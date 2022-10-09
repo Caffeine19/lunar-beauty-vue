@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  @font-face {
+    font-family: libertinus-semibold;
+    src: url("./assets/Font/LibertinusSerif-Semibold.otf");
+  }
+  .libertinus-semibold {
+    font-family: libertinus-semibold;
+  }
+  @font-face {
+    font-family: libertinus-regular;
+    src: url("./assets/Font/LibertinusSerif-Regular.otf");
+  }
+  .libertinus-regular {
+    font-family: libertinus-regular;
+  }
+}
