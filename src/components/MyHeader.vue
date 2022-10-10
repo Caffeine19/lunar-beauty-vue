@@ -11,12 +11,21 @@
       </h1>
     </div>
     <div class="flex items-center px-4 grow justify-between space-x-4">
-      <input
-        type="text"
-        placeholder="Type to search"
-        class="bg-white border-[1px] outline-[1px] outline-zinc-600 border-zinc-100 rounded text-zinc-900 placeholder-zinc-400 text-lg font-normal py-2 px-4 w-full"
-      />
-      <PhBell :size="32" weight="regular" color="#18181b"></PhBell>
+      <div class="relative w-full">
+        <input
+          type="text"
+          placeholder="Type to search"
+          class="peer bg-transparent border-[1px] outline-[1px] hover:bg-zinc-100/80 outline-zinc-600 focus:bg-zinc-100 transition-all border-zinc-100 rounded text-zinc-900 placeholder-zinc-400 text-lg font-normal py-2 px-4 w-full"
+        />
+        <i
+          class="ph-magnifying-glass text-zinc-600 absolute right-4 top-1/2 -translate-y-1/2 peer-focus:text-zinc-900"
+          style="font-size: 32px"
+        >
+        </i>
+      </div>
+      <button>
+        <i class="ph-bell text-zinc-900" style="font-size: 32px"> </i>
+      </button>
     </div>
     <div
       class="flex border-l-[1px] border-l-zinc-800 items-center pl-4 py-4 space-x-3"
@@ -30,25 +39,19 @@
         <h1 class="text-zinc-900 font-normal text-2xl libertinus-regular">
           Lazy Fish
         </h1>
-        <PhCaretUp
-          :size="24"
-          weight="regular"
-          color="#18181b"
-          class="rotate-180 transition-all"
-        >
-        </PhCaretUp>
+        <button>
+          <i
+            class="ph-caret-up text-zinc-900 rotate-180 hover:rotate-0"
+            style="font-size: 24px"
+          ></i>
+        </button>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import { PhCaretUp, PhBell } from "phosphor-vue";
-export default defineComponent({
-  components: {
-    PhCaretUp,
-    PhBell,
-  },
-});
+
+export default defineComponent({});
 </script>
 <style lang=""></style>
