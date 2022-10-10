@@ -1,16 +1,19 @@
 <template>
   <div
-    class="bg-[url('./assets/images/Background.png')] w-screen h-screen bg-cover bg-center"
+    class="bg-[url('./assets/images/Background.png')] w-screen h-screen bg-cover bg-center flex flex-col"
   >
     <MyHeader></MyHeader>
-    <h1 class="text-4xl text-red-700">HI</h1>
+    <div class="grow flex">
+      <MySider></MySider>
+    </div>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
 import MyHeader from "@/components/MyHeader.vue";
+import MySider from "@/components/MySider.vue";
 export default defineComponent({
-  components: { MyHeader },
+  components: { MyHeader, MySider },
 });
 </script>
 <style scoped>
