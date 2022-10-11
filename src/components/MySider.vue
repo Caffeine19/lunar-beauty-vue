@@ -5,12 +5,16 @@
     <router-link
       v-for="(tab, index) in siderTabOption"
       :key="index"
-      :to="tab.to"
+      :to="{ name: tab.to }"
       class="text-zinc-900 py-2 px-4 flex items-center space-x-6 hover:bg-zinc-900/10 transition-colors"
-      :class="currentRoute.name == tab.to ? 'text-zinc-50' : ''"
+      :class="
+        currentRoute.name == tab.to
+          ? 'text-zinc-50 bg-gradient-to-r from-[#C5B1B8] to-[#DBC5CF]'
+          : ''
+      "
     >
       <i class="" style="font-size: 32px" :class="tab.iconClass"></i>
-      <p class="font-medium text-xl">{{ tab.name }}</p>
+      <p class="font-normal text-xl">{{ tab.name }}</p>
     </router-link>
   </div>
 </template>
@@ -23,7 +27,7 @@ export default defineComponent({
     const siderTabOption = reactive([
       {
         name: "HomePage",
-        to: "homepage",
+        to: "home",
         iconClass: "ph-bank",
       },
       {
