@@ -12,7 +12,7 @@
       "
     >
       <i
-        class="ph-star-four-fill"
+        class="ph-star-four-fill text-zinc-50"
         style="font-size: 18px"
         v-show="selectedProductCategory == category"
       ></i>
