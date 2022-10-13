@@ -15,9 +15,15 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
+
 import ProductCategories from "./ProductCategories.vue";
 import ProductOverView from "@/components/ProductOverview.vue";
+
+import useProductStore from "@/stores/useProductStore";
 export default defineComponent({
+  setup() {
+    const productStore = useProductStore();
+  },
   components: {
     ProductCategories,
     ProductOverView,
