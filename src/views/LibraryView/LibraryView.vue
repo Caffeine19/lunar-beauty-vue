@@ -1,6 +1,8 @@
 <template>
-  <div class="p-6 grow overflow-hidden space-y-8">
-    <div class="flex items-center overflow-hidden divide-x divide-zinc-600">
+  <div class="p-6 grow overflow-hidden space-y-8 flex flex-col">
+    <div
+      class="flex items-center overflow-hidden divide-x divide-zinc-600 shrink-0"
+    >
       <button>
         <i
           class="ph-faders text-zinc-900 font-normal pr-2"
@@ -10,19 +12,37 @@
       </button>
       <ProductCategories></ProductCategories>
     </div>
-    <div><ProductOverView></ProductOverView></div>
+    <div
+      class="justify-between gap-x-4 gap-y-4 grid test grid-cols-[repeat(auto-fill,250px)] overflow-y-scroll"
+    >
+      <ProductOverView
+        v-for="product in productOverviewList"
+        :key="product.id"
+        v-bind="product"
+      >
+      </ProductOverView>
+    </div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted } from "vue";
 
 import ProductCategories from "./ProductCategories.vue";
 import ProductOverView from "@/components/ProductOverview.vue";
 
+import { storeToRefs } from "pinia";
 import useProductStore from "@/stores/useProductStore";
 export default defineComponent({
   setup() {
     const productStore = useProductStore();
+    const { productOverviewList } = storeToRefs(productStore);
+    onMounted(async () => {
+      await productStore.getProductOverviewList("ALL");
+    });
+
+    return {
+      productOverviewList,
+    };
   },
   components: {
     ProductCategories,
@@ -30,4 +50,4 @@ export default defineComponent({
   },
 });
 </script>
-<style lang=""></style>
+<style scoped></style>

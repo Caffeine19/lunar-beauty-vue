@@ -3,7 +3,9 @@
     class="bg-[url('./assets/images/Background.svg')] w-screen h-screen bg-cover bg-center flex flex-col"
   >
     <MyHeader></MyHeader>
-    <div class="grow flex"><MySider></MySider> <RouterView></RouterView></div>
+    <div class="grow flex overflow-hidden">
+      <MySider></MySider> <RouterView></RouterView>
+    </div>
   </div>
 </template>
 <script lang="ts">

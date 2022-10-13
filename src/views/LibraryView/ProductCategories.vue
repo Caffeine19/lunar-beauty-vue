@@ -51,7 +51,7 @@ export default defineComponent({
 });
 </script>
 <style>
-.test::-webkit-scrollbar {
+/* .test::-webkit-scrollbar {
   display: none;
-}
+} */
 </style>
