@@ -1,7 +1,10 @@
 <template>
   <div class="space-x-6 pl-2 grow flex items-center overflow-auto test">
     <button
-      @click="setProductCategory(category)"
+      @click="
+        changeProductCategory(category),
+          $emit('clickCategory', selectedProductCategory)
+      "
       v-for="(category, index) in productCategoryOption"
       :key="index"
       class="rounded-full py-1 px-4 border-[1px] border-zinc-900 transition-all flex flex-row space-x-2 items-center"
@@ -24,6 +27,7 @@
 import { defineComponent, reactive, ref } from "vue";
 
 export default defineComponent({
+  emits: ["clickCategory"],
   setup() {
     const productCategoryOption = reactive([
       "All",
@@ -39,12 +43,12 @@ export default defineComponent({
     ]);
     const selectedProductCategory = ref("All");
 
-    const setProductCategory = (target: string) => {
+    const changeProductCategory = (target: string) => {
       selectedProductCategory.value = target;
     };
     return {
       productCategoryOption,
-      setProductCategory,
+      changeProductCategory,
       selectedProductCategory,
     };
   },

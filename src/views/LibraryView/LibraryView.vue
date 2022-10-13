@@ -10,7 +10,7 @@
         >
         </i>
       </button>
-      <ProductCategories></ProductCategories>
+      <ProductCategories @click-category="changeCategory"></ProductCategories>
     </div>
     <div
       class="justify-between gap-x-4 gap-y-4 grid test grid-cols-[repeat(auto-fill,250px)] overflow-y-scroll"
@@ -25,7 +25,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 
 import ProductCategories from "./ProductCategories.vue";
 import ProductOverView from "@/components/ProductOverview.vue";
@@ -37,11 +37,16 @@ export default defineComponent({
     const productStore = useProductStore();
     const { productOverviewList } = storeToRefs(productStore);
     onMounted(async () => {
-      await productStore.getProductOverviewList("ALL");
+      await productStore.getProductOverviewList("All");
     });
+
+    const changeCategory = async (category: string) => {
+      await productStore.getProductOverviewList(category);
+    };
 
     return {
       productOverviewList,
+      changeCategory,
     };
   },
   components: {
