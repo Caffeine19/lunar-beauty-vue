@@ -24,6 +24,21 @@ const router = createRouter({
           path: "/main/library",
           name: "library",
           component: () => import("@/views/LibraryView/LibraryView.vue"),
+          redirect: { name: "productOverview" },
+          children: [
+            {
+              path: "/main/library/productOverview",
+              name: "productOverview",
+              component: () =>
+                import("@/views/LibraryView/ProductOverviewView.vue"),
+            },
+            {
+              path: "/main/library/productDetail",
+              name: "productDetail",
+              component: () =>
+                import("@/views/LibraryView/ProductDetailView.vue"),
+            },
+          ],
         },
         {
           path: "/main/store",

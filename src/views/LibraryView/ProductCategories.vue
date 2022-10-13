@@ -1,5 +1,7 @@
 <template>
-  <div class="space-x-6 pl-2 grow flex items-center overflow-auto test">
+  <div
+    class="space-x-6 pl-2 grow flex items-center overflow-auto test product-categories-container"
+  >
     <button
       @click="
         changeProductCategory(category),
@@ -55,7 +57,7 @@ export default defineComponent({
 });
 </script>
 <style>
-/* .test::-webkit-scrollbar {
+.product-categories-container::-webkit-scrollbar {
   display: none;
-} */
+}
 </style>
