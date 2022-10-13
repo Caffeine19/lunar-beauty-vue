@@ -1,19 +1,22 @@
 <template>
-  <div class="p-6 grow overflow-hidden space-y-8 flex flex-col">
-    <div
-      class="flex items-center overflow-hidden divide-x divide-zinc-600 shrink-0"
-    >
-      <button>
-        <i
-          class="ph-faders text-zinc-900 font-normal pr-2"
-          style="font-size: 32px"
-        >
-        </i>
-      </button>
-      <ProductCategories @click-category="changeCategory"></ProductCategories>
+  <div class="px-6 pb-6 grow overflow-hidden space-y-8 flex flex-col relative">
+    <div class="top-0 left-0 w-full absolute p-6 backdrop-blur-2xl">
+      <div
+        class="flex items-center overflow-hidden divide-x divide-zinc-600 shrink-0"
+      >
+        <button>
+          <i
+            class="ph-faders text-zinc-900 font-normal pr-2"
+            style="font-size: 32px"
+          >
+          </i>
+        </button>
+        <ProductCategories @click-category="changeCategory"></ProductCategories>
+      </div>
     </div>
+
     <div
-      class="justify-between gap-x-4 gap-y-4 grid test grid-cols-[repeat(auto-fill,250px)] overflow-y-scroll"
+      class="pt-16 justify-between gap-x-4 gap-y-4 grid test grid-cols-[repeat(auto-fill,250px)] overflow-y-scroll product-overview-container"
     >
       <ProductOverView
         v-for="product in productOverviewList"
@@ -55,4 +58,8 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped></style>
+<style scoped>
+.product-overview-container::-webkit-scrollbar {
+  display: none;
+}
+</style>
