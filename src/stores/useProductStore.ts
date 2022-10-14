@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { reqProjectFindOverview, reqProjectFindRelated } from "@/api";
-import type { IProduct } from "@/types/product.";
+import type { IProduct } from "@/types/product";
 const useProductStore = defineStore({
   id: "product",
   state: () => {
