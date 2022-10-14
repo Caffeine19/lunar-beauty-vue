@@ -14,6 +14,7 @@ const useCommentStore = defineStore({
         const res = await reqCommentFindByProduct(productId);
         const { commentList } = res.data;
         console.log({ commentList });
+        this.productRelatedCommentList = commentList;
       } catch (error) {
         console.error(error);
       }

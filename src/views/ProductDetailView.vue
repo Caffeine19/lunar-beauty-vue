@@ -1,7 +1,7 @@
 <template>
   <div class="grid w-full grid-cols-3 p-6">
-    <div class="col-span-2 space-y-12">
-      <div class="flex space-x-12">
+    <div class="hide-scrollbar col-span-2 pr-6 overflow-y-auto">
+      <div class="flex space-x-12" id="product-basic-info">
         <div class="flex space-x-6">
           <div class="flex flex-col justify-between">
             <div class="bg-zinc-50 w-16 h-16">
@@ -52,7 +52,7 @@
           </button>
         </div>
       </div>
-      <div class="space-y-4">
+      <div class="mt-16 space-y-4" id="product-related-products">
         <div class="flex items-center space-x-2">
           <i class="ph-link-simple-fill" style="font-size: 32px"></i>
           <p class="text-zinc-900 text-2xl font-semibold">Related Products</p>
@@ -64,6 +64,35 @@
               :key="relatedProduct.id"
               v-bind="relatedProduct"
             ></ProductOverView>
+          </div>
+        </div>
+      </div>
+      <div id="product-related-comments" class="mt-4 space-y-4">
+        <div class="flex items-center space-x-2">
+          <i class="ph-chat-teardrop-text-fill" style="font-size: 32px"></i>
+          <p class="text-zinc-900 text-2xl font-semibold">Comments</p>
+        </div>
+        <div
+          class="bg-zinc-50 p-4 space-y-6 rounded border-[1px] border-zinc-100"
+          v-for="comment in productRelatedCommentList"
+          :key="comment.id"
+        >
+          <div class="space-y-6">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-4">
+                <img src="@/assets/images/Avatar.png" alt="user_avatar" />
+                <p class="text-zinc-900 libertinus-regular text-2xl">
+                  {{ comment.user.name }}
+                </p>
+              </div>
+              <p class="text-zinc-700 text-sm font-light">
+                {{ comment.created_time }}
+              </p>
+            </div>
+
+            <p class="text-zinc-700 text-base font-normal">
+              {{ comment.content }}
+            </p>
           </div>
         </div>
       </div>
@@ -138,6 +167,7 @@ export default defineComponent({
     return {
       ingredientList,
       relatedProductList,
+      productRelatedCommentList,
     };
   },
 });
