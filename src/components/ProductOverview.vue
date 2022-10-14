@@ -1,9 +1,9 @@
 <template>
-  <div class="group w-fit col-span-1">
+  <div class="group w-[230px] col-span-1">
     <img
       src="@/assets/images/Product/Frame 1.png"
       alt="productImg"
-      class="rounded"
+      class="rounded w-[230px] h-[260px]"
     />
     <div class="my-4 space-y-2">
       <p class="text-zinc-700 text-base font-normal">{{ brand }}</p>
@@ -18,7 +18,7 @@
     </div>
     <button
       class="opacity-0 rounded text-zinc-50 bg-gradient-to-r to-[#E3E5ED] from-[#B0B6C4] py-0.5 px-2 items-center flex group-hover:opacity-100 transition-opacity"
-      @click="goProductDetail(id)"
+      @click="goProductDetail(id, brand || '')"
     >
       <p class="text-base font-medium">Detail</p>
       <i class="ph-arrow-right" style="font-size: 24px"></i>
@@ -27,7 +27,8 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import type { PropType } from "vue";
+
+import { useRouter } from "vue-router";
 export default defineComponent({
   props: {
     id: {
@@ -41,10 +42,19 @@ export default defineComponent({
     category: String,
     capacity: String,
     mark: Number,
-    goProductDetail: {
-      type: Function as PropType<(productId: number) => void>,
-      required: true,
-    },
+  },
+  setup(props) {
+    const currentRouter = useRouter();
+    console.log(props.id, props.brand);
+    const goProductDetail = (id: number, brand: string) => {
+      currentRouter.push({
+        name: "productDetail",
+        query: { productId: id, productBrand: brand },
+      });
+    };
+    return {
+      goProductDetail,
+    };
   },
 });
 </script>

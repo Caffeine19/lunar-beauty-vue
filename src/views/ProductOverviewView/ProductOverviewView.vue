@@ -16,20 +16,19 @@
     </div>
 
     <div
-      class="pt-16 justify-between gap-x-4 gap-y-4 grid test grid-cols-[repeat(auto-fill,250px)] overflow-y-scroll product-overview-container"
+      class="pt-16 justify-between gap-x-4 gap-y-4 grid test grid-cols-[repeat(auto-fill,230px)] overflow-y-scroll product-overview-container"
     >
       <ProductOverView
         v-for="product in productOverviewList"
         :key="product.id"
         v-bind="product"
-        :go-product-detail="goProductDetail"
       >
       </ProductOverView>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, onMounted } from "vue";
 
 import ProductCategories from "./ProductCategories.vue";
 import ProductOverView from "@/components/ProductOverview.vue";
@@ -37,7 +36,6 @@ import ProductOverView from "@/components/ProductOverview.vue";
 import { storeToRefs } from "pinia";
 import useProductStore from "@/stores/useProductStore";
 
-import { useRouter } from "vue-router";
 export default defineComponent({
   setup() {
     const productStore = useProductStore();
@@ -50,14 +48,9 @@ export default defineComponent({
       await productStore.getProductOverviewList(category);
     };
 
-    const currentRouter = useRouter();
-    const goProductDetail = (id: number) => {
-      currentRouter.push({ name: "productDetail", query: { productId: id } });
-    };
     return {
       productOverviewList,
       changeCategory,
-      goProductDetail,
     };
   },
   components: {

@@ -1,6 +1,6 @@
 <template>
   <div class="grid w-full grid-cols-3 p-6">
-    <div class="col-span-2 space-y-8">
+    <div class="col-span-2 space-y-12">
       <div class="flex space-x-12">
         <div class="flex space-x-6">
           <div class="flex flex-col justify-between">
@@ -52,10 +52,19 @@
           </button>
         </div>
       </div>
-      <div>
+      <div class="space-y-4">
         <div class="flex items-center space-x-2">
           <i class="ph-link-simple-fill" style="font-size: 32px"></i>
           <p class="text-zinc-900 text-2xl font-semibold">Related Products</p>
+        </div>
+        <div class="hide-scrollbar overflow-x-auto">
+          <div class="w-fit flex space-x-6">
+            <ProductOverView
+              v-for="relatedProduct in relatedProductList"
+              :key="relatedProduct.id"
+              v-bind="relatedProduct"
+            ></ProductOverView>
+          </div>
         </div>
       </div>
     </div>
@@ -69,7 +78,7 @@
           <p class="text-zinc-900 text-2xl font-semibold">Ingredients</p>
         </div>
         <ul
-          class="text-zinc-800 ml-3 space-y-4 overflow-y-scroll text-base font-normal list-disc list-inside"
+          class="text-zinc-800 hide-scrollbar ml-3 space-y-4 overflow-y-scroll text-base font-normal list-disc list-inside"
         >
           <li v-for="i in ingredientList" :key="i.id">{{ i.name }}</li>
         </ul>
@@ -83,9 +92,15 @@ import { defineComponent, onMounted } from "vue";
 
 import { storeToRefs } from "pinia";
 import useIngredientStore from "@/stores/useIngredientStore";
+import useProductStore from "@/stores/useProductStore";
 
 import { useRoute } from "vue-router";
+
+import ProductOverView from "@/components/ProductOverview.vue";
 export default defineComponent({
+  components: {
+    ProductOverView,
+  },
   setup() {
     const ingredientStore = useIngredientStore();
     const { ingredientList } = storeToRefs(ingredientStore);
@@ -95,15 +110,31 @@ export default defineComponent({
     onMounted(() => {
       if (currentRoute.query.productId) {
         ingredientStore.getIngredientList(
-          parseInt(currentRoute.query.productId as string)
+          parseInt(currentRoute.query.productId.toString())
         );
       }
     });
+
+    const productStore = useProductStore();
+    const { relatedProductList } = storeToRefs(productStore);
+    onMounted(() => {
+      if (currentRoute.query.productBrand) {
+        productStore.getRelatedProduct(
+          currentRoute.query.productBrand.toString()
+        );
+      }
+    });
+
     return {
       ingredientList,
+      relatedProductList,
     };
   },
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+</style>
