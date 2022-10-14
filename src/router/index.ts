@@ -13,7 +13,7 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import("@/views/MainView/MainView.vue"),
+      component: () => import("@/views/MainView.vue"),
       children: [
         {
           path: "/main/home",
@@ -23,20 +23,19 @@ const router = createRouter({
         {
           path: "/main/library",
           name: "library",
-          component: () => import("@/views/LibraryView/LibraryView.vue"),
+          component: () => import("@/views/LibraryView.vue"),
           redirect: { name: "productOverview" },
           children: [
             {
               path: "/main/library/productOverview",
               name: "productOverview",
               component: () =>
-                import("@/views/LibraryView/ProductOverviewView.vue"),
+                import("@/views/ProductOverviewView/ProductOverviewView.vue"),
             },
             {
               path: "/main/library/productDetail",
               name: "productDetail",
-              component: () =>
-                import("@/views/LibraryView/ProductDetailView.vue"),
+              component: () => import("@/views/ProductDetailView.vue"),
             },
           ],
         },
