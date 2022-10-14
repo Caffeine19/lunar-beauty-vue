@@ -6,3 +6,6 @@ const axiosInstance = axios.create({
 export const reqProjectFindOverview = (category: string) => {
   return axiosInstance.post("/product/findOverview", { category });
 };
+export const reqIngredientFindByProduct = (productId: number) => {
+  return axiosInstance.post("/ingredient/findByProduct", { productId });
+};

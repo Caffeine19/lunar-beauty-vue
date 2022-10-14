@@ -1,24 +1,24 @@
 import { defineStore } from "pinia";
-import { reqProjectFindOverview } from "@/api";
-import type { IProduct } from "@/types/product.";
-const useProductStore = defineStore({
+import { reqProjectFindOverview, reqIngredientFindByProduct } from "@/api";
+import type { IIngredient } from "@/types/ingredient";
+const useIngredientStore = defineStore({
   id: "ingredient",
   state: () => {
     return {
-      productOverviewList: [] as IProduct[],
+      ingredientList: [] as IIngredient[],
     };
   },
   actions: {
-    async getProductOverviewList(category: string) {
+    async getIngredientList(productId: number) {
       try {
-        const res = await reqProjectFindOverview(category);
-        const { productOverviewList } = res.data;
-        this.productOverviewList = productOverviewList;
-        console.log(productOverviewList);
+        const res = await reqIngredientFindByProduct(productId);
+        const { ingredientList } = res.data;
+        this.ingredientList = ingredientList;
+        console.log(ingredientList);
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     },
   },
 });
-export default useProductStore;
+export default useIngredientStore;

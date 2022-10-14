@@ -59,21 +59,19 @@
         </div>
       </div>
     </div>
-    <div class="flex col-span-1 space-x-6">
+    <div class="flex col-span-1 space-x-6 overflow-hidden">
       <div class="flex items-center">
         <div class="w-[1px] border-l-[1px] border-zinc-900 h-full"></div>
       </div>
-      <div class="space-y-4">
+      <div class="flex flex-col space-y-4 overflow-hidden">
         <div class="flex items-center space-x-2">
           <i class="ph-flask-fill" style="font-size: 32px"></i>
           <p class="text-zinc-900 text-2xl font-semibold">Ingredients</p>
         </div>
         <ul
-          class="text-zinc-800 ml-5 space-y-1 text-base font-normal list-disc"
+          class="text-zinc-800 ml-3 space-y-4 overflow-y-scroll text-base font-normal list-disc list-inside"
         >
-          <li>Aqua (Water),</li>
-          <li>Caprylic/Capric Triglyceride,</li>
-          <li>Glycerin</li>
+          <li v-for="i in ingredientList" :key="i.id">{{ i.name }}</li>
         </ul>
       </div>
     </div>
@@ -81,9 +79,31 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted } from "vue";
 
-export default defineComponent({});
+import { storeToRefs } from "pinia";
+import useIngredientStore from "@/stores/useIngredientStore";
+
+import { useRoute } from "vue-router";
+export default defineComponent({
+  setup() {
+    const ingredientStore = useIngredientStore();
+    const { ingredientList } = storeToRefs(ingredientStore);
+
+    const currentRoute = useRoute();
+
+    onMounted(() => {
+      if (currentRoute.query.productId) {
+        ingredientStore.getIngredientList(
+          parseInt(currentRoute.query.productId as string)
+        );
+      }
+    });
+    return {
+      ingredientList,
+    };
+  },
+});
 </script>
 
 <style scoped></style>
