@@ -1,12 +1,18 @@
 import { defineStore } from "pinia";
-import { reqProjectFindOverview, reqProjectFindRelated } from "@/api";
+import {
+  reqProjectFindOverview,
+  reqProjectFindRelated,
+  reqProductFindByStore,
+} from "@/api";
 import type { IProduct } from "@/types/product";
+import type { IStoreProduct } from "@/types/storeProduct";
 const useProductStore = defineStore({
   id: "product",
   state: () => {
     return {
       productOverviewList: [] as IProduct[],
       relatedProductList: [] as IProduct[],
+      storeProductList: [] as IStoreProduct[],
     };
   },
   actions: {
@@ -28,6 +34,14 @@ const useProductStore = defineStore({
         console.info({ relatedProductList });
       } catch (error) {
         console.error(error);
+      }
+    },
+    async getStoreProduct(userId: number) {
+      try {
+        const res = await reqProductFindByStore(userId);
+        console.log(res);
+      } catch (error) {
+        console.log(error);
       }
     },
   },
