@@ -99,6 +99,7 @@ import { defineComponent, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import useIngredientStore from "@/stores/useIngredientStore";
 import useProductStore from "@/stores/useProductStore";
+import useCommentStore from "@/stores/useCommentStore";
 
 import { useRoute } from "vue-router";
 
@@ -113,24 +114,27 @@ export default defineComponent({
 
     const currentRoute = useRoute();
 
+    const productStore = useProductStore();
+    const { relatedProductList } = storeToRefs(productStore);
+
+    const commentStore = useCommentStore();
+    const { productRelatedCommentList } = storeToRefs(commentStore);
+
     onMounted(() => {
       if (currentRoute.query.productId) {
         ingredientStore.getIngredientList(
           parseInt(currentRoute.query.productId.toString())
         );
+        commentStore.getProductRelatedCommentList(
+          parseInt(currentRoute.query.productId.toString())
+        );
       }
-    });
-
-    const productStore = useProductStore();
-    const { relatedProductList } = storeToRefs(productStore);
-    onMounted(() => {
       if (currentRoute.query.productBrand) {
         productStore.getRelatedProduct(
           currentRoute.query.productBrand.toString()
         );
       }
     });
-
     return {
       ingredientList,
       relatedProductList,

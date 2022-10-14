@@ -12,3 +12,7 @@ export const reqIngredientFindByProduct = (productId: number) => {
 export const reqProjectFindRelated = (brand: string) => {
   return axiosInstance.post("/product/findRelated", { brand });
 };
+
+export const reqCommentFindByProduct = (productId: number) => {
+  return axiosInstance.post("/comment/findByProduct", { productId });
+};
