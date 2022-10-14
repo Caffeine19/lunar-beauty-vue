@@ -80,7 +80,13 @@
         <ul
           class="text-zinc-800 hide-scrollbar ml-3 space-y-4 overflow-y-scroll text-base font-normal list-disc list-inside"
         >
-          <li v-for="i in ingredientList" :key="i.id">{{ i.name }}</li>
+          <li
+            v-for="i in ingredientList"
+            :key="i.id"
+            class="hover:underline hover:decoration-zinc-600"
+          >
+            {{ i.name }}
+          </li>
         </ul>
       </div>
     </div>
