@@ -39,7 +39,9 @@ const useProductStore = defineStore({
     async getStoreProduct(userId: number) {
       try {
         const res = await reqProductFindByStore(userId);
+        const { storeProductList } = res.data;
         console.log(res);
+        this.storeProductList = storeProductList;
       } catch (error) {
         console.log(error);
       }

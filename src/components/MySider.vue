@@ -6,15 +6,15 @@
       v-for="(tab, index) in siderTabOption"
       :key="index"
       :to="{ name: tab.to }"
-      class="text-zinc-900 py-2 px-4 flex items-center space-x-6 hover:bg-zinc-900/10 transition-colors"
+      class="text-zinc-900 hover:bg-zinc-900/10 flex items-center px-4 py-2 space-x-6 transition-colors"
       :class="
-        currentRoute.name == tab.to
+        currentRoute.path.includes(tab.to)
           ? 'text-zinc-50 bg-gradient-to-r from-[#C5B1B8] to-[#DBC5CF]'
           : ''
       "
     >
       <i class="" style="font-size: 32px" :class="tab.iconClass"></i>
-      <p class="font-normal text-xl">{{ tab.name }}</p>
+      <p class="text-xl font-normal">{{ tab.name }}</p>
     </router-link>
   </div>
 </template>
@@ -36,14 +36,14 @@ export default defineComponent({
         iconClass: "ph-books",
       },
       {
-        name: "Routine",
-        to: "routine",
-        iconClass: "ph-map-trifold",
-      },
-      {
         name: "Store",
         to: "store",
         iconClass: "ph-package",
+      },
+      {
+        name: "Routine",
+        to: "routine",
+        iconClass: "ph-map-trifold",
       },
     ]);
     const currentRoute = useRoute();

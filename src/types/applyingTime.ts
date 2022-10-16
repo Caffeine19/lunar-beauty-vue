@@ -1,5 +1,5 @@
 export enum applyingTime {
-  ALL,
-  NIGHT,
-  DAY,
+  ALL = "ALL",
+  NIGHT = "Night",
+  DAY = "DAY",
 }
