@@ -6,6 +6,7 @@ import {
 } from "@/api";
 import type { IProduct } from "@/types/product";
 import type { IStoreProduct } from "@/types/storeProduct";
+import dayjs from "dayjs";
 const useProductStore = defineStore({
   id: "product",
   state: () => {
@@ -40,7 +41,23 @@ const useProductStore = defineStore({
       try {
         const res = await reqProductFindByStore(userId);
         const { storeProductList } = res.data;
-        console.log(res);
+        console.log({ storeProductList });
+        storeProductList.forEach((product: IStoreProduct) => {
+          if (product.openedTime) {
+            product.isOpened = true;
+          }
+          if (product.productionTime) {
+            const safeTime = dayjs(product.productionTime).add(
+              product.shelfTime,
+              "month"
+            );
+            if (safeTime.unix() > dayjs().unix()) {
+              product.isExpired = false;
+            } else {
+              product.isExpired = true;
+            }
+          }
+        });
         this.storeProductList = storeProductList;
       } catch (error) {
         console.log(error);

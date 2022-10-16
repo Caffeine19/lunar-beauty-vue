@@ -73,15 +73,23 @@
         </li>
         <li class="text-zinc-600 flex justify-between text-base font-medium">
           <p>OpenedTime:</p>
-          <p>{{ selectedProduct?.openedTime.slice(0, 10) }}</p>
+          <p>
+            {{
+              selectedProduct?.openedTime
+                ? selectedProduct.openedTime.slice(0, 10)
+                : "unOpened"
+            }}
+          </p>
         </li>
         <li class="text-zinc-600 flex justify-between text-base font-medium">
           <p>ProductionTime:</p>
-          <p>{{ selectedProduct?.productionTime.slice(0, 10) }}</p>
+          <p>
+            {{ selectedProduct?.productionTime.slice(0, 10) }}
+          </p>
         </li>
         <li class="text-zinc-600 flex justify-between text-base font-medium">
           <p>ShelfTime:</p>
-          <p>{{ selectedProduct?.shelfTime.slice(0, 10) }}</p>
+          <p>{{ selectedProduct?.shelfTime + "months" }}</p>
         </li>
         <li class="text-zinc-600 flex justify-between text-base font-medium">
           <p>expense:</p>
@@ -118,6 +126,7 @@ export default defineComponent({
     onMounted(() => {
       projectStore.getStoreProduct(1);
     });
+
     const storeProductForAll = computed(() =>
       storeProductList.value.filter((storeProduct) => {
         return storeProduct.applyingTime == applyingTime.ALL;
@@ -131,6 +140,32 @@ export default defineComponent({
     const storeProductForNight = computed(() =>
       storeProductList.value.filter((storeProduct) => {
         return storeProduct.applyingTime == applyingTime.NIGHT;
+      })
+    );
+
+    const unopenedStoreProduct = computed(() =>
+      storeProductForAll.value.filter((storeProduct) => {
+        return storeProduct.isOpened === false;
+      })
+    );
+    const openedStoreProduct = computed(() =>
+      storeProductForAll.value.filter((storeProduct) => {
+        return storeProduct.isOpened === true;
+      })
+    );
+    const unexpiredStoreProduct = computed(() =>
+      storeProductForAll.value.filter((storeProduct) => {
+        return storeProduct.isExpired === false;
+      })
+    );
+    const expiredStoreProduct = computed(() =>
+      storeProductForAll.value.filter((storeProduct) => {
+        return storeProduct.isExpired === true;
+      })
+    );
+    const runoutStoreProduct = computed(() =>
+      storeProductForAll.value.filter((storeProduct) => {
+        return storeProduct.isRunout === true;
       })
     );
     const showingProductDetail = ref(false);
@@ -158,6 +193,11 @@ export default defineComponent({
       openStoreProductDetail,
       closeStoreProductDetail,
       selectedProduct,
+      unopenedStoreProduct,
+      unexpiredStoreProduct,
+      openedStoreProduct,
+      expiredStoreProduct,
+      runoutStoreProduct,
     };
   },
 });

@@ -5,10 +5,17 @@ export interface IStoreProduct {
   id: number;
   amount: number;
   applyingTime: applyingTime;
-  productionTime: string;
-  openedTime: string;
-  shelfTime: string;
+
   expense: string;
+
+  isOpened: boolean;
+  openedTime: string;
+
+  isExpired: boolean;
+  productionTime: string;
+  shelfTime: number;
+
+  isRunout: boolean;
 
   product: IProduct;
 }
