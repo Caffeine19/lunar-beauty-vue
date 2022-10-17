@@ -20,3 +20,6 @@ export const reqCommentFindByProduct = (productId: number) => {
 export const reqStoreProductFindByUser = (userId: number) => {
   return axiosInstance.post("/storeProduct/findByUser", { userId });
 };
+export const reqRoutineFindByUser = (userId: number) => {
+  return axiosInstance.post("/routine/findByUser", { userId });
+};
