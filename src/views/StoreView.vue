@@ -102,7 +102,7 @@
 import { computed, defineComponent, onMounted, reactive, ref } from "vue";
 
 import { storeToRefs } from "pinia";
-import useProjectStore from "@/stores/useProductStore";
+import useStoreProductStore from "@/stores/useStoreProductStore";
 
 import { applyingTime } from "@/types/applyingTime";
 import { preservationStatus } from "@/types/preservationStatus";
@@ -114,7 +114,7 @@ import type { IStoreProduct } from "@/types/storeProduct";
 export default defineComponent({
   components: { ProductOverview, ProductBoard },
   setup() {
-    const projectStore = useProjectStore();
+    const projectStore = useStoreProductStore();
     const { storeProductList } = storeToRefs(projectStore);
     const userId = 1;
     onMounted(() => {

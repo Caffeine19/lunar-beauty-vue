@@ -17,6 +17,6 @@ export const reqCommentFindByProduct = (productId: number) => {
   return axiosInstance.post("/comment/findByProduct", { productId });
 };
 
-export const reqProductFindByStore = (userId: number) => {
-  return axiosInstance.post("/product/findByStore", { userId });
+export const reqStoreProductFindByUser = (userId: number) => {
+  return axiosInstance.post("/storeProduct/findByUser", { userId });
 };
