@@ -10,7 +10,10 @@
           <div class="flex items-center">
             <div class="w-[1px] border-l-[1px] border-zinc-900 h-4/5"></div>
           </div>
-          <button class="text-zinc-900">
+          <button
+            class="text-zinc-900"
+            @click="toggleGroupOption('preservationStatus')"
+          >
             <i class="ph-faders" style="font-size: 28px"></i>
           </button>
           <button class="text-zinc-900">
@@ -23,26 +26,15 @@
         class="hide-scrollbar flex justify-between w-full mt-4 space-x-6 overflow-x-auto"
       >
         <ProductBoard
-          :store-product-list="storeProductForAll"
-          :tag-icon-class="'ph-alarm-fill'"
-          :tag="'ALl'"
+          v-for="(group, index) in groupOptions[currentGroupOption]"
+          :key="index"
+          :store-product-list="group.value"
+          :tag-icon-class="group.tagIconClass"
+          :tag="group.tag"
           @product-board-item-click="openStoreProductDetail"
           :selected-product="selectedProduct"
-        ></ProductBoard>
-        <ProductBoard
-          :store-product-list="storeProductForDay"
-          :tag-icon-class="'ph-sun-fill'"
-          :tag="'DAY'"
-          @product-board-item-click="openStoreProductDetail"
-          :selected-product="selectedProduct"
-        ></ProductBoard>
-        <ProductBoard
-          :store-product-list="storeProductForNight"
-          :tag-icon-class="'ph-moon-stars-fill'"
-          :tag="'NIGHT'"
-          @product-board-item-click="openStoreProductDetail"
-          :selected-product="selectedProduct"
-        ></ProductBoard>
+        >
+        </ProductBoard>
       </div>
     </div>
     <div
@@ -107,12 +99,13 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from "vue";
+import { computed, defineComponent, onMounted, reactive, ref } from "vue";
 
 import { storeToRefs } from "pinia";
 import useProjectStore from "@/stores/useProductStore";
 
 import { applyingTime } from "@/types/applyingTime";
+import { preservationStatus } from "@/types/preservationStatus";
 
 import ProductBoard from "@/components/ProductBoard.vue";
 import ProductOverview from "@/components/ProductOverview.vue";
@@ -123,10 +116,12 @@ export default defineComponent({
   setup() {
     const projectStore = useProjectStore();
     const { storeProductList } = storeToRefs(projectStore);
+    const userId = 1;
     onMounted(() => {
-      projectStore.getStoreProduct(1);
+      projectStore.getStoreProduct(userId);
     });
 
+    /*filtered by applyingTime*/
     const storeProductForAll = computed(() =>
       storeProductList.value.filter((storeProduct) => {
         return storeProduct.applyingTime == applyingTime.ALL;
@@ -142,32 +137,90 @@ export default defineComponent({
         return storeProduct.applyingTime == applyingTime.NIGHT;
       })
     );
-
+    /*filtered by preservationStatus*/
     const unopenedStoreProduct = computed(() =>
-      storeProductForAll.value.filter((storeProduct) => {
-        return storeProduct.isOpened === false;
+      storeProductList.value.filter((storeProduct) => {
+        return !storeProduct.isRunout && storeProduct.isOpened;
       })
     );
     const openedStoreProduct = computed(() =>
-      storeProductForAll.value.filter((storeProduct) => {
-        return storeProduct.isOpened === true;
+      storeProductList.value.filter((storeProduct) => {
+        return !storeProduct.isRunout && !storeProduct.isOpened;
       })
     );
     const unexpiredStoreProduct = computed(() =>
-      storeProductForAll.value.filter((storeProduct) => {
-        return storeProduct.isExpired === false;
+      storeProductList.value.filter((storeProduct) => {
+        return !storeProduct.isRunout && !storeProduct.isExpired;
       })
     );
     const expiredStoreProduct = computed(() =>
-      storeProductForAll.value.filter((storeProduct) => {
-        return storeProduct.isExpired === true;
+      storeProductList.value.filter((storeProduct) => {
+        return !storeProduct.isRunout && storeProduct.isExpired;
       })
     );
     const runoutStoreProduct = computed(() =>
-      storeProductForAll.value.filter((storeProduct) => {
-        return storeProduct.isRunout === true;
+      storeProductList.value.filter((storeProduct) => {
+        return storeProduct.isRunout;
       })
     );
+
+    const groupOptions = reactive({
+      applyingTime: [
+        {
+          value: storeProductForAll,
+          tag: applyingTime.ALL,
+          tagIconClass: "ph-alarm-fill",
+        },
+        {
+          value: storeProductForDay,
+          tag: applyingTime.DAY,
+          tagIconClass: "ph-sun-fill",
+        },
+        {
+          value: storeProductForNight,
+          tag: applyingTime.NIGHT,
+          tagIconClass: "ph-moon-stars-fill",
+        },
+      ],
+      preservationStatus: [
+        {
+          value: unopenedStoreProduct,
+          tag: preservationStatus.unopened,
+          tagIconClass: "ph-moon-stars-fill",
+        },
+        {
+          value: openedStoreProduct,
+          tag: preservationStatus.opened,
+          tagIconClass: "ph-moon-stars-fill",
+        },
+        {
+          value: unexpiredStoreProduct,
+          tag: preservationStatus.unexpired,
+          tagIconClass: "ph-moon-stars-fill",
+        },
+        {
+          value: expiredStoreProduct,
+          tag: preservationStatus.expired,
+          tagIconClass: "ph-moon-stars-fill",
+        },
+        {
+          value: runoutStoreProduct,
+          tag: preservationStatus.runout,
+          tagIconClass: "ph-moon-stars-fill",
+        },
+      ],
+    });
+
+    let currentGroupOption = ref<"applyingTime" | "preservationStatus">(
+      "applyingTime"
+    );
+    const toggleGroupOption = (
+      newOption: "applyingTime" | "preservationStatus"
+    ) => {
+      currentGroupOption.value = newOption;
+    };
+    console.log({ currentGroupOption });
+    /*控制storeProduct的详情*/
     const showingProductDetail = ref(false);
 
     const selectedProduct = ref<IStoreProduct>();
@@ -198,6 +251,9 @@ export default defineComponent({
       openedStoreProduct,
       expiredStoreProduct,
       runoutStoreProduct,
+      currentGroupOption,
+      groupOptions,
+      toggleGroupOption,
     };
   },
 });

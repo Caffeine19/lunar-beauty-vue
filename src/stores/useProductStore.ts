@@ -45,17 +45,18 @@ const useProductStore = defineStore({
         storeProductList.forEach((product: IStoreProduct) => {
           if (product.openedTime) {
             product.isOpened = true;
+          } else {
+            product.isOpened = false;
           }
-          if (product.productionTime) {
-            const safeTime = dayjs(product.productionTime).add(
-              product.shelfTime,
-              "month"
-            );
-            if (safeTime.unix() > dayjs().unix()) {
-              product.isExpired = false;
-            } else {
-              product.isExpired = true;
-            }
+
+          const safeTime = dayjs(product.productionTime).add(
+            product.shelfTime,
+            "month"
+          );
+          if (safeTime.unix() > dayjs().unix()) {
+            product.isExpired = false;
+          } else {
+            product.isExpired = true;
           }
         });
         this.storeProductList = storeProductList;
