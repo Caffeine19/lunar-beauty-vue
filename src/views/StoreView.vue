@@ -29,10 +29,10 @@
           v-for="(group, index) in groupOptions[currentGroupOption]"
           :key="index"
           :store-product-list="group.value"
-          :tag-icon-class="group.tagIconClass"
+          :tagIconClass="group.tagIconClass"
           :tag="group.tag"
           @product-board-item-click="openStoreProductDetail"
-          :selected-product="selectedProduct"
+          :selectedProduct="selectedProduct"
         >
         </ProductBoard>
       </div>

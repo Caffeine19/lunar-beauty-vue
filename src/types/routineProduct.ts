@@ -1,7 +1,9 @@
 import type { applyingTime } from "./applyingTime";
 import type { IProduct } from "./product";
-export interface IRoutingProduct {
+export interface IRoutineProduct {
+  id: number;
   amount: number;
-  applyingTIme: applyingTime;
+  applyingTime: applyingTime;
+  expense: number;
   product: IProduct;
 }

@@ -10,9 +10,6 @@ const router = createRouter({
     {
       path: "/main",
       name: "main",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import("@/views/MainView.vue"),
       children: [
         {
@@ -49,6 +46,24 @@ const router = createRouter({
           path: "/main/routine",
           name: "routine",
           component: () => import("@/views/RoutineView.vue"),
+          redirect: { name: "routineBoard" },
+          children: [
+            {
+              path: "/main/library/routine/routineBoard",
+              component: () => import("@/views/RoutineBoardView.vue"),
+              name: "routineBoard",
+            },
+            {
+              path: "/main/library/routine/routineTable",
+              component: () => import("@/views/RoutineTableView.vue"),
+              name: "routineTable",
+            },
+            {
+              path: "/main/library/routine/routineFlow",
+              component: () => import("@/views/RoutineFlowView.vue"),
+              name: "routineFlow",
+            },
+          ],
         },
       ],
     },

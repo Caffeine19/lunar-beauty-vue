@@ -8,7 +8,7 @@
     </button>
     <ul class="w-[320px] space-y-3">
       <li
-        v-for="product in storeProductList"
+        v-for="product in productList"
         :key="product.id"
         @click="$emit('productBoardItemClick', product.id)"
         :class="
@@ -41,12 +41,13 @@
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
 import type { IStoreProduct } from "@/types/storeProduct";
+import type { IRoutineProduct } from "@/types/routineProduct";
 export default defineComponent({
   props: {
-    storeProductList: Array as PropType<IStoreProduct[]>,
+    productList: Array as PropType<IStoreProduct[] | IRoutineProduct[]>,
     tag: String,
     tagIconClass: String,
-    selectedProduct: Object as PropType<IStoreProduct>,
+    selectedProduct: Object as PropType<IStoreProduct | IRoutineProduct>,
   },
   emits: ["productBoardItemClick"],
   setup() {},

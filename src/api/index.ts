@@ -23,3 +23,6 @@ export const reqStoreProductFindByUser = (userId: number) => {
 export const reqRoutineFindByUser = (userId: number) => {
   return axiosInstance.post("/routine/findByUser", { userId });
 };
+export const reqRoutineProductFindByRoutine = (routineId: number) => {
+  return axiosInstance.post("/routineProduct/findByRoutine", routineId);
+};
