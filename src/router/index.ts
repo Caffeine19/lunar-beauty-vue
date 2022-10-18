@@ -45,25 +45,7 @@ const router = createRouter({
         {
           path: "/main/routine",
           name: "routine",
-          component: () => import("@/views/RoutineView.vue"),
-          redirect: { name: "routineBoard" },
-          children: [
-            {
-              path: "/main/library/routine/routineBoard",
-              component: () => import("@/views/RoutineBoardView.vue"),
-              name: "routineBoard",
-            },
-            {
-              path: "/main/library/routine/routineTable",
-              component: () => import("@/views/RoutineTableView.vue"),
-              name: "routineTable",
-            },
-            {
-              path: "/main/library/routine/routineFlow",
-              component: () => import("@/views/RoutineFlowView.vue"),
-              name: "routineFlow",
-            },
-          ],
+          component: () => import("@/views/RoutineView/RoutineView.vue"),
         },
       ],
     },

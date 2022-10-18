@@ -1,50 +1,47 @@
 <template>
-  <div>
+  <div
+    class="hide-scrollbar flex justify-between w-full mt-4 space-x-6 overflow-auto"
+  >
     <ProductBoard
       v-for="(group, index) in groupOption"
       :key="index"
-      :routineProductList="group.value"
+      :productList="group.value"
       :tag="group.tag"
       :tagIconClass="group.tagIconClass"
     ></ProductBoard>
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, onMounted, reactive } from "vue";
-
-import useRoutineProductStore from "@/stores/useRoutineProductStore";
-import { storeToRefs } from "pinia";
-
-import { useRoute } from "vue-router";
+import { computed, defineComponent, reactive } from "vue";
+import type { PropType } from "vue";
 
 import ProductBoard from "@/components/ProductBoard.vue";
 
 import { applyingTime } from "@/types/applyingTime";
+
+import type { IRoutineProduct } from "@/types/routineProduct";
+
 export default defineComponent({
   components: { ProductBoard },
-  setup() {
-    const routineProductStore = useRoutineProductStore();
-    const { routineProductList } = storeToRefs(routineProductStore);
-    const currentRoute = useRoute();
-    onMounted(() => {
-      if (currentRoute.query.routineId) {
-        routineProductStore.getRoutineProductList(
-          parseInt(currentRoute.query.routineId.toString())
-        );
-      }
-    });
+  props: {
+    routineProductList: {
+      type: Array as PropType<IRoutineProduct[]>,
+      required: true,
+    },
+  },
+  setup(props) {
     const routineProductForAll = computed(() =>
-      routineProductList.value.filter((storeProduct) => {
+      props.routineProductList.filter((storeProduct) => {
         return storeProduct.applyingTime == applyingTime.ALL;
       })
     );
     const routineProductForDay = computed(() =>
-      routineProductList.value.filter((storeProduct) => {
+      props.routineProductList.filter((storeProduct) => {
         return storeProduct.applyingTime == applyingTime.DAY;
       })
     );
     const routineProductForNight = computed(() =>
-      routineProductList.value.filter((storeProduct) => {
+      props.routineProductList.filter((storeProduct) => {
         return storeProduct.applyingTime == applyingTime.NIGHT;
       })
     );
@@ -67,7 +64,6 @@ export default defineComponent({
       },
     ]);
     return {
-      routineProductList,
       routineProductForNight,
       routineProductForDay,
       routineProductForAll,
@@ -76,4 +72,8 @@ export default defineComponent({
   },
 });
 </script>
-<style></style>
+<style scoped>
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+</style>

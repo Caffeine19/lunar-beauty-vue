@@ -259,21 +259,6 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-.store-product-list-group {
-  @apply border-[1px] p-4 space-y-3 border-zinc-900 rounded h-fit;
-}
-.store-product-list-group ul {
-  @apply w-[320px] space-y-3;
-}
-.store-product-list-group ul > li {
-  @apply text-zinc-900 border-[1px] flex justify-between items-center transition-all text-base font-normal rounded border-zinc-900 bg-zinc-50 p-1.5 space-x-2 hover:bg-zinc-900/10;
-}
-.store-product-list-group ul > li p:first-child {
-  @apply w-11/12;
-}
-.store-product-list-group ul > li p:nth-child(2) {
-  @apply w-1/12;
-}
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
