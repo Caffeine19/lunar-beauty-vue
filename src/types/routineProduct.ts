@@ -5,7 +5,7 @@ export interface IRoutineProduct {
   id: number;
   amount: number;
   applyingTime: applyingTime;
-  expense: number;
+  expense: string;
   product: IProduct;
 }
 export type IRoutineProductWithRef = Ref<IRoutineProduct[]>;

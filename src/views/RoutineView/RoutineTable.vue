@@ -1,10 +1,122 @@
 <template>
-  <div></div>
+  <div>
+    <table class="w-full">
+      <thead>
+        <tr>
+          <th><span>No</span></th>
+          <th>
+            <i class="ph-text-aa" style="font-size: 20px"></i>
+            <span>Name</span>
+          </th>
+          <th>
+            <i class="ph-coin-vertical" style="font-size: 20px"></i>
+            <span>Price</span>
+          </th>
+          <th>
+            <i class="ph-math-operations" style="font-size: 20px"></i>
+            <span>Num</span>
+          </th>
+          <th>
+            <i class="ph-clock" style="font-size: 20px"></i>
+            <span>Time</span>
+          </th>
+          <th>
+            <i class="ph-tag" style="font-size: 20px"></i>
+            <span>Type</span>
+          </th>
+          <th>
+            <i class="ph-plus" style="font-size: 20px"></i>
+            <span>Count</span>
+          </th>
+          <th>
+            <i class="ph-percent" style="font-size: 20px"></i>
+            <span>Proportion</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="(routineProduct, index) in routineProductList"
+          :key="routineProduct.id"
+          class=""
+        >
+          <td>{{ index }}</td>
+          <td>{{ routineProduct.product.name }}</td>
+          <td>{{ routineProduct.product.price }}</td>
+          <td>{{ routineProduct.amount }}</td>
+          <td>{{ routineProduct.applyingTime }}</td>
+          <td>{{ routineProduct.product.category }}</td>
+          <td>{{ routineProduct.expense }}</td>
+          <td>
+            {{
+              (
+                (parseInt(routineProduct.expense.slice(1)) / totalExpense) *
+                100
+              ).toFixed(2) + "%"
+            }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="flex items-center justify-between mt-4">
+      <button class="text-zinc-600 flex items-center space-x-3">
+        <i class="ph-plus" style="font-size: 28px"></i>
+        <p class="text-lg font-light">Add new</p>
+      </button>
+      <p class="text-xl italic font-medium">Total:{{ totalExpense }}$</p>
+    </div>
+    <div></div>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({});
+import { computed, defineComponent } from "vue";
+
+import type { PropType } from "vue";
+import type { IRoutineProduct } from "@/types/routineProduct";
+export default defineComponent({
+  props: {
+    routineProductList: {
+      type: Array as PropType<IRoutineProduct[]>,
+      required: true,
+    },
+  },
+  setup(props) {
+    const totalExpense = computed(() => {
+      let e = 0;
+      props.routineProductList.forEach((routineProduct) => {
+        e +=
+          routineProduct.amount *
+          parseInt(routineProduct.product.price.slice(1));
+      });
+      return e;
+    });
+    return { totalExpense };
+  },
+});
 </script>
 
-<style scoped></style>
+<style scoped>
+table > thead > tr > th {
+  @apply text-zinc-500 px-4 py-2 space-x-1 text-left;
+}
+table > thead > tr > th > i {
+  @apply align-middle;
+}
+table > thead > tr > th span {
+  @apply text-base font-medium align-middle;
+}
+table > tbody > tr > td {
+  @apply text-zinc-900 border-t-[1px] px-4 py-2 text-base font-normal border-zinc-300;
+}
+table > thead > tr > th:nth-child(3),
+table > thead > tr > th:nth-child(4),
+table > thead > tr > th:nth-child(7),
+table > thead > tr > th:nth-child(8),
+table > tbody > tr > td:nth-child(3),
+table > tbody > tr > td:nth-child(4),
+table > tbody > tr > td:nth-child(7),
+table > tbody > tr > td:nth-child(8) {
+  @apply text-right;
+}
+</style>
