@@ -65,7 +65,16 @@
       </button>
       <p class="text-xl italic font-medium">Total:{{ totalExpense }}$</p>
     </div>
-    <div></div>
+    <div class="gap-x-8 grid grid-cols-4 mt-6">
+      <div></div>
+      <div></div>
+      <BarChart
+        :chart-data="barChartData"
+        class="col-span-2"
+        :height="125"
+        :css-classes="'bg-zinc-50 rounded border-[1px] border-zinc-200'"
+      ></BarChart>
+    </div>
   </div>
 </template>
 
@@ -74,7 +83,11 @@ import { computed, defineComponent } from "vue";
 
 import type { PropType } from "vue";
 import type { IRoutineProduct } from "@/types/routineProduct";
+
+import BarChart from "@/components/BarChart.vue";
+import type { ChartData } from "chart.js";
 export default defineComponent({
+  components: { BarChart },
   props: {
     routineProductList: {
       type: Array as PropType<IRoutineProduct[]>,
@@ -91,7 +104,22 @@ export default defineComponent({
       });
       return e;
     });
-    return { totalExpense };
+    const barChartData = computed(() => {
+      const b: ChartData<"bar"> = {
+        labels: [],
+        datasets: [
+          {
+            data: [],
+          },
+        ],
+      };
+      props.routineProductList.forEach((routineProduct) => {
+        b?.labels?.push(routineProduct.product.name);
+        b.datasets[0].data.push(parseInt(routineProduct.expense.slice(1)));
+      });
+      return b;
+    });
+    return { totalExpense, barChartData };
   },
 });
 </script>

@@ -13,6 +13,14 @@ const useRoutineProductStore = defineStore({
       try {
         const res = await reqRoutineProductFindByRoutine(routineId);
         const { routineProductList } = res.data;
+        routineProductList.forEach((routineProduct: IRoutineProduct) => {
+          routineProduct.expense =
+            "$" +
+            (
+              routineProduct.amount *
+              parseInt(routineProduct.product.price.slice(1))
+            ).toString();
+        });
         this.routineProductList = routineProductList;
         console.log({ routineProductList });
       } catch (error) {
