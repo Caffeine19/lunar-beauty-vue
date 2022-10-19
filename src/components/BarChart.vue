@@ -62,35 +62,6 @@ export default defineComponent({
     chartData: { type: Object as PropType<ChartData<"bar">>, required: true },
   },
   setup() {
-    // const chartData = {
-    //   labels: [
-    //     "January",
-    //     "February",
-    //     "March",
-    //     "January",
-    //     "February",
-    //     "March",
-    //     "January",
-    //     "February",
-    //     "March",
-    //     "January",
-    //     "February",
-    //     "March",
-    //     "March",
-    //     "January",
-    //     "February",
-    //     "March",
-    //   ],
-    //   datasets: [
-    //     {
-    //       data: [
-    //         40, 20, 12, 40, 20, 12, 40, 20, 12, 40, 20, 12, 40, 20, 12, 12, 40,
-    //         20, 12,
-    //       ],
-    //     },
-    //   ],
-    // };
-
     const chartOptions = {
       responsive: true,
       backgroundColor: "#A6ADC6",

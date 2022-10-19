@@ -1,6 +1,6 @@
-import type { IRoutingProduct } from "./routineProduct";
+import type { IRoutineProduct } from "./routineProduct";
 export interface IRoutine {
   id: number;
   name: string;
-  routineProducts: IRoutingProduct[];
+  routineProducts: IRoutineProduct[];
 }
