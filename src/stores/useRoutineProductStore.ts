@@ -1,12 +1,18 @@
 import { defineStore } from "pinia";
-import { reqRoutineProductFindByRoutine, reqRoutineFindFlow } from "@/api";
+import {
+  reqRoutineProductFindByRoutine,
+  reqRoutineFindNode,
+  reqRoutineFindEdge,
+} from "@/api";
 
 import type { IRoutineProduct } from "@/types/routineProduct";
+
 import type { IProductNode } from "@/types/productNode";
 import type { IIngredientNode } from "@/types/ingredientNode";
+import { EdgeType, type IEdge } from "@/types/edge";
 
 import { MarkerType, Position } from "@vue-flow/core";
-import type { Node } from "@vue-flow/core";
+import type { Node, Edge } from "@vue-flow/core";
 
 const useRoutineProductStore = defineStore({
   id: "routineProduct",
@@ -73,7 +79,7 @@ const useRoutineProductStore = defineStore({
           target: "4",
         },
       ],
-      nodeList: [] as Node<IProductNode | IIngredientNode>[],
+      elementList: [] as (Node<IProductNode | IIngredientNode> | Edge<IEdge>)[],
     };
   },
   actions: {
@@ -95,18 +101,18 @@ const useRoutineProductStore = defineStore({
         console.log(error);
       }
     },
-    async getRoutineFlow(routineId: number) {
+    async getRoutineNode(routineId: number) {
       try {
-        const res = await reqRoutineFindFlow(routineId);
-        const { flowList } = res.data;
+        const res = await reqRoutineFindNode(routineId);
+        const { nodeList } = res.data;
 
-        flowList.forEach((pNode: IProductNode) => {
-          this.nodeList.push({
-            id: pNode.id + "pNode",
+        nodeList.forEach((pNode: IProductNode, index: number) => {
+          this.elementList.push({
+            id: pNode.id + "PNode",
             label: pNode.label,
             data: {
-              id: pNode.id + "pNode",
-              label: pNode.label,
+              id: pNode.id + "PNode",
+              label: index + pNode.label,
               position: {
                 x: pNode.x || 0,
                 y: pNode.y || 0,
@@ -118,16 +124,16 @@ const useRoutineProductStore = defineStore({
               x: pNode.x || 0,
               y: pNode.y || 0,
             },
-            sourcePosition: Position.Right,
-            targetPosition: Position.Left,
+            sourcePosition: Position.Left,
+            targetPosition: Position.Right,
             class: "product-node",
           });
           pNode.ingredientNodes?.forEach((iNode) => {
-            this.nodeList.push({
-              id: iNode.id + "iNode",
+            this.elementList.push({
+              id: iNode.id + "INode",
               label: iNode.label,
               data: {
-                id: iNode.id + "iNode",
+                id: iNode.id + "INode",
                 label: iNode.label,
                 productNodeId: iNode.productNodeId,
               },
@@ -135,12 +141,39 @@ const useRoutineProductStore = defineStore({
                 x: iNode.x || 0,
                 y: iNode.y || 0,
               },
-              parentNode: pNode.id + "pNode",
+              parentNode: pNode.id + "PNode",
               hidden: true,
-              sourcePosition: Position.Right,
-              targetPosition: Position.Left,
+              sourcePosition: Position.Left,
+              targetPosition: Position.Right,
               class: "ingredient-node",
             });
+          });
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getRoutineEdge(routineId: number) {
+      try {
+        const res = await reqRoutineFindEdge(routineId);
+        const { edgeList } = res.data;
+        console.log({ edgeList });
+        edgeList.forEach((e: IEdge) => {
+          this.elementList.push({
+            id: e.id + "Edge",
+            label: e.label,
+            source: e.source,
+            target: e.target,
+            data: {
+              id: e.id + "Edge",
+              label: e.label,
+              routineId: e.routineId,
+              source: e.source,
+              target: e.target,
+              edgeType: e.edgeType,
+            },
+            type: e.edgeType == EdgeType.PP ? "smoothstep" : "default",
+            style: { stroke: "#DBC5CF" },
           });
         });
       } catch (error) {

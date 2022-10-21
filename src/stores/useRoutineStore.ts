@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { reqRoutineFindByUser, reqRoutineFindFlow } from "@/api";
+import { reqRoutineFindByUser } from "@/api";
 import type { IRoutine } from "@/types/routine";
 const useRoutineStore = defineStore({
   id: "routine",

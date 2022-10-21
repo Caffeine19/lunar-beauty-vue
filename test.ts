@@ -43,3 +43,7 @@ if ("test1" in combinedA.data) {
 if (combinedA.data.type == "a") {
   console.log(combinedA.data.test1);
 }
+function combine<Type>(arr1: Type[], arr2: Type[]): Type[] {
+  return arr1.concat(arr2);
+}
+const arr = combine<string | number>([1, 2, 3], ["hello"]);

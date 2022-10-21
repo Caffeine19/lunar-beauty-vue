@@ -1,13 +1,12 @@
 <template>
   <div class="grow w-full">
     <VueFlow
-      :default-edge-options="{ type: 'smoothstep' }"
       :node-types="nodeDefaultOption"
       :default-zoom="1.5"
       :min-zoom="0.2"
       :max-zoom="4"
       class=""
-      v-model="nodeList"
+      v-model="elementList"
       @node-double-click="doubleClick"
     >
       <Background pattern-color="#aaa" :gap="8" /> <MiniMap /> <Controls />
@@ -32,7 +31,7 @@ export default defineComponent({
   components: { VueFlow, Background, Controls, MiniMap },
   setup() {
     const routineProductStore = useRoutineProductStore();
-    const { nodeList } = storeToRefs(routineProductStore);
+    const { elementList } = storeToRefs(routineProductStore);
 
     const currentRoute = useRoute();
 
@@ -43,21 +42,21 @@ export default defineComponent({
 
     const test = ref<number>(1);
 
-    onMounted(() => {
+    onMounted(async () => {
       if (currentRoute.query.routineId) {
-        routineProductStore.getRoutineFlow(
-          parseInt(currentRoute.query.routineId.toString())
-        );
+        const routineId = parseInt(currentRoute.query.routineId.toString());
+        routineProductStore.getRoutineNode(routineId);
+        routineProductStore.getRoutineEdge(routineId);
       }
     });
 
     const doubleClick = (e: NodeMouseEvent) => {
       console.log("onDoubleClick", e, e.node.id, e.node.label);
-      nodeList.value.forEach((node) => {
+      elementList.value.forEach((node) => {
         if (node.data && node.id == e.node.id && "showChildren" in node.data) {
           node.data.showChildren = !node.data.showChildren;
         }
-        if (node.parentNode == e.node.id) {
+        if ("parentNode" in node && node.parentNode == e.node.id) {
           node.hidden = !node.hidden;
         }
       });
@@ -65,7 +64,7 @@ export default defineComponent({
 
     return {
       nodeDefaultOption,
-      nodeList,
+      elementList,
       doubleClick,
     };
   },
@@ -77,6 +76,6 @@ export default defineComponent({
   @apply bg-zinc-900 border-zinc-50 text-zinc-50 hover:opacity-[85%] border-2 rounded-lg;
 }
 .ingredient-node {
-  @apply border-[1px] bg-transparent border-zinc-600 rounded-full;
+  @apply border-[1px] bg-zinc-50/80 border-zinc-600 rounded-full;
 }
 </style>

@@ -68,12 +68,12 @@
     <div class="gap-x-8 grid grid-cols-4 mt-6">
       <div></div>
       <div></div>
-      <BarChart
+      <!-- <BarChart
         :chart-data="barChartData"
         class="col-span-2"
         :height="125"
         :css-classes="'bg-zinc-50 rounded border-[1px] border-zinc-200'"
-      ></BarChart>
+      ></BarChart> -->
     </div>
   </div>
 </template>
@@ -87,7 +87,7 @@ import type { IRoutineProduct } from "@/types/routineProduct";
 import BarChart from "@/components/BarChart.vue";
 import type { ChartData } from "chart.js";
 export default defineComponent({
-  components: { BarChart },
+  components: {},
   props: {
     routineProductList: {
       type: Array as PropType<IRoutineProduct[]>,
