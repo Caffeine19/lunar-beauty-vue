@@ -1,5 +1,5 @@
 <template>
-  <div class="grow p-6 overflow-x-hidden">
+  <div class="grow flex flex-col p-6 overflow-x-hidden">
     <div class="flex items-center justify-between">
       <p class="text-zinc-900 text-2xl font-semibold">Routine</p>
       <div class="flex space-x-2">

@@ -28,7 +28,7 @@
         <ProductBoard
           v-for="(group, index) in groupOptions[currentGroupOption]"
           :key="index"
-          :store-product-list="group.value"
+          :product-list="group.value"
           :tagIconClass="group.tagIconClass"
           :tag="group.tag"
           @product-board-item-click="openStoreProductDetail"

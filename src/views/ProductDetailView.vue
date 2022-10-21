@@ -133,10 +133,12 @@ import useCommentStore from "@/stores/useCommentStore";
 import { useRoute } from "vue-router";
 
 import ProductOverView from "@/components/ProductOverview.vue";
+
 export default defineComponent({
   components: {
     ProductOverView,
   },
+
   setup() {
     const ingredientStore = useIngredientStore();
     const { ingredientList } = storeToRefs(ingredientStore);
