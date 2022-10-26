@@ -31,9 +31,9 @@
             </div>
           </div>
           <img
-            src="@/assets/images/Product/Frame 1.png"
+            :src="'data:image/png;base64,' + selectedProduct?.images"
             alt="productDetailImg"
-            class="rounded"
+            class="rounded w-[230px] h-[260px]"
           />
         </div>
         <div class="flex items-center">
@@ -42,11 +42,15 @@
 
         <div class="flex flex-col justify-between">
           <div class="space-y-4">
-            <p class="text-zinc-600 text-xl font-medium">NIOD</p>
-            <p class="text-zinc-900 text-2xl font-semibold">
-              SURVIVAL 0 (S0)SURVIVAL 0 (S0)
+            <p class="text-zinc-600 text-xl font-medium">
+              {{ selectedProduct?.brand }}
             </p>
-            <p class="text-zinc-600 text-xl font-medium">30ml | $60</p>
+            <p class="text-zinc-900 text-2xl font-semibold">
+              {{ selectedProduct?.name }}
+            </p>
+            <p class="text-zinc-600 text-xl font-medium">
+              {{ selectedProduct?.capacity }} | {{ selectedProduct?.price }}
+            </p>
           </div>
           <button
             class="hover:opacity-90 bg-zinc-900 text-zinc-50 w-fit flex items-center px-4 py-2 space-x-2 rounded-full"
@@ -137,6 +141,7 @@ import useCommentStore from "@/stores/useCommentStore";
 import { useRoute } from "vue-router";
 
 import ProductOverView from "@/components/ProductOverview.vue";
+import { computed } from "vue";
 
 export default defineComponent({
   components: {
@@ -170,10 +175,21 @@ export default defineComponent({
         );
       }
     });
+
+    const selectedProduct = computed(() => {
+      const sP = relatedProductList.value.find((p) => {
+        if (currentRoute.query.productId) {
+          return p.id == parseInt(currentRoute?.query?.productId.toString());
+        }
+      });
+      return sP;
+    });
+
     return {
       ingredientList,
       relatedProductList,
       productRelatedCommentList,
+      selectedProduct,
     };
   },
 });
