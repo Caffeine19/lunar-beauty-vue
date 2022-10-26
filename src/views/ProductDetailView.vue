@@ -1,6 +1,10 @@
 <template>
-  <div class="grid w-full grid-cols-3 p-6">
-    <div class="hide-scrollbar col-span-2 pr-6 overflow-y-auto">
+  <div
+    class="xl:overflow-y-hidden hide-scrollbar grid w-full grid-cols-3 p-6 overflow-y-auto"
+  >
+    <div
+      class="hide-scrollbar xl:col-span-2 xl:overflow-y-auto col-span-3 pr-6"
+    >
       <div class="flex space-x-12" id="product-basic-info">
         <div class="flex space-x-6">
           <div class="flex flex-col justify-between">
@@ -73,7 +77,7 @@
           <p class="text-zinc-900 text-2xl font-semibold">Comments</p>
         </div>
         <div
-          class="bg-zinc-50 p-4 space-y-6 rounded border-[1px] border-zinc-100"
+          class="p-4 space-y-6 rounded border-[1px] border-zinc-900/60 hover:bg-zinc-900/10 transition-colors"
           v-for="comment in productRelatedCommentList"
           :key="comment.id"
         >
@@ -97,11 +101,11 @@
         </div>
       </div>
     </div>
-    <div class="flex col-span-1 space-x-6 overflow-hidden">
-      <div class="flex items-center">
+    <div class="xl:col-span-1 xl:overflow-hidden xl:space-x-6 flex col-span-3">
+      <div class="xl:flex items-center hidden">
         <div class="w-[1px] border-l-[1px] border-zinc-900 h-full"></div>
       </div>
-      <div class="flex flex-col space-y-4 overflow-hidden">
+      <div class="xl:mt-0 flex flex-col mt-8 space-y-4 overflow-hidden">
         <div class="flex items-center space-x-2">
           <i class="ph-flask-fill" style="font-size: 32px"></i>
           <p class="text-zinc-900 text-2xl font-semibold">Ingredients</p>

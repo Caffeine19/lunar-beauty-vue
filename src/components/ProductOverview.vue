@@ -1,9 +1,9 @@
 <template>
   <div class="group w-[230px] col-span-1">
     <img
-      src="@/assets/images/Product/Frame 1.png"
+      :src="'data:image/png;base64,' + images"
       alt="productImg"
-      class="rounded w-[230px] h-[260px]"
+      class="rounded w-[230px] h-[260px] cover-image object-cover object-center"
     />
     <div class="my-4 space-y-2">
       <p class="text-zinc-700 text-base font-normal">{{ brand }}</p>

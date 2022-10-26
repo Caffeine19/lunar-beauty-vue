@@ -5,3 +5,4 @@ export interface IRoutine {
   routineProducts: IRoutineProduct[];
   flowChartInfo: string;
 }
+

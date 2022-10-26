@@ -13,7 +13,7 @@
         :to="{ name: tab.to }"
       >
         <i class="" style="font-size: 32px" :class="tab.iconClass"></i>
-        <p class="text-xl font-normal">{{ tab.name }}</p>
+        <p class="xl:block hidden text-xl font-normal">{{ tab.name }}</p>
       </RouterLink>
     </div>
     <div class="w-full">
@@ -31,7 +31,9 @@
         style="font-size: 32px"
         :class="routineTabOption.iconClass"
       ></i>
-      <p class="text-xl font-normal">{{ routineTabOption.name }}</p>
+      <p class="xl:block hidden text-xl font-normal">
+        {{ routineTabOption.name }}
+      </p>
     </button>
     <ul v-show="showingRoutineList" class="space-y-1.5 transition-all">
       <li
