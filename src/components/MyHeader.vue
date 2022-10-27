@@ -1,9 +1,7 @@
 <template>
-  <div
-    class="w-full border-b-[1px] border-b-zinc-800 px-4 flex justify-between"
-  >
+  <div class="header-container flex justify-between w-full px-4">
     <div
-      class="flex items-center space-x-6 py-4 border-r-[1px] border-r-zinc-800 pr-4"
+      class="header-section-container-left flex items-center py-4 pr-4 space-x-6"
     >
       <img src="@/assets/images/Icon/48.svg" alt="product icon" />
       <h1
@@ -30,7 +28,7 @@
       </button>
     </div>
     <div
-      class="flex border-l-[1px] border-l-zinc-800 items-center pl-4 py-4 space-x-3"
+      class="header-section-container-right flex items-center py-4 pl-4 space-x-3"
     >
       <img
         src="@/assets/images/Avatar.png"
@@ -56,4 +54,47 @@ import { defineComponent } from "vue";
 
 export default defineComponent({});
 </script>
-<style lang=""></style>
+<style scoped>
+.header-container {
+  @apply relative;
+}
+.header-container:before {
+  @apply border-b-[1px] border-zinc-900 absolute  bottom-0 w-[1px] h-0 left-0;
+
+  content: "";
+  animation: draw-border-right 2s linear forwards;
+}
+@keyframes draw-border-right {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+.header-section-container-left,
+.header-section-container-right {
+  @apply relative;
+}
+.header-section-container-left:before {
+  @apply border-r-[1px] border-zinc-900 absolute  bottom-0 w-[1px] h-0 right-0;
+
+  content: "";
+  animation: draw-border-up 2s linear forwards;
+}
+.header-section-container-right:before {
+  @apply border-r-[1px] border-zinc-900 absolute  bottom-0 w-[1px] h-0 left-0;
+
+  content: "";
+  animation: draw-border-up 2s linear forwards;
+  animation-delay: 1s;
+}
+@keyframes draw-border-up {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: 100%;
+  }
+}
+</style>

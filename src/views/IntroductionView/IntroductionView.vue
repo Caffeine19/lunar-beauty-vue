@@ -41,11 +41,11 @@
         </button>
       </div>
       <div
-        class="justify-items-center xl:grid-cols-3 xl:space-y-0 grid items-center w-4/5 grid-cols-1 grid-rows-1 space-y-8"
+        class="justify-items-center xl:grid-cols-3 xl:space-y-0 xl:w-4/5 grid items-center w-full grid-cols-1 grid-rows-1 space-y-8"
       >
         <IntroductionCard
-          v-for="(card, index) in introductionCardOptions"
-          :key="index"
+          v-for="card in introductionCardOptions"
+          :key="card.iconClass"
           v-bind="card"
         ></IntroductionCard>
       </div>

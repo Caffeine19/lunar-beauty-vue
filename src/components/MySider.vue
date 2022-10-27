@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col h-full border-r-[1px] border-zinc-900">
+  <div class="sider-container flex flex-col h-full">
     <div class="w-fit flex flex-col justify-start py-4 space-y-4">
       <RouterLink
         v-for="(tab, index) in siderTabOption"
@@ -114,4 +114,22 @@ export default defineComponent({
   },
 });
 </script>
-<style lang=""></style>
+<style scoped>
+.sider-container {
+  @apply relative;
+}
+.sider-container:before {
+  @apply border-r-[1px] border-zinc-900 absolute right-0 top-0 w-[1px] h-0;
+
+  content: "";
+  animation: draw-border-down 2s linear forwards;
+}
+@keyframes draw-border-down {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: 100%;
+  }
+}
+</style>
