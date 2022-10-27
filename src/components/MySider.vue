@@ -7,7 +7,7 @@
         class="text-zinc-900 hover:bg-zinc-900/10 flex items-center px-4 py-2 space-x-6 transition-colors"
         :class="
           currentRoute.path.includes(tab.to)
-            ? 'text-zinc-50 bg-gradient-to-r from-[#C5B1B8] to-[#DBC5CF]'
+            ? 'text-zinc-50 bg-gradient-to-r from-bean-900 to-bean-800'
             : ''
         "
         :to="{ name: tab.to }"
@@ -24,7 +24,7 @@
     </div>
     <button
       @click="toggleShowingRoutineList"
-      class="text-zinc-900 hover:bg-zinc-900/10 flex items-center px-4 py-2 space-x-6 transition-all transition-colors"
+      class="text-zinc-900 hover:bg-zinc-900/10 flex items-center px-4 py-2 space-x-6 transition-colors"
     >
       <i
         class=""
@@ -44,7 +44,7 @@
         :class="
           currentRoute.query.routineId &&
           parseInt(currentRoute.query.routineId.toString()) === routine.id
-            ? 'text-zinc-50 bg-gradient-to-r from-[#C5B1B8] to-[#DBC5CF]'
+            ? 'text-zinc-50 bg-gradient-to-r from-bean-900 to-bean-800'
             : ''
         "
       >

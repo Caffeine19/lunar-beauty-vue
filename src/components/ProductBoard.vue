@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-3">
     <button
-      class="rounded-full bg-gradient-to-r to-[#E3E5ED] from-[#B0B6C4] flex items-center px-3 py-1 space-x-2"
+      class="bg-gradient-to-r to-moonlight-800 from-moonlight-900 flex items-center px-3 py-1 space-x-2 rounded-full"
     >
       <i class="text-zinc-50" style="font-size: 24px" :class="tagIconClass"></i>
       <p class="text-zinc-50 text-lg font-medium">{{ tag }}</p>
