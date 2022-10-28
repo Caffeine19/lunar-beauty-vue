@@ -10,6 +10,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@tailwindcss/container-queries": "^0.1.0",
     "@vue-flow/additional-components": "^1.1.0",
     "@vue-flow/core": "^1.1.4",
     "@vueuse/core": "^9.4.0",
