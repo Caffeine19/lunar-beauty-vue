@@ -77,7 +77,6 @@ export default {
       },
       {
         iconClass: "ph-map-trifold-fill",
-
         iconContainerClass: "bg-zinc-900",
         title: "Routine",
         content:

@@ -37,6 +37,14 @@ const useStoreProductStore = defineStore({
         console.log(error);
       }
     },
+    updateTest(storeProductId: number, amount: number) {
+      console.log("onUpdate");
+      this.storeProductList.forEach((sP, index) => {
+        if (sP.id == storeProductId) {
+          this.storeProductList[index].amount = amount;
+        }
+      });
+    },
   },
 });
 export default useStoreProductStore;

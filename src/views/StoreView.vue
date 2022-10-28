@@ -53,7 +53,7 @@
       <ul class="space-y-3">
         <li class="text-zinc-600 flex justify-between text-base font-medium">
           <p>Amount:</p>
-          <p>{{ selectedProduct?.amount }}</p>
+          <LunarCounter v-model="computedAmount"></LunarCounter>
         </li>
         <li class="text-zinc-600 flex justify-between text-base font-medium">
           <p>Status:</p>
@@ -109,16 +109,17 @@ import { preservationStatus } from "@/types/preservationStatus";
 
 import ProductBoard from "@/components/ProductBoard.vue";
 import ProductOverview from "@/components/ProductOverview.vue";
+import LunarCounter from "@/components/LunarCounter.vue";
 
 import type { IStoreProduct } from "@/types/storeProduct";
 export default defineComponent({
-  components: { ProductOverview, ProductBoard },
+  components: { ProductOverview, ProductBoard, LunarCounter },
   setup() {
-    const projectStore = useStoreProductStore();
-    const { storeProductList } = storeToRefs(projectStore);
+    const productStore = useStoreProductStore();
+    const { storeProductList } = storeToRefs(productStore);
     const userId = 1;
     onMounted(() => {
-      projectStore.getStoreProduct(userId);
+      productStore.getStoreProduct(userId);
     });
 
     /*filtered by applyingTime*/
@@ -224,6 +225,7 @@ export default defineComponent({
     const showingProductDetail = ref(false);
 
     const selectedProduct = ref<IStoreProduct>();
+    const selectedIndex = ref<number>(0);
 
     const openStoreProductDetail = (productId: IStoreProduct["id"]) => {
       showingProductDetail.value = true;
@@ -237,6 +239,16 @@ export default defineComponent({
       showingProductDetail.value = false;
     };
 
+    const computedAmount = computed({
+      get: () => {
+        return selectedProduct.value?.amount || 0;
+      },
+      set: (newVal) => {
+        console.log(newVal);
+        if (selectedProduct.value)
+          productStore.updateTest(selectedProduct.value?.id, newVal);
+      },
+    });
     return {
       storeProductList,
       storeProductForAll,
@@ -254,6 +266,7 @@ export default defineComponent({
       currentGroupOption,
       groupOptions,
       toggleGroupOption,
+      computedAmount,
     };
   },
 });
