@@ -53,7 +53,7 @@
       <ul class="space-y-3">
         <li class="text-zinc-600 flex justify-between text-base font-medium">
           <p>Amount:</p>
-          <LunarCounter v-model="computedAmount"></LunarCounter>
+          <LunarCounter v-model="amount"></LunarCounter>
         </li>
         <li class="text-zinc-600 flex justify-between text-base font-medium">
           <p>Status:</p>
@@ -99,7 +99,14 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, onMounted, reactive, ref } from "vue";
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  reactive,
+  ref,
+  toRefs,
+} from "vue";
 
 import { storeToRefs } from "pinia";
 import useStoreItemStore from "@/stores/useStoreItemStore";
@@ -221,11 +228,16 @@ export default defineComponent({
       currentGroupOption.value = newOption;
     };
     console.log({ currentGroupOption });
-    /*控制storeItem的详情*/
+
+    /*控制显示storeItem的详情*/
     const showingProductDetail = ref(false);
 
     const selectedProduct = ref<IStoreItem>();
-    const selectedIndex = ref<number>(0);
+    // const selectedIndex = ref<number>(0);
+
+    const updateOptions = reactive({
+      amount: 0,
+    });
 
     const openStoreItemDetail = (productId: IStoreItem["id"]) => {
       showingProductDetail.value = true;
@@ -233,22 +245,26 @@ export default defineComponent({
       selectedProduct.value = storeItemList.value.find((product) => {
         return product.id == productId;
       });
+
+      updateOptions.amount = selectedProduct.value?.amount || 0;
     };
+
     const closeStoreItemDetail = () => {
       selectedProduct.value = undefined;
       showingProductDetail.value = false;
     };
 
-    const computedAmount = computed({
-      get: () => {
-        return selectedProduct.value?.amount || 0;
-      },
-      set: (newVal) => {
-        console.log(newVal);
-        if (selectedProduct.value)
-          productStore.updateTest(selectedProduct.value?.id, newVal);
-      },
-    });
+    // const computedAmount = computed({
+    //   get: () => {
+    //     return selectedProduct.value?.amount || 0;
+    //   },
+    //   set: (newVal) => {
+    //     console.log(newVal);
+    //     if (selectedProduct.value)
+    //       productStore.updateTest(selectedProduct.value?.id, newVal);
+    //   },
+    // });
+
     return {
       storeItemList,
       storeItemForAll,
@@ -266,7 +282,8 @@ export default defineComponent({
       currentGroupOption,
       groupOptions,
       toggleGroupOption,
-      computedAmount,
+      // computedAmount,
+      ...toRefs(updateOptions),
     };
   },
 });
