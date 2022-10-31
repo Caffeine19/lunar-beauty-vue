@@ -28,7 +28,7 @@
         <ProductBoard
           v-for="(group, index) in groupOptions[currentGroupOption]"
           :key="index"
-          :product-list="group.value"
+          :productList="group.value"
           :tagIconClass="group.tagIconClass"
           :tag="group.tag"
           @product-board-item-click="openStoreItemDetail"
@@ -53,15 +53,16 @@
       <ul class="space-y-3">
         <li class="text-zinc-600 flex justify-between text-base font-medium">
           <p>Amount:</p>
-          <LunarCounter v-model="amount"></LunarCounter>
-        </li>
-        <li class="text-zinc-600 flex justify-between text-base font-medium">
-          <p>Status:</p>
-          <p>{{ selectedProduct?.amount }}</p>
+          <LunarCounter v-model="updateOptions.amount"></LunarCounter>
         </li>
         <li class="text-zinc-600 flex justify-between text-base font-medium">
           <p>applyingTime:</p>
-          <p>{{ selectedProduct?.applyingTime }}</p>
+          <!-- <p>{{ selectedProduct?.applyingTime }}</p> -->
+          <LunarSelector
+            v-model:selectedTap="updateOptions.applyingTime"
+            :tapOptions="applyingTimeArr"
+            class="w-24"
+          ></LunarSelector>
         </li>
         <li class="text-zinc-600 flex justify-between text-base font-medium">
           <p>OpenedTime:</p>
@@ -84,6 +85,10 @@
           <p>{{ selectedProduct?.shelfTime + "months" }}</p>
         </li>
         <li class="text-zinc-600 flex justify-between text-base font-medium">
+          <p>Status:</p>
+          <p>{{ selectedProduct?.amount }}</p>
+        </li>
+        <li class="text-zinc-600 flex justify-between text-base font-medium">
           <p>expense:</p>
           <p>{{ selectedProduct?.expense }}</p>
         </li>
@@ -99,34 +104,27 @@
   </div>
 </template>
 <script lang="ts">
-import {
-  computed,
-  defineComponent,
-  onMounted,
-  reactive,
-  ref,
-  toRefs,
-} from "vue";
+import { computed, defineComponent, onMounted, reactive, ref } from "vue";
 
 import { storeToRefs } from "pinia";
 import useStoreItemStore from "@/stores/useStoreItemStore";
 
-import { applyingTime } from "@/types/applyingTime";
+import type { IStoreItem } from "@/types/storeItem";
+import { applyingTime, applyingTimeArr } from "@/types/applyingTime";
 import { preservationStatus } from "@/types/preservationStatus";
 
 import ProductBoard from "@/components/ProductBoard.vue";
 import ProductOverview from "@/components/ProductOverview.vue";
 import LunarCounter from "@/components/LunarCounter.vue";
-
-import type { IStoreItem } from "@/types/storeItem";
+import LunarSelector from "@/components/LunarSelector.vue";
 export default defineComponent({
-  components: { ProductOverview, ProductBoard, LunarCounter },
+  components: { ProductOverview, ProductBoard, LunarCounter, LunarSelector },
   setup() {
     const productStore = useStoreItemStore();
     const { storeItemList } = storeToRefs(productStore);
     const userId = 1;
-    onMounted(() => {
-      productStore.getStoreItem(userId);
+    onMounted(async () => {
+      await productStore.getStoreItem(userId);
     });
 
     /*filtered by applyingTime*/
@@ -237,6 +235,7 @@ export default defineComponent({
 
     const updateOptions = reactive({
       amount: 0,
+      applyingTime: applyingTime.ALL,
     });
 
     const openStoreItemDetail = (productId: IStoreItem["id"]) => {
@@ -247,6 +246,8 @@ export default defineComponent({
       });
 
       updateOptions.amount = selectedProduct.value?.amount || 0;
+      updateOptions.applyingTime =
+        selectedProduct.value?.applyingTime || applyingTime.ALL;
     };
 
     const closeStoreItemDetail = () => {
@@ -283,7 +284,8 @@ export default defineComponent({
       groupOptions,
       toggleGroupOption,
       // computedAmount,
-      ...toRefs(updateOptions),
+      updateOptions,
+      applyingTimeArr,
     };
   },
 });
