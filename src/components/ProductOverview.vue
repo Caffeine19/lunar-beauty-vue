@@ -45,7 +45,7 @@ export default defineComponent({
   },
   setup(props) {
     const currentRouter = useRouter();
-    console.log(props.id, props.brand);
+    // console.log(props.id, props.brand);
     const goProductDetail = (id: number, brand: string) => {
       currentRouter.push({
         name: "productDetail",

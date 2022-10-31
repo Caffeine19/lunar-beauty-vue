@@ -31,7 +31,7 @@
           :product-list="group.value"
           :tagIconClass="group.tagIconClass"
           :tag="group.tag"
-          @product-board-item-click="openStoreProductDetail"
+          @product-board-item-click="openStoreItemDetail"
           :selectedProduct="selectedProduct"
         >
         </ProductBoard>
@@ -42,7 +42,7 @@
       :class="showingProductDetail ? 'basis-1/4' : 'basis-0 hidden'"
     >
       <div class="flex justify-between">
-        <button @click="closeStoreProductDetail">
+        <button @click="closeStoreItemDetail">
           <i class="ph-x text-zinc-900" style="font-size: 28px"></i>
         </button>
         <button>
@@ -102,7 +102,7 @@
 import { computed, defineComponent, onMounted, reactive, ref } from "vue";
 
 import { storeToRefs } from "pinia";
-import useStoreProductStore from "@/stores/useStoreProductStore";
+import useStoreItemStore from "@/stores/useStoreItemStore";
 
 import { applyingTime } from "@/types/applyingTime";
 import { preservationStatus } from "@/types/preservationStatus";
@@ -111,101 +111,101 @@ import ProductBoard from "@/components/ProductBoard.vue";
 import ProductOverview from "@/components/ProductOverview.vue";
 import LunarCounter from "@/components/LunarCounter.vue";
 
-import type { IStoreProduct } from "@/types/storeProduct";
+import type { IStoreItem } from "@/types/storeItem";
 export default defineComponent({
   components: { ProductOverview, ProductBoard, LunarCounter },
   setup() {
-    const productStore = useStoreProductStore();
-    const { storeProductList } = storeToRefs(productStore);
+    const productStore = useStoreItemStore();
+    const { storeItemList } = storeToRefs(productStore);
     const userId = 1;
     onMounted(() => {
-      productStore.getStoreProduct(userId);
+      productStore.getStoreItem(userId);
     });
 
     /*filtered by applyingTime*/
-    const storeProductForAll = computed(() =>
-      storeProductList.value.filter((storeProduct) => {
-        return storeProduct.applyingTime == applyingTime.ALL;
+    const storeItemForAll = computed(() =>
+      storeItemList.value.filter((storeItem) => {
+        return storeItem.applyingTime == applyingTime.ALL;
       })
     );
-    const storeProductForDay = computed(() =>
-      storeProductList.value.filter((storeProduct) => {
-        return storeProduct.applyingTime == applyingTime.DAY;
+    const storeItemForDay = computed(() =>
+      storeItemList.value.filter((storeItem) => {
+        return storeItem.applyingTime == applyingTime.DAY;
       })
     );
-    const storeProductForNight = computed(() =>
-      storeProductList.value.filter((storeProduct) => {
-        return storeProduct.applyingTime == applyingTime.NIGHT;
+    const storeItemForNight = computed(() =>
+      storeItemList.value.filter((storeItem) => {
+        return storeItem.applyingTime == applyingTime.NIGHT;
       })
     );
     /*filtered by preservationStatus*/
-    const unopenedStoreProduct = computed(() =>
-      storeProductList.value.filter((storeProduct) => {
-        return !storeProduct.isRunout && storeProduct.isOpened;
+    const unopenedStoreItem = computed(() =>
+      storeItemList.value.filter((storeItem) => {
+        return !storeItem.isRunout && storeItem.isOpened;
       })
     );
-    const openedStoreProduct = computed(() =>
-      storeProductList.value.filter((storeProduct) => {
-        return !storeProduct.isRunout && !storeProduct.isOpened;
+    const openedStoreItem = computed(() =>
+      storeItemList.value.filter((storeItem) => {
+        return !storeItem.isRunout && !storeItem.isOpened;
       })
     );
-    const unexpiredStoreProduct = computed(() =>
-      storeProductList.value.filter((storeProduct) => {
-        return !storeProduct.isRunout && !storeProduct.isExpired;
+    const unexpiredStoreItem = computed(() =>
+      storeItemList.value.filter((storeItem) => {
+        return !storeItem.isRunout && !storeItem.isExpired;
       })
     );
-    const expiredStoreProduct = computed(() =>
-      storeProductList.value.filter((storeProduct) => {
-        return !storeProduct.isRunout && storeProduct.isExpired;
+    const expiredStoreItem = computed(() =>
+      storeItemList.value.filter((storeItem) => {
+        return !storeItem.isRunout && storeItem.isExpired;
       })
     );
-    const runoutStoreProduct = computed(() =>
-      storeProductList.value.filter((storeProduct) => {
-        return storeProduct.isRunout;
+    const runoutStoreItem = computed(() =>
+      storeItemList.value.filter((storeItem) => {
+        return storeItem.isRunout;
       })
     );
 
     const groupOptions = reactive({
       applyingTime: [
         {
-          value: storeProductForAll,
+          value: storeItemForAll,
           tag: applyingTime.ALL,
           tagIconClass: "ph-alarm-fill",
         },
         {
-          value: storeProductForDay,
+          value: storeItemForDay,
           tag: applyingTime.DAY,
           tagIconClass: "ph-sun-fill",
         },
         {
-          value: storeProductForNight,
+          value: storeItemForNight,
           tag: applyingTime.NIGHT,
           tagIconClass: "ph-moon-stars-fill",
         },
       ],
       preservationStatus: [
         {
-          value: unopenedStoreProduct,
+          value: unopenedStoreItem,
           tag: preservationStatus.unopened,
           tagIconClass: "ph-moon-stars-fill",
         },
         {
-          value: openedStoreProduct,
+          value: openedStoreItem,
           tag: preservationStatus.opened,
           tagIconClass: "ph-moon-stars-fill",
         },
         {
-          value: unexpiredStoreProduct,
+          value: unexpiredStoreItem,
           tag: preservationStatus.unexpired,
           tagIconClass: "ph-moon-stars-fill",
         },
         {
-          value: expiredStoreProduct,
+          value: expiredStoreItem,
           tag: preservationStatus.expired,
           tagIconClass: "ph-moon-stars-fill",
         },
         {
-          value: runoutStoreProduct,
+          value: runoutStoreItem,
           tag: preservationStatus.runout,
           tagIconClass: "ph-moon-stars-fill",
         },
@@ -221,20 +221,20 @@ export default defineComponent({
       currentGroupOption.value = newOption;
     };
     console.log({ currentGroupOption });
-    /*控制storeProduct的详情*/
+    /*控制storeItem的详情*/
     const showingProductDetail = ref(false);
 
-    const selectedProduct = ref<IStoreProduct>();
+    const selectedProduct = ref<IStoreItem>();
     const selectedIndex = ref<number>(0);
 
-    const openStoreProductDetail = (productId: IStoreProduct["id"]) => {
+    const openStoreItemDetail = (productId: IStoreItem["id"]) => {
       showingProductDetail.value = true;
 
-      selectedProduct.value = storeProductList.value.find((product) => {
+      selectedProduct.value = storeItemList.value.find((product) => {
         return product.id == productId;
       });
     };
-    const closeStoreProductDetail = () => {
+    const closeStoreItemDetail = () => {
       selectedProduct.value = undefined;
       showingProductDetail.value = false;
     };
@@ -250,19 +250,19 @@ export default defineComponent({
       },
     });
     return {
-      storeProductList,
-      storeProductForAll,
-      storeProductForDay,
-      storeProductForNight,
+      storeItemList,
+      storeItemForAll,
+      storeItemForDay,
+      storeItemForNight,
       showingProductDetail,
-      openStoreProductDetail,
-      closeStoreProductDetail,
+      openStoreItemDetail,
+      closeStoreItemDetail,
       selectedProduct,
-      unopenedStoreProduct,
-      unexpiredStoreProduct,
-      openedStoreProduct,
-      expiredStoreProduct,
-      runoutStoreProduct,
+      unopenedStoreItem,
+      unexpiredStoreItem,
+      openedStoreItem,
+      expiredStoreItem,
+      runoutStoreItem,
       currentGroupOption,
       groupOptions,
       toggleGroupOption,

@@ -36,21 +36,21 @@
       </thead>
       <tbody>
         <tr
-          v-for="(routineProduct, index) in routineProductList"
-          :key="routineProduct.id"
+          v-for="(routineItem, index) in routineItemList"
+          :key="routineItem.id"
           class=""
         >
           <td>{{ index }}</td>
-          <td>{{ routineProduct.product.name }}</td>
-          <td>{{ routineProduct.product.price }}</td>
-          <td>{{ routineProduct.amount }}</td>
-          <td>{{ routineProduct.applyingTime }}</td>
-          <td>{{ routineProduct.product.category }}</td>
-          <td>{{ routineProduct.expense }}</td>
+          <td>{{ routineItem.product.name }}</td>
+          <td>{{ routineItem.product.price }}</td>
+          <td>{{ routineItem.amount }}</td>
+          <td>{{ routineItem.applyingTime }}</td>
+          <td>{{ routineItem.product.category }}</td>
+          <td>{{ routineItem.expense }}</td>
           <td>
             {{
               (
-                (parseInt(routineProduct.expense.slice(1)) / totalExpense) *
+                (parseInt(routineItem.expense.slice(1)) / totalExpense) *
                 100
               ).toFixed(2) + "%"
             }}
@@ -82,25 +82,23 @@
 import { computed, defineComponent } from "vue";
 
 import type { PropType } from "vue";
-import type { IRoutineProduct } from "@/types/routineProduct";
+import type { IRoutineItem } from "@/types/routineItem";
 
 import BarChart from "@/components/BarChart.vue";
 import type { ChartData } from "chart.js";
 export default defineComponent({
   components: {},
   props: {
-    routineProductList: {
-      type: Array as PropType<IRoutineProduct[]>,
+    routineItemList: {
+      type: Array as PropType<IRoutineItem[]>,
       required: true,
     },
   },
   setup(props) {
     const totalExpense = computed(() => {
       let e = 0;
-      props.routineProductList.forEach((routineProduct) => {
-        e +=
-          routineProduct.amount *
-          parseInt(routineProduct.product.price.slice(1));
+      props.routineItemList.forEach((routineItem) => {
+        e += routineItem.amount * parseInt(routineItem.product.price.slice(1));
       });
       return e;
     });
@@ -113,9 +111,9 @@ export default defineComponent({
           },
         ],
       };
-      props.routineProductList.forEach((routineProduct) => {
-        b?.labels?.push(routineProduct.product.name);
-        b.datasets[0].data.push(parseInt(routineProduct.expense.slice(1)));
+      props.routineItemList.forEach((routineItem) => {
+        b?.labels?.push(routineItem.product.name);
+        b.datasets[0].data.push(parseInt(routineItem.expense.slice(1)));
       });
       return b;
     });

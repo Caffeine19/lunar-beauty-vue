@@ -17,14 +17,14 @@ export const reqCommentFindByProduct = (productId: number) => {
   return axiosInstance.post("/comment/findByProduct", { productId });
 };
 
-export const reqStoreProductFindByUser = (userId: number) => {
-  return axiosInstance.post("/storeProduct/findByUser", { userId });
+export const reqStoreItemFindByUser = (userId: number) => {
+  return axiosInstance.post("/storeItem/findByUser", { userId });
 };
 export const reqRoutineFindByUser = (userId: number) => {
   return axiosInstance.post("/routine/findByUser", { userId });
 };
-export const reqRoutineProductFindByRoutine = (routineId: number) => {
-  return axiosInstance.post("/routineProduct/findByRoutine", routineId);
+export const reqRoutineItemFindByRoutine = (routineId: number) => {
+  return axiosInstance.post("/routineItem/findByRoutine", routineId);
 };
 export const reqRoutineFindNode = (routineId: number) => {
   return axiosInstance.post("/routine/findNode", { routineId });

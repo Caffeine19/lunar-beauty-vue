@@ -40,14 +40,14 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
-import type { IStoreProduct } from "@/types/storeProduct";
-import type { IRoutineProduct } from "@/types/routineProduct";
+import type { IStoreItem } from "@/types/storeItem";
+import type { IRoutineItem } from "@/types/routineItem";
 export default defineComponent({
   props: {
-    productList: Array as PropType<IStoreProduct[] | IRoutineProduct[]>,
+    productList: Array as PropType<IStoreItem[] | IRoutineItem[]>,
     tag: String,
     tagIconClass: String,
-    selectedProduct: Object as PropType<IStoreProduct | IRoutineProduct>,
+    selectedProduct: Object as PropType<IStoreItem | IRoutineItem>,
   },
   emits: ["productBoardItemClick"],
   setup() {},

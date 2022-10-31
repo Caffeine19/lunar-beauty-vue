@@ -19,54 +19,54 @@ import ProductBoard from "@/components/ProductBoard.vue";
 
 import { applyingTime } from "@/types/applyingTime";
 
-import type { IRoutineProduct } from "@/types/routineProduct";
+import type { IRoutineItem } from "@/types/routineItem";
 
 export default defineComponent({
   components: { ProductBoard },
   props: {
-    routineProductList: {
-      type: Array as PropType<IRoutineProduct[]>,
+    routineItemList: {
+      type: Array as PropType<IRoutineItem[]>,
       required: true,
     },
   },
   setup(props) {
-    const routineProductForAll = computed(() =>
-      props.routineProductList.filter((storeProduct) => {
-        return storeProduct.applyingTime == applyingTime.ALL;
+    const routineItemForAll = computed(() =>
+      props.routineItemList.filter((storeItem) => {
+        return storeItem.applyingTime == applyingTime.ALL;
       })
     );
-    const routineProductForDay = computed(() =>
-      props.routineProductList.filter((storeProduct) => {
-        return storeProduct.applyingTime == applyingTime.DAY;
+    const routineItemForDay = computed(() =>
+      props.routineItemList.filter((storeItem) => {
+        return storeItem.applyingTime == applyingTime.DAY;
       })
     );
-    const routineProductForNight = computed(() =>
-      props.routineProductList.filter((storeProduct) => {
-        return storeProduct.applyingTime == applyingTime.NIGHT;
+    const routineItemForNight = computed(() =>
+      props.routineItemList.filter((storeItem) => {
+        return storeItem.applyingTime == applyingTime.NIGHT;
       })
     );
 
     const groupOption = reactive([
       {
-        value: routineProductForAll,
+        value: routineItemForAll,
         tag: applyingTime.ALL,
         tagIconClass: "ph-alarm-fill",
       },
       {
-        value: routineProductForDay,
+        value: routineItemForDay,
         tag: applyingTime.DAY,
         tagIconClass: "ph-sun-fill",
       },
       {
-        value: routineProductForNight,
+        value: routineItemForNight,
         tag: applyingTime.NIGHT,
         tagIconClass: "ph-moon-stars-fill",
       },
     ]);
     return {
-      routineProductForNight,
-      routineProductForDay,
-      routineProductForAll,
+      routineItemForNight,
+      routineItemForDay,
+      routineItemForAll,
       groupOption,
     };
   },

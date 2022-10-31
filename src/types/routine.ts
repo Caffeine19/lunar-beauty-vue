@@ -1,8 +1,7 @@
-import type { IRoutineProduct } from "./routineProduct";
+import type { IRoutineItem } from "./routineItem";
 export interface IRoutine {
   id: number;
   name: string;
-  routineProducts: IRoutineProduct[];
+  routineItems: IRoutineItem[];
   flowChartInfo: string;
 }
-
