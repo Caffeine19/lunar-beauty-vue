@@ -2,7 +2,7 @@
   <div class="grow flex overflow-x-hidden">
     <div
       class="p-6 overflow-x-hidden"
-      :class="showingProductDetail ? 'basis-3/4' : 'basis-full'"
+      :class="showingProductDetail ? 'basis-1/2 xl:basis-3/4' : 'basis-full'"
     >
       <div class="flex items-center justify-between">
         <p class="text-zinc-900 text-2xl font-semibold">Store</p>
@@ -39,7 +39,9 @@
     </div>
     <div
       class="border-l-[1px] border-zinc-900 p-6"
-      :class="showingProductDetail ? 'basis-1/4' : 'basis-0 hidden'"
+      :class="
+        showingProductDetail ? 'basis-1/2 xl:basis-1/4 ' : 'basis-0 hidden'
+      "
     >
       <div class="flex justify-between">
         <button @click="closeStoreItemDetail">
@@ -66,13 +68,14 @@
         </li>
         <li class="text-zinc-600 flex justify-between text-base font-medium">
           <p>OpenedTime:</p>
-          <p>
+          <!-- <p>
             {{
               selectedProduct?.openedTime
                 ? selectedProduct.openedTime.slice(0, 10)
                 : "unOpened"
             }}
-          </p>
+          </p> -->
+          <LunarCalendar class="w-32"></LunarCalendar>
         </li>
         <li class="text-zinc-600 flex justify-between text-base font-medium">
           <p>ProductionTime:</p>
@@ -117,8 +120,16 @@ import ProductBoard from "@/components/ProductBoard.vue";
 import ProductOverview from "@/components/ProductOverview.vue";
 import LunarCounter from "@/components/LunarCounter.vue";
 import LunarSelector from "@/components/LunarSelector.vue";
+import LunarCalendar from "@/components/LunarCalendar.vue";
+
 export default defineComponent({
-  components: { ProductOverview, ProductBoard, LunarCounter, LunarSelector },
+  components: {
+    ProductOverview,
+    ProductBoard,
+    LunarCounter,
+    LunarSelector,
+    LunarCalendar,
+  },
   setup() {
     const productStore = useStoreItemStore();
     const { storeItemList } = storeToRefs(productStore);

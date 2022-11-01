@@ -1,8 +1,10 @@
 <template>
   <div class="relative" @click="toggleOpeningDropMenu(true)">
     <div
-      class="border-zinc-600 border-[1px] py-0.5 px-2 space-x-3 flex items-center justify-between hover:bg-zinc-900/10"
-      :class="openingDropMenu ? 'bg-zinc-900/10' : ''"
+      class="hover:border-zinc-900 border-[1px] py-0.5 px-2 space-x-3 flex items-center justify-between hover:bg-zinc-900/10"
+      :class="
+        openingDropMenu ? 'bg-zinc-900/10 border-zinc-900' : 'border-zinc-300'
+      "
     >
       <p class="text-zinc-900 text-base font-medium">{{ selectedTap }}</p>
       <i
@@ -12,7 +14,7 @@
     </div>
 
     <div
-      class="bg-zinc-900 absolute flex flex-col justify-center w-full py-1 mt-2 space-y-1 shadow-2xl"
+      class="bg-zinc-900 absolute z-10 flex flex-col justify-center w-full py-1 mt-2 space-y-1 shadow-2xl"
       v-show="openingDropMenu"
       @mouseleave="toggleOpeningDropMenu(false)"
     >
@@ -28,6 +30,7 @@
           v-show="selectedTap == tab"
         ></i>
         <p>{{ tab }}</p>
+
         <i
           class="ph-arrow-left-light"
           style="font-size: 20px"
@@ -40,7 +43,7 @@
 <script lang="ts">
 import { ref } from "vue";
 import type { PropType } from "vue";
-import type { applyingTime } from "@/types/applyingTime";
+
 export default {
   props: {
     selectedTap: {
