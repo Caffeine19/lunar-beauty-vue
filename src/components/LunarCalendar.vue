@@ -106,7 +106,7 @@
   </div>
 </template>
 <script lang="ts">
-import { ref, defineComponent } from "vue";
+import { ref, defineComponent, watch } from "vue";
 
 import dayjs from "dayjs";
 export default defineComponent({
@@ -133,6 +133,7 @@ export default defineComponent({
     const beginBrick = ref();
     const monthBrick = ref();
     const endBrick = ref();
+
     const drawBricks = () => {
       const daysInMouthAmount = dayjs(props.givenDate).daysInMonth();
       const beginDay = dayjs(props.givenDate).startOf("month").day();
@@ -152,29 +153,35 @@ export default defineComponent({
         return index;
       });
     };
-    drawBricks();
+
+    watch(
+      () => props.givenDate,
+      () => {
+        drawBricks();
+      }
+    );
 
     const nextMonth = () => {
       emit("update:givenDate", dayjs(props.givenDate).add(1, "month").format());
-      drawBricks();
+      // drawBricks();
     };
     const prevMonth = () => {
       emit(
         "update:givenDate",
         dayjs(props.givenDate).subtract(1, "month").format()
       );
-      drawBricks();
+      // drawBricks();
     };
     const nextYear = () => {
       emit("update:givenDate", dayjs(props.givenDate).add(1, "year").format());
-      drawBricks();
+      // drawBricks();
     };
     const prevYear = () => {
       emit(
         "update:givenDate",
         dayjs(props.givenDate).subtract(1, "year").format()
       );
-      drawBricks();
+      // drawBricks();
     };
 
     const clearDate = () => {
@@ -188,7 +195,7 @@ export default defineComponent({
     const targetToday = () => {
       emit("update:givenDate", dayjs().format());
       selectedIndex.value = dayjs().date();
-      drawBricks();
+      // drawBricks();
     };
     return {
       openingDropMenu,

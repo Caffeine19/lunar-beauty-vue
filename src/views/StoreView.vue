@@ -76,7 +76,7 @@
             }}
           </p> -->
           <LunarCalendar
-            class="w-32"
+            class="w-40"
             v-model:givenDate="updateOptions.openedTime"
           ></LunarCalendar>
         </li>
