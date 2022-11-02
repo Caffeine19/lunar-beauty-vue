@@ -75,7 +75,10 @@
                 : "unOpened"
             }}
           </p> -->
-          <LunarCalendar class="w-32"></LunarCalendar>
+          <LunarCalendar
+            class="w-32"
+            v-model:givenDate="updateOptions.openedTime"
+          ></LunarCalendar>
         </li>
         <li class="text-zinc-600 flex justify-between text-base font-medium">
           <p>ProductionTime:</p>
@@ -247,6 +250,7 @@ export default defineComponent({
     const updateOptions = reactive({
       amount: 0,
       applyingTime: applyingTime.ALL,
+      openedTime: "",
     });
 
     const openStoreItemDetail = (productId: IStoreItem["id"]) => {
@@ -259,6 +263,7 @@ export default defineComponent({
       updateOptions.amount = selectedProduct.value?.amount || 0;
       updateOptions.applyingTime =
         selectedProduct.value?.applyingTime || applyingTime.ALL;
+      updateOptions.openedTime = selectedProduct.value?.openedTime || "";
     };
 
     const closeStoreItemDetail = () => {
