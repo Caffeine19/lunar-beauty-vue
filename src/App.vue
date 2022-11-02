@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div
+    class="bg-[url('./assets/images/Background.svg')] bg-cover bg-center h-screen w-screen"
+  >
     <container-query-test v-if="false"></container-query-test>
     <router-view></router-view>
     <test-axios></test-axios>

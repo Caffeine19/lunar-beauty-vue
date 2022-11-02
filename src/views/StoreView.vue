@@ -76,15 +76,19 @@
             }}
           </p> -->
           <LunarCalendar
-            class="w-40"
+            class="w-36"
             v-model:givenDate="updateOptions.openedTime"
           ></LunarCalendar>
         </li>
         <li class="text-zinc-600 flex justify-between text-base font-medium">
           <p>ProductionTime:</p>
-          <p>
+          <!-- <p>
             {{ selectedProduct?.productionTime.slice(0, 10) }}
-          </p>
+          </p> -->
+          <LunarCalendar
+            class="w-36"
+            v-model:givenDate="updateOptions.productionTime"
+          ></LunarCalendar>
         </li>
         <li class="text-zinc-600 flex justify-between text-base font-medium">
           <p>ShelfTime:</p>
@@ -124,6 +128,13 @@ import ProductOverview from "@/components/ProductOverview.vue";
 import LunarCounter from "@/components/LunarCounter.vue";
 import LunarSelector from "@/components/LunarSelector.vue";
 import LunarCalendar from "@/components/LunarCalendar.vue";
+
+interface IUpdateOptions {
+  amount: number;
+  applyingTime: applyingTime;
+  openedTime: string | undefined;
+  productionTime: string | undefined;
+}
 
 export default defineComponent({
   components: {
@@ -247,14 +258,11 @@ export default defineComponent({
     const selectedProduct = ref<IStoreItem>();
     // const selectedIndex = ref<number>(0);
 
-    const updateOptions = reactive<{
-      amount: number;
-      applyingTime: applyingTime;
-      openedTime: string | undefined;
-    }>({
+    const updateOptions = reactive<IUpdateOptions>({
       amount: 0,
       applyingTime: applyingTime.ALL,
       openedTime: undefined,
+      productionTime: undefined,
     });
 
     const openStoreItemDetail = (productId: IStoreItem["id"]) => {
@@ -268,6 +276,8 @@ export default defineComponent({
       updateOptions.applyingTime =
         selectedProduct.value?.applyingTime || applyingTime.ALL;
       updateOptions.openedTime = selectedProduct.value?.openedTime || undefined;
+      updateOptions.productionTime =
+        selectedProduct.value?.productionTime || undefined;
     };
 
     const closeStoreItemDetail = () => {

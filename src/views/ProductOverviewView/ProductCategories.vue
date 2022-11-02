@@ -1,6 +1,6 @@
 <template>
   <div
-    class="space-x-6 pl-2 grow flex items-center overflow-auto test product-categories-container"
+    class="grow test product-categories-container flex items-center pl-2 space-x-6 overflow-auto"
   >
     <button
       @click="
@@ -9,7 +9,7 @@
       "
       v-for="(category, index) in productCategoryOption"
       :key="index"
-      class="rounded-full py-1 px-4 border-[1px] border-zinc-900 transition-all flex flex-row space-x-2 items-center"
+      class="rounded-full py-1 px-4 border-[1px] border-zinc-900 transition-colors flex flex-row space-x-2 items-center"
       :class="
         selectedProductCategory == category
           ? 'bg-zinc-900 text-zinc-50  hover:bg-zinc-900/80'

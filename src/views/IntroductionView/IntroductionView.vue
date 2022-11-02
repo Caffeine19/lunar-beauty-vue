@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="xl:h-screen h-fit w-screen pb-24 p-12 bg-[url('./assets/images/Background.svg')] bg-cover bg-center flex flex-col"
-  >
+  <div class="xl:h-screen h-fit flex flex-col w-screen p-12 pb-24">
     <div
       class="flex items-center space-x-6 border-r-[1px] border-r-zinc-800 pr-4 w-fit"
     >
@@ -99,7 +97,7 @@ export default {
 
     const router = useRouter();
     const getStarted = () => {
-      router.push("/main");
+      router.push("/signIn");
     };
     return {
       introductionCardOptions,

@@ -1,7 +1,7 @@
 <template>
   <div class="relative w-full">
     <div
-      class="border-[1px] py-0.5 px-2 space-x-3 flex items-center justify-between hover:bg-zinc-900/10 hover:border-zinc-900"
+      class="border-[1px] py-0.5 px-2 space-x-3 flex items-center justify-between hover:bg-zinc-900/10 hover:border-zinc-900 group transition-colors"
       :class="
         openingDropMenu ? 'bg-zinc-900/10 border-zinc-900' : 'border-zinc-300'
       "
@@ -11,9 +11,13 @@
         {{ givenDate?.slice(0, 10) || "Unset" }}
       </p>
       <i
-        class="ph-calendar-blank rotate-180"
+        class="ph-calendar-blank transition-colors rotate-180"
         style="font-size: 20px"
-        :class="openingDropMenu ? 'text-zinc-900' : 'text-zinc-300'"
+        :class="
+          openingDropMenu
+            ? 'text-zinc-900'
+            : 'text-zinc-300 group-hover:text-zinc-900'
+        "
       ></i>
     </div>
 
@@ -68,7 +72,7 @@
           :class="[
             brick + 1 == selectedIndex
               ? 'bg-gradient-to-r from-bean-900/80 to-bean-800'
-              : 'bg-transparent',
+              : 'bg-transparent hover:bg-zinc-700',
           ]"
           @click="setSelectedDay(brick + 1)"
         >
@@ -85,20 +89,20 @@
       <div class="w-full border-zinc-700 border-b-[1px] h-[1px] my-3"></div>
       <div class="flex justify-end space-x-2">
         <button
-          class="hover:bg-zinc-700 text-zinc-300 hover:text-zinc-50 flex items-center justify-center p-1 transition-all rounded-full"
+          class="hover:bg-zinc-700 text-zinc-300 hover:text-zinc-50 flex items-center justify-center p-1 transition-colors rounded-full"
           @click="clearDate"
         >
-          <i class="ph-x" style="font-size: 24px"></i>
+          <i class="ph-eraser" style="font-size: 24px"></i>
         </button>
         <button
           @click="targetToday"
-          class="hover:bg-zinc-700 text-zinc-300 hover:text-zinc-50 flex items-center justify-center p-1 transition-all rounded-full"
+          class="hover:bg-zinc-700 text-zinc-300 hover:text-zinc-50 flex items-center justify-center p-1 transition-colors rounded-full"
         >
           <i class="ph-anchor-simple" style="font-size: 24px"></i>
         </button>
         <button
           @click="commitDate"
-          class="hover:bg-zinc-700 text-zinc-300 hover:text-zinc-50 flex items-center justify-center p-1 transition-all rounded-full"
+          class="hover:bg-zinc-700 text-zinc-300 hover:text-zinc-50 flex items-center justify-center p-1 transition-colors rounded-full"
         >
           <i class="ph-check" style="font-size: 24px"></i>
         </button>
@@ -135,7 +139,7 @@ export default defineComponent({
       console.log(dayjs(props.givenDate).format());
       const daysInMouthAmount = dayjs(props.givenDate).daysInMonth();
       const beginDay = dayjs(props.givenDate).startOf("month").day();
-      const endDay = dayjs(props.givenDate).endOf("month").day();
+      // const endDay = dayjs(props.givenDate).endOf("month").day();
 
       beginBrick.value = Array.from({ length: beginDay }).map((i, index) => {
         return index;

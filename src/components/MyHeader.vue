@@ -15,7 +15,7 @@
         <input
           type="text"
           placeholder="Type to search"
-          class="peer bg-transparent border-[1px] outline-[1px] hover:bg-zinc-100/80 outline-zinc-600 focus:bg-zinc-100 transition-all border-zinc-100 rounded text-zinc-900 placeholder-zinc-400 text-lg font-normal py-2 px-4 w-full"
+          class="peer bg-transparent border-[1px] outline-[1px] hover:bg-zinc-100/80 outline-zinc-600 focus:bg-zinc-100 transition-colors border-zinc-100 rounded text-zinc-900 placeholder-zinc-400 text-lg font-normal py-2 px-4 w-full"
         />
         <i
           class="ph-magnifying-glass text-zinc-600 right-4 top-1/2 peer-focus:text-zinc-900 absolute -translate-y-1/2"
