@@ -160,12 +160,12 @@ export default defineComponent({
     /*filtered by preservationStatus*/
     const unopenedStoreItem = computed(() =>
       storeItemList.value.filter((storeItem) => {
-        return !storeItem.isRunout && storeItem.isOpened;
+        return !storeItem.isRunout && !storeItem.isOpened;
       })
     );
     const openedStoreItem = computed(() =>
       storeItemList.value.filter((storeItem) => {
-        return !storeItem.isRunout && !storeItem.isOpened;
+        return !storeItem.isRunout && storeItem.isOpened;
       })
     );
     const unexpiredStoreItem = computed(() =>
@@ -247,10 +247,14 @@ export default defineComponent({
     const selectedProduct = ref<IStoreItem>();
     // const selectedIndex = ref<number>(0);
 
-    const updateOptions = reactive({
+    const updateOptions = reactive<{
+      amount: number;
+      applyingTime: applyingTime;
+      openedTime: string | undefined;
+    }>({
       amount: 0,
       applyingTime: applyingTime.ALL,
-      openedTime: "",
+      openedTime: undefined,
     });
 
     const openStoreItemDetail = (productId: IStoreItem["id"]) => {
@@ -263,7 +267,7 @@ export default defineComponent({
       updateOptions.amount = selectedProduct.value?.amount || 0;
       updateOptions.applyingTime =
         selectedProduct.value?.applyingTime || applyingTime.ALL;
-      updateOptions.openedTime = selectedProduct.value?.openedTime || "";
+      updateOptions.openedTime = selectedProduct.value?.openedTime || undefined;
     };
 
     const closeStoreItemDetail = () => {

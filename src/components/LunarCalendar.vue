@@ -8,7 +8,7 @@
       @click="toggleOpeningDropMenu(true)"
     >
       <p class="text-zinc-900 text-base font-medium">
-        {{ givenDate?.slice(0, 10) }}
+        {{ givenDate?.slice(0, 10) || "Unset" }}
       </p>
       <i
         class="ph-calendar-blank rotate-180"
@@ -20,6 +20,7 @@
     <div
       class="bg-zinc-900 absolute right-0 z-10 flex flex-col p-3 mt-2 shadow-2xl"
       v-if="openingDropMenu"
+      @mouseleave="toggleOpeningDropMenu(false)"
     >
       <div class="flex items-center justify-between w-full">
         <button class="flex items-center justify-center" @click="prevYear">
@@ -32,7 +33,7 @@
           <i class="ph-arrow-left text-zinc-400" style="font-size: 20px"></i>
         </button>
         <p class="text-zinc-50 text-lg font-medium">
-          {{ givenDate?.slice(0, 10) }}
+          {{ givenDate?.slice(0, 10) || "Unset" }}
         </p>
         <button class="flex items-center justify-center" @click="nextMonth">
           <i class="ph-arrow-right text-zinc-400" style="font-size: 20px"></i>
@@ -110,11 +111,7 @@ import { ref, defineComponent, watch } from "vue";
 
 import dayjs from "dayjs";
 export default defineComponent({
-  props: {
-    givenDate: {
-      type: String,
-    },
-  },
+  props: ["givenDate"],
   emits: ["update:givenDate"],
   setup(props, { emit }) {
     const openingDropMenu = ref<boolean>(false);
@@ -135,6 +132,7 @@ export default defineComponent({
     const endBrick = ref();
 
     const drawBricks = () => {
+      console.log(dayjs(props.givenDate).format());
       const daysInMouthAmount = dayjs(props.givenDate).daysInMonth();
       const beginDay = dayjs(props.givenDate).startOf("month").day();
       const endDay = dayjs(props.givenDate).endOf("month").day();
@@ -185,7 +183,7 @@ export default defineComponent({
     };
 
     const clearDate = () => {
-      emit("update:givenDate", null);
+      emit("update:givenDate", undefined);
       toggleOpeningDropMenu(false);
     };
     const commitDate = () => {

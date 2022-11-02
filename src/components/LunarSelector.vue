@@ -55,7 +55,7 @@ export default {
   },
   emits: ["update:selectedTap"],
   setup(props, { emit }) {
-    const openingDropMenu = ref<boolean>(true);
+    const openingDropMenu = ref<boolean>(false);
     const toggleOpeningDropMenu = (flag: boolean) => {
       openingDropMenu.value = flag;
     };
