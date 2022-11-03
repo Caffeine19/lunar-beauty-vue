@@ -9,7 +9,7 @@
           Lunar Beauty
         </h1>
       </div>
-      <img src="../assets/images/stickers.svg" alt="stickers" class="w-full" />
+      <LunarStickers class="w-full"></LunarStickers>
     </div>
     <div
       class="basis-5/12 bg-zinc-900 flex flex-col items-center justify-between px-12 py-32"
@@ -53,7 +53,9 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useRouter } from "vue-router";
+import LunarStickers from "@/components/LunarStickers.vue";
 export default defineComponent({
+  components: { LunarStickers },
   setup() {
     const router = useRouter();
     const go = () => {
