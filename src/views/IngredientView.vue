@@ -18,7 +18,7 @@
       class="pt-16 justify-between gap-x-4 gap-y-4 grid test grid-cols-[repeat(auto-fill,230px)] overflow-y-scroll product-overview-container"
     >
       <ProductOverView
-        v-for="product in productOverviewList"
+        v-for="product in relatedProductList"
         :key="product.id"
         v-bind="product"
       >
@@ -27,15 +27,30 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted } from "vue";
 import { useRoute } from "vue-router";
 
 import ProductOverView from "@/components/ProductOverview.vue";
+
+import { storeToRefs } from "pinia";
+import useProductStore from "@/stores/useProductStore";
 export default defineComponent({
   setup() {
     const route = useRoute();
+    const productStore = useProductStore();
+
+    const { relatedProductList } = storeToRefs(productStore);
+    onMounted(async () => {
+      if (route.query.ingredientId) {
+        console.log(123);
+        await productStore.getIngredientRelatedProduct(
+          parseInt(route.query.ingredientId.toString())
+        );
+      }
+    });
     return {
       route,
+      relatedProductList,
     };
   },
   components: {

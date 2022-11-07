@@ -5,14 +5,17 @@ const axiosInstance = axios.create({
   baseURL: "http://localhost:3008/api/",
   timeout: 5000,
 });
-export const reqProjectFindOverview = (category: string) => {
+export const reqProductFindOverview = (category: string) => {
   return axiosInstance.post("/product/findOverview", { category });
+};
+export const reqProductFindByBrand = (brand: string) => {
+  return axiosInstance.post("/product/findByBrand", { brand });
+};
+export const reqProductFindByIngredient = (ingredientId: number) => {
+  return axiosInstance.post("/product/findByIngredient", { ingredientId });
 };
 export const reqIngredientFindByProduct = (productId: number) => {
   return axiosInstance.post("/ingredient/findByProduct", { productId });
-};
-export const reqProjectFindRelated = (brand: string) => {
-  return axiosInstance.post("/product/findRelated", { brand });
 };
 
 export const reqCommentFindByProduct = (productId: number) => {
@@ -22,18 +25,6 @@ export const reqCommentFindByProduct = (productId: number) => {
 export const reqStoreItemFindByUser = (userId: number) => {
   return axiosInstance.post("/storeItem/findByUser", { userId });
 };
-export const reqRoutineFindByUser = (userId: number) => {
-  return axiosInstance.post("/routine/findByUser", { userId });
-};
-export const reqRoutineItemFindByRoutine = (routineId: number) => {
-  return axiosInstance.post("/routineItem/findByRoutine", routineId);
-};
-export const reqRoutineFindNode = (routineId: number) => {
-  return axiosInstance.post("/routine/findNode", { routineId });
-};
-export const reqRoutineFindEdge = (routineId: number) => {
-  return axiosInstance.post("/routine/findEdge", { routineId });
-};
 export const reqStoreItemUpdateById = (
   storeItemId: number,
   data: IStoreItemUpdateOptions
@@ -42,4 +33,16 @@ export const reqStoreItemUpdateById = (
     storeItemId,
     ...data,
   });
+};
+export const reqRoutineFindByUser = (userId: number) => {
+  return axiosInstance.post("/routine/findByUser", { userId });
+};
+export const reqRoutineFindNode = (routineId: number) => {
+  return axiosInstance.post("/routine/findNode", { routineId });
+};
+export const reqRoutineFindEdge = (routineId: number) => {
+  return axiosInstance.post("/routine/findEdge", { routineId });
+};
+export const reqRoutineItemFindByRoutine = (routineId: number) => {
+  return axiosInstance.post("/routineItem/findByRoutine", routineId);
 };

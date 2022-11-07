@@ -171,7 +171,9 @@ export default defineComponent({
         );
       }
       if (route.query.productBrand) {
-        productStore.getRelatedProduct(route.query.productBrand.toString());
+        productStore.getBrandRelatedProduct(
+          route.query.productBrand.toString()
+        );
       }
     });
 

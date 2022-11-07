@@ -1,5 +1,9 @@
 import { defineStore } from "pinia";
-import { reqProjectFindOverview, reqProjectFindRelated } from "@/api";
+import {
+  reqProductFindOverview,
+  reqProductFindByBrand,
+  reqProductFindByIngredient,
+} from "@/api";
 import type { IProduct } from "@/types/product";
 
 const useProductStore = defineStore({
@@ -13,7 +17,7 @@ const useProductStore = defineStore({
   actions: {
     async getProductOverviewList(category: string) {
       try {
-        const res = await reqProjectFindOverview(category);
+        const res = await reqProductFindOverview(category);
         const { productOverviewList } = res.data;
         this.productOverviewList = productOverviewList;
         console.log({ productOverviewList });
@@ -21,14 +25,23 @@ const useProductStore = defineStore({
         console.error(error);
       }
     },
-    async getRelatedProduct(brand: string) {
+    async getBrandRelatedProduct(brand: string) {
       try {
-        const res = await reqProjectFindRelated(brand);
+        const res = await reqProductFindByBrand(brand);
         const { relatedProductList } = res.data;
         this.relatedProductList = relatedProductList;
         console.info({ relatedProductList });
       } catch (error) {
         console.error(error);
+      }
+    },
+    async getIngredientRelatedProduct(ingredientId: number) {
+      try {
+        const res = await reqProductFindByIngredient(ingredientId);
+        const { relatedProductList } = res.data;
+        this.relatedProductList = relatedProductList;
+      } catch (error) {
+        console.log(error);
       }
     },
   },
