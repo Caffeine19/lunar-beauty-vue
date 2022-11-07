@@ -2,10 +2,11 @@
   <div class="relative w-full">
     <div
       class="border-[1px] py-0.5 px-2 space-x-3 flex items-center justify-between hover:bg-zinc-900/10 hover:border-zinc-900 group transition-colors"
-      :class="
-        openingDropMenu ? 'bg-zinc-900/10 border-zinc-900' : 'border-zinc-300'
-      "
-      @click="toggleOpeningDropMenu(true)"
+      :class="[
+        openingDropMenu ? 'bg-zinc-900/10 border-zinc-900' : 'border-zinc-300',
+        disabled ? 'cursor-not-allowed' : 'cursor-pointer',
+      ]"
+      @click="openDropMenu"
     >
       <p class="text-zinc-900 text-base font-medium">
         {{ givenDate?.slice(0, 10) || "Unset" }}
@@ -23,7 +24,7 @@
     <div
       class="bg-zinc-900 absolute right-0 z-10 flex flex-col p-3 mt-2 shadow-2xl"
       v-if="openingDropMenu"
-      @mouseleave="toggleOpeningDropMenu(false)"
+      @mouseleave="closeDropMenu"
     >
       <div class="flex items-center justify-between w-full">
         <button class="flex items-center justify-center" @click="prevYear">
@@ -118,8 +119,13 @@ export default defineComponent({
   emits: ["update:givenDate"],
   setup(props, { emit }) {
     const openingDropMenu = ref<boolean>(false);
-    const toggleOpeningDropMenu = (flag: boolean) => {
-      openingDropMenu.value = flag;
+    const openDropMenu = () => {
+      if (!props.disabled) {
+        openingDropMenu.value = true;
+      }
+    };
+    const closeDropMenu = () => {
+      openingDropMenu.value = false;
     };
 
     const weeks = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -144,7 +150,7 @@ export default defineComponent({
       const beginDay = dayjs(props.givenDate || undefined)
         .startOf("month")
         .day();
-
+      console.log(beginDay);
       beginBrick.value = Array.from({ length: beginDay }).map((i, index) => {
         return index;
       });
@@ -188,11 +194,11 @@ export default defineComponent({
 
     const clearDate = () => {
       emit("update:givenDate", undefined);
-      toggleOpeningDropMenu(false);
+      closeDropMenu();
     };
     const commitDate = () => {
       // emit("update:givenDate", dayjs(props.givenDate).format());
-      toggleOpeningDropMenu(false);
+      closeDropMenu();
     };
     const targetToday = () => {
       emit("update:givenDate", dayjs().format());
@@ -200,7 +206,8 @@ export default defineComponent({
     };
     return {
       openingDropMenu,
-      toggleOpeningDropMenu,
+      openDropMenu,
+      closeDropMenu,
 
       weeks,
 

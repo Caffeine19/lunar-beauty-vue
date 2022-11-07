@@ -27,7 +27,10 @@
     <ul class="space-y-3">
       <li class="text-zinc-600 flex justify-between text-base font-medium">
         <p>Amount:</p>
-        <LunarCounter v-model="updateOptions.amount"></LunarCounter>
+        <LunarCounter
+          v-model="updateOptions.amount"
+          :disabled="!isEditing"
+        ></LunarCounter>
       </li>
       <li class="text-zinc-600 flex justify-between text-base font-medium">
         <p>applyingTime:</p>
@@ -36,6 +39,7 @@
           v-model:selectedTap="updateOptions.applyingTime"
           :tapOptions="applyingTimeArr"
           class="w-24"
+          :disabled="!isEditing"
         ></LunarSelector>
       </li>
       <li class="text-zinc-600 flex justify-between text-base font-medium">
@@ -50,6 +54,7 @@
         <LunarCalendar
           class="w-36"
           v-model:givenDate="updateOptions.openedTime"
+          :disabled="!isEditing"
         ></LunarCalendar>
       </li>
       <li class="text-zinc-600 flex justify-between text-base font-medium">
@@ -60,6 +65,7 @@
         <LunarCalendar
           class="w-36"
           v-model:givenDate="updateOptions.productionTime"
+          :disabled="!isEditing"
         ></LunarCalendar>
       </li>
       <li class="text-zinc-600 flex justify-between text-base font-medium">
@@ -136,7 +142,8 @@ export default defineComponent({
         updateOptions.productionTime = newVal.productionTime;
         updateOptions.shelfTime = newVal.shelfTime;
         updateOptions.isRunout = newVal.isRunout;
-        console.log(selectedProduct.value);
+        // console.log(selectedProduct.value);
+        isEditing.value = false;
       },
       { immediate: true }
     );
