@@ -6,7 +6,7 @@
         :key="index"
         class="text-zinc-900 hover:bg-zinc-900/10 flex items-center px-4 py-2 space-x-6 transition-colors"
         :class="
-          currentRoute.path.includes(tab.to)
+          route.path.includes(tab.to)
             ? 'text-zinc-50 bg-gradient-to-r from-bean-900 to-bean-800'
             : ''
         "
@@ -42,8 +42,8 @@
         @click="routeToRoutinePage(routine.id)"
         class="text-zinc-900 space-x-7 hover:bg-zinc-900/10 flex items-center py-1 pl-5 transition-colors cursor-pointer"
         :class="
-          currentRoute.query.routineId &&
-          parseInt(currentRoute.query.routineId.toString()) === routine.id
+          route.query.routineId &&
+          parseInt(route.query.routineId.toString()) === routine.id
             ? 'text-zinc-50 bg-gradient-to-r from-bean-900 to-bean-800'
             : ''
         "
@@ -86,7 +86,7 @@ export default defineComponent({
       iconClass: "ph-map-trifold",
     });
 
-    const currentRoute = useRoute();
+    const route = useRoute();
     const router = useRouter();
 
     const routineStore = useRoutineStore();
@@ -103,7 +103,7 @@ export default defineComponent({
     };
     return {
       siderTabOption,
-      currentRoute,
+      route,
 
       toggleShowingRoutineList,
       routineList,

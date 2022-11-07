@@ -33,7 +33,7 @@ export default defineComponent({
     const routineItemStore = useRoutineItemStore();
     const { elementList } = storeToRefs(routineItemStore);
 
-    const currentRoute = useRoute();
+    const route = useRoute();
 
     const nodeDefaultOption = ref({
       sourcePosition: Position.Right,
@@ -43,8 +43,8 @@ export default defineComponent({
     const test = ref<number>(1);
 
     onMounted(async () => {
-      if (currentRoute.query.routineId) {
-        const routineId = parseInt(currentRoute.query.routineId.toString());
+      if (route.query.routineId) {
+        const routineId = parseInt(route.query.routineId.toString());
         routineItemStore.getRoutineNode(routineId);
         routineItemStore.getRoutineEdge(routineId);
       }

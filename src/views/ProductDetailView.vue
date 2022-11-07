@@ -121,6 +121,7 @@
             v-for="i in ingredientList"
             :key="i.id"
             class="hover:underline hover:decoration-zinc-600"
+            @click="routeToIngredient(i.id, i.name)"
           >
             {{ i.name }}
           </li>
@@ -138,7 +139,7 @@ import useIngredientStore from "@/stores/useIngredientStore";
 import useProductStore from "@/stores/useProductStore";
 import useCommentStore from "@/stores/useCommentStore";
 
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import ProductOverView from "@/components/ProductOverview.vue";
 import { computed } from "vue";
@@ -152,7 +153,7 @@ export default defineComponent({
     const ingredientStore = useIngredientStore();
     const { ingredientList } = storeToRefs(ingredientStore);
 
-    const currentRoute = useRoute();
+    const route = useRoute();
 
     const productStore = useProductStore();
     const { relatedProductList } = storeToRefs(productStore);
@@ -161,35 +162,47 @@ export default defineComponent({
     const { productRelatedCommentList } = storeToRefs(commentStore);
 
     onMounted(() => {
-      if (currentRoute.query.productId) {
+      if (route.query.productId) {
         ingredientStore.getIngredientList(
-          parseInt(currentRoute.query.productId.toString())
+          parseInt(route.query.productId.toString())
         );
         commentStore.getProductRelatedCommentList(
-          parseInt(currentRoute.query.productId.toString())
+          parseInt(route.query.productId.toString())
         );
       }
-      if (currentRoute.query.productBrand) {
-        productStore.getRelatedProduct(
-          currentRoute.query.productBrand.toString()
-        );
+      if (route.query.productBrand) {
+        productStore.getRelatedProduct(route.query.productBrand.toString());
       }
     });
 
     const selectedProduct = computed(() => {
       const sP = relatedProductList.value.find((p) => {
-        if (currentRoute.query.productId) {
-          return p.id == parseInt(currentRoute?.query?.productId.toString());
+        if (route.query.productId) {
+          return p.id == parseInt(route?.query?.productId.toString());
         }
       });
       return sP;
     });
 
+    const router = useRouter();
+    const routeToIngredient = (
+      ingredientId: number,
+      ingredientName: string
+    ) => {
+      router.push({
+        name: "ingredient",
+        query: {
+          ingredientId,
+          ingredientName,
+        },
+      });
+    };
     return {
       ingredientList,
       relatedProductList,
       productRelatedCommentList,
       selectedProduct,
+      routeToIngredient,
     };
   },
 });

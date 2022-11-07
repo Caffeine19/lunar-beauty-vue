@@ -44,10 +44,10 @@ export default defineComponent({
     mark: Number,
   },
   setup(props) {
-    const currentRouter = useRouter();
+    const router = useRouter();
     // console.log(props.id, props.brand);
     const goProductDetail = (id: number, brand: string) => {
-      currentRouter.push({
+      router.push({
         name: "productDetail",
         query: { productId: id, productBrand: brand },
       });

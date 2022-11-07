@@ -78,11 +78,11 @@ export default defineComponent({
 
     const routineItemStore = useRoutineItemStore();
     const { routineItemList } = storeToRefs(routineItemStore);
-    const currentRoute = useRoute();
+    const route = useRoute();
     onMounted(() => {
-      if (currentRoute.query.routineId) {
+      if (route.query.routineId) {
         routineItemStore.getRoutineItemList(
-          parseInt(currentRoute.query.routineId.toString())
+          parseInt(route.query.routineId.toString())
         );
       }
     });
