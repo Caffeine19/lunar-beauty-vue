@@ -136,10 +136,15 @@ export default defineComponent({
     const endBrick = ref();
 
     const drawBricks = () => {
-      console.log(dayjs(props.givenDate).format());
-      const daysInMouthAmount = dayjs(props.givenDate).daysInMonth();
-      const beginDay = dayjs(props.givenDate).startOf("month").day();
-      // const endDay = dayjs(props.givenDate).endOf("month").day();
+      console.log(dayjs(props.givenDate || undefined).format());
+
+      const daysInMouthAmount = dayjs(
+        props.givenDate || undefined
+      ).daysInMonth();
+
+      const beginDay = dayjs(props.givenDate || undefined)
+        .startOf("month")
+        .day();
 
       beginBrick.value = Array.from({ length: beginDay }).map((i, index) => {
         return index;
@@ -165,25 +170,21 @@ export default defineComponent({
 
     const nextMonth = () => {
       emit("update:givenDate", dayjs(props.givenDate).add(1, "month").format());
-      // drawBricks();
     };
     const prevMonth = () => {
       emit(
         "update:givenDate",
         dayjs(props.givenDate).subtract(1, "month").format()
       );
-      // drawBricks();
     };
     const nextYear = () => {
       emit("update:givenDate", dayjs(props.givenDate).add(1, "year").format());
-      // drawBricks();
     };
     const prevYear = () => {
       emit(
         "update:givenDate",
         dayjs(props.givenDate).subtract(1, "year").format()
       );
-      // drawBricks();
     };
 
     const clearDate = () => {
@@ -197,7 +198,6 @@ export default defineComponent({
     const targetToday = () => {
       emit("update:givenDate", dayjs().format());
       selectedIndex.value = dayjs().date();
-      // drawBricks();
     };
     return {
       openingDropMenu,

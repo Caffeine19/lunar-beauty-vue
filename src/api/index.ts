@@ -1,3 +1,5 @@
+import type { IStoreItemUpdateOptions } from "@/types/storeItem";
+
 import axios from "axios";
 const axiosInstance = axios.create({
   baseURL: "http://localhost:3008/api/",
@@ -31,4 +33,13 @@ export const reqRoutineFindNode = (routineId: number) => {
 };
 export const reqRoutineFindEdge = (routineId: number) => {
   return axiosInstance.post("/routine/findEdge", { routineId });
+};
+export const reqStoreItemUpdateById = (
+  storeItemId: number,
+  data: IStoreItemUpdateOptions
+) => {
+  return axiosInstance.post("/storeItem/updateById", {
+    storeItemId,
+    ...data,
+  });
 };

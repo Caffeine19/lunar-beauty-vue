@@ -1,13 +1,12 @@
 <template>
-  <div>
+  <div class="w-full">
     <svg
-      width="874"
-      height="818"
       viewBox="0 0 874 818"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"
       overflow="visible"
+      class="w-full h-full"
     >
       <g id="stickers">
         <g id="IngredientSticker1" class="origin-left">
@@ -375,7 +374,7 @@ export default defineComponent({
   },
 });
 </script>
-<style>
+<style scoped>
 g {
   transform-box: fill-box;
 }

@@ -47,9 +47,21 @@
         <button @click="closeStoreItemDetail">
           <i class="ph-x text-zinc-900" style="font-size: 28px"></i>
         </button>
-        <button>
-          <i class="ph-trash text-zinc-900" style="font-size: 28px"></i>
-        </button>
+        <div class="space-x-2">
+          <button v-show="!isEditing" @click="toggleIsEditing(true)">
+            <i class="ph-note-pencil text-zinc-900" style="font-size: 28px"></i>
+          </button>
+          <button v-show="isEditing" @click="submitUpdateOptions">
+            <i class="ph-upload-simple text-zinc-900" style="font-size: 28px">
+            </i>
+          </button>
+          <button v-show="isEditing" @click="resetAndExit">
+            <i class="ph-eraser text-zinc-900" style="font-size: 28px"></i>
+          </button>
+          <button>
+            <i class="ph-trash text-zinc-900" style="font-size: 28px"></i>
+          </button>
+        </div>
       </div>
       <div class="w-full h-[1px] border-b-[1px] border-zinc-900 my-2"></div>
       <ul class="space-y-3">
@@ -119,7 +131,7 @@ import { computed, defineComponent, onMounted, reactive, ref } from "vue";
 import { storeToRefs } from "pinia";
 import useStoreItemStore from "@/stores/useStoreItemStore";
 
-import type { IStoreItem } from "@/types/storeItem";
+import type { IStoreItem, IStoreItemUpdateOptions } from "@/types/storeItem";
 import { applyingTime, applyingTimeArr } from "@/types/applyingTime";
 import { preservationStatus } from "@/types/preservationStatus";
 
@@ -145,11 +157,11 @@ export default defineComponent({
     LunarCalendar,
   },
   setup() {
-    const productStore = useStoreItemStore();
-    const { storeItemList } = storeToRefs(productStore);
+    const storeItemStore = useStoreItemStore();
+    const { storeItemList } = storeToRefs(storeItemStore);
     const userId = 1;
     onMounted(async () => {
-      await productStore.getStoreItem(userId);
+      await storeItemStore.getStoreItem(userId);
     });
 
     /*filtered by applyingTime*/
@@ -252,17 +264,22 @@ export default defineComponent({
     };
     console.log({ currentGroupOption });
 
-    /*控制显示storeItem的详情*/
+    /*控制显示storeItem的详情面板的显示*/
     const showingProductDetail = ref(false);
 
     const selectedProduct = ref<IStoreItem>();
     // const selectedIndex = ref<number>(0);
 
-    const updateOptions = reactive<IUpdateOptions>({
+    const updateOptions = reactive<IStoreItemUpdateOptions>({
       amount: 0,
       applyingTime: applyingTime.ALL,
-      openedTime: undefined,
-      productionTime: undefined,
+      expense: "",
+
+      openedTime: "",
+      productionTime: "",
+      shelfTime: 0,
+
+      isRunout: false,
     });
 
     const openStoreItemDetail = (productId: IStoreItem["id"]) => {
@@ -273,11 +290,14 @@ export default defineComponent({
       });
 
       updateOptions.amount = selectedProduct.value?.amount || 0;
+
       updateOptions.applyingTime =
         selectedProduct.value?.applyingTime || applyingTime.ALL;
-      updateOptions.openedTime = selectedProduct.value?.openedTime || undefined;
+
+      updateOptions.openedTime = selectedProduct.value?.openedTime || null;
+
       updateOptions.productionTime =
-        selectedProduct.value?.productionTime || undefined;
+        selectedProduct.value?.productionTime || "";
     };
 
     const closeStoreItemDetail = () => {
@@ -285,17 +305,39 @@ export default defineComponent({
       showingProductDetail.value = false;
     };
 
-    // const computedAmount = computed({
-    //   get: () => {
-    //     return selectedProduct.value?.amount || 0;
-    //   },
-    //   set: (newVal) => {
-    //     console.log(newVal);
-    //     if (selectedProduct.value)
-    //       productStore.updateTest(selectedProduct.value?.id, newVal);
-    //   },
-    // });
+    const isEditing = ref(false);
+    const toggleIsEditing = (flag: boolean) => {
+      isEditing.value = flag;
+    };
 
+    const submitUpdateOptions = async () => {
+      const data: any = {};
+      if (selectedProduct.value) {
+        for (let i in selectedProduct.value) {
+          if (updateOptions[i as keyof IStoreItemUpdateOptions]) {
+            if (
+              updateOptions[i as keyof IStoreItemUpdateOptions] !=
+              selectedProduct.value[i as keyof IStoreItem]
+            )
+              // console.log(i);
+              data[i] = updateOptions[i as keyof IStoreItemUpdateOptions];
+          }
+        }
+        await storeItemStore.updateById(selectedProduct.value.id, data);
+        toggleIsEditing(false);
+      }
+    };
+
+    const resetAndExit = () => {
+      updateOptions.amount = selectedProduct.value?.amount || 0;
+      updateOptions.applyingTime =
+        selectedProduct.value?.applyingTime || applyingTime.ALL;
+      updateOptions.openedTime = selectedProduct.value?.openedTime || null;
+      updateOptions.productionTime =
+        selectedProduct.value?.productionTime || "";
+
+      toggleIsEditing(false);
+    };
     return {
       storeItemList,
       storeItemForAll,
@@ -316,6 +358,10 @@ export default defineComponent({
       // computedAmount,
       updateOptions,
       applyingTimeArr,
+      isEditing,
+      toggleIsEditing,
+      submitUpdateOptions,
+      resetAndExit,
     };
   },
 });

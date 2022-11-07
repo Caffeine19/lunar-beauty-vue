@@ -20,7 +20,7 @@ export default {
       emit("update:modelValue", newVal);
     };
     const minus = () => {
-      if (props.modelValue >= 0) {
+      if (props.modelValue > 0) {
         const newVal = props.modelValue - 1;
         emit("update:modelValue", newVal);
       }
