@@ -20,7 +20,6 @@
         "
       ></i>
     </div>
-
     <div
       class="bg-zinc-900 absolute right-0 z-10 flex flex-col p-3 mt-2 shadow-2xl"
       v-if="openingDropMenu"
@@ -115,7 +114,7 @@ import { ref, defineComponent, watch } from "vue";
 
 import dayjs from "dayjs";
 export default defineComponent({
-  props: ["givenDate"],
+  props: ["givenDate", "disabled"],
   emits: ["update:givenDate"],
   setup(props, { emit }) {
     const openingDropMenu = ref<boolean>(false);

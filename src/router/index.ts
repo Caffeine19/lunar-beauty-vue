@@ -50,7 +50,7 @@ const router = createRouter({
         {
           path: "/main/store",
           name: "store",
-          component: () => import("@/views/StoreView.vue"),
+          component: () => import("@/views/StoreView/StoreView.vue"),
         },
         {
           path: "/main/routine",
