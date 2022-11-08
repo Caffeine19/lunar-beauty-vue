@@ -72,8 +72,4 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-</style>
+<style scoped></style>

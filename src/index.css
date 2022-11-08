@@ -17,4 +17,7 @@
   .libertinus-regular {
     font-family: libertinus-regular;
   }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }

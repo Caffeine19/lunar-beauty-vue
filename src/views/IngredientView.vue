@@ -1,11 +1,15 @@
 <template>
-  <div class="p-6">
-    <p class="font-zinc-900 text-4xl font-medium">
-      {{ route.query.ingredientName }}
-    </p>
-    <div class="flex items-center">
-      <div class="bg-zinc-900/10 w-8 h-full my-4"></div>
-      <p class="text-zinc-700 text-lg font-normal">
+  <div class="flex flex-col p-8 overflow-hidden">
+    <div class="flex items-center space-x-2">
+      <i class="ph-flask-fill" style="font-size: 40px"></i>
+      <p class="font-zinc-900 text-4xl font-medium">
+        {{ route.query.ingredientName }}
+      </p>
+    </div>
+
+    <div class="h-fit flex items-stretch my-6 space-x-6">
+      <div class="bg-zinc-900/10 w-2"></div>
+      <p class="text-zinc-700 flex-1 text-lg font-normal">
         The second argument is the callback that will be called when the source
         changes. The callback receives three arguments: the new value, the old
         value, and a function for registering a side effect cleanup callback.
@@ -14,8 +18,12 @@
         e.g. a pending async request.
       </p>
     </div>
+    <div class="flex items-center pt-8 space-x-2">
+      <i class="ph-link-simple-fill" style="font-size: 32px"></i>
+      <p class="text-zinc-900 text-2xl font-semibold">Related Products</p>
+    </div>
     <div
-      class="pt-16 justify-between gap-x-4 gap-y-4 grid test grid-cols-[repeat(auto-fill,230px)] overflow-y-scroll product-overview-container"
+      class="pt-6 justify-between gap-x-4 gap-y-4 grid test grid-cols-[repeat(auto-fill,230px)] overflow-y-scroll product-overview-container hide-scrollbar"
     >
       <ProductOverView
         v-for="product in relatedProductList"

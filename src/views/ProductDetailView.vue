@@ -1,6 +1,6 @@
 <template>
   <div
-    class="xl:overflow-y-hidden hide-scrollbar grid w-full grid-cols-3 p-6 overflow-y-auto"
+    class="xl:overflow-y-hidden hide-scrollbar grid w-full grid-cols-3 p-8 overflow-y-auto"
   >
     <div
       class="hide-scrollbar xl:col-span-2 xl:overflow-y-auto col-span-3 pr-6"
@@ -210,8 +210,4 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-</style>
+<style scoped></style>

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="border-l-[1px] border-zinc-900 p-6"
+    class="border-l-[1px] border-zinc-900 p-8"
     :class="showingProductDetail ? 'basis-1/2 xl:basis-1/4 ' : 'basis-0 hidden'"
   >
     <div class="flex justify-between">

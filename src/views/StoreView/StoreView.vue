@@ -1,7 +1,7 @@
 <template>
   <div class="grow flex overflow-x-hidden">
     <div
-      class="p-6 overflow-x-hidden"
+      class="p-8 overflow-x-hidden"
       :class="showingProductDetail ? 'basis-1/2 xl:basis-3/4' : 'basis-full'"
     >
       <div class="flex items-center justify-between">
@@ -212,8 +212,4 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-</style>
+<style scoped></style>
