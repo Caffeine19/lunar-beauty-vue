@@ -39,7 +39,7 @@
         <h1 class="text-zinc-900 libertinus-regular text-2xl font-normal">
           Lazy Fish
         </h1>
-        <button>
+        <button class="flex items-center justify-center">
           <i
             class="ph-caret-up text-zinc-900 hover:rotate-0 rotate-180"
             style="font-size: 24px"

@@ -120,7 +120,7 @@
           <li
             v-for="i in ingredientList"
             :key="i.id"
-            class="hover:underline hover:decoration-zinc-600"
+            class="hover:underline hover:decoration-zinc-600 cursor-pointer"
             @click="routeToIngredient(i.id, i.name)"
           >
             {{ i.name }}
