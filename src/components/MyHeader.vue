@@ -57,11 +57,13 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref, inject } from "vue";
 
 import { useRouter } from "vue-router";
 
 import OperateMenu from "./OperateMenu.vue";
+
+import { toggleUserSettingPanelKey } from "@/symbols/userSettingPanel";
 export default defineComponent({
   components: {
     OperateMenu,
@@ -77,12 +79,19 @@ export default defineComponent({
       router.push({ name: "signIn" });
     };
 
-    const goUserSetting = () => {
-      router.push({ name: "userSetting" });
-    };
+    const toggleOpeningUserSettingPanel =
+      inject(toggleUserSettingPanelKey) ||
+      (() => {
+        console.log("missing toggleUserSettingKey");
+      });
+
     const userOperatorOptions = reactive([
       { name: "Logout", iconClass: "ph-sign-out", action: goSingIn },
-      { name: "Settings", iconClass: "ph-nut", action: goUserSetting },
+      {
+        name: "Settings",
+        iconClass: "ph-nut",
+        action: () => toggleOpeningUserSettingPanel(true),
+      },
       { name: "Theme", iconClass: "ph-sun" },
     ]);
 

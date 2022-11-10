@@ -7,14 +7,23 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, provide, ref } from "vue";
 import { RouterView } from "vue-router";
 
 import UserSettingPanel from "@/components/UserSettingPanel.vue";
+import { toggleUserSettingPanelKey } from "@/symbols/userSettingPanel";
 export default defineComponent({
   components: {
     RouterView,
     UserSettingPanel,
+  },
+  setup() {
+    const openingUserSettingPanel = ref(false);
+    provide("openingUserSettingPanel", openingUserSettingPanel);
+    const toggleOpeningUserSettingPanel = (flag: boolean) => {
+      openingUserSettingPanel.value = flag;
+    };
+    provide(toggleUserSettingPanelKey, toggleOpeningUserSettingPanel);
   },
 });
 </script>
