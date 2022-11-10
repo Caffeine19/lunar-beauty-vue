@@ -17,7 +17,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "vue";
 
-import useRoutineProductStore from "@/stores/useRoutineProductStore";
+import useRoutineItemStore from "@/stores/useRoutineItemStore";
 import { storeToRefs } from "pinia";
 
 import { VueFlow, useVueFlow, Position } from "@vue-flow/core";
@@ -30,10 +30,10 @@ import type { IProductNode } from "@/types/productNode";
 export default defineComponent({
   components: { VueFlow, Background, Controls, MiniMap },
   setup() {
-    const routineProductStore = useRoutineProductStore();
-    const { elementList } = storeToRefs(routineProductStore);
+    const routineItemStore = useRoutineItemStore();
+    const { elementList } = storeToRefs(routineItemStore);
 
-    const currentRoute = useRoute();
+    const route = useRoute();
 
     const nodeDefaultOption = ref({
       sourcePosition: Position.Right,
@@ -43,10 +43,10 @@ export default defineComponent({
     const test = ref<number>(1);
 
     onMounted(async () => {
-      if (currentRoute.query.routineId) {
-        const routineId = parseInt(currentRoute.query.routineId.toString());
-        routineProductStore.getRoutineNode(routineId);
-        routineProductStore.getRoutineEdge(routineId);
+      if (route.query.routineId) {
+        const routineId = parseInt(route.query.routineId.toString());
+        routineItemStore.getRoutineNode(routineId);
+        routineItemStore.getRoutineEdge(routineId);
       }
     });
 

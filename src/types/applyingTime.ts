@@ -3,3 +3,4 @@ export enum applyingTime {
   NIGHT = "Night",
   DAY = "DAY",
 }
+export const applyingTimeArr = Object.values(applyingTime);

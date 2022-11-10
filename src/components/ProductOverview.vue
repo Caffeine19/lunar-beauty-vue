@@ -17,7 +17,7 @@
       </p>
     </div>
     <button
-      class="opacity-0 rounded text-zinc-50 bg-gradient-to-r to-[#E3E5ED] from-[#B0B6C4] py-0.5 px-2 items-center flex group-hover:opacity-100 transition-opacity"
+      class="opacity-0 rounded text-zinc-50 bg-gradient-to-r to-moonlight-800 from-moonlight-900 py-0.5 px-2 items-center flex group-hover:opacity-100 transition-opacity"
       @click="goProductDetail(id, brand || '')"
     >
       <p class="text-base font-medium">Detail</p>
@@ -44,10 +44,10 @@ export default defineComponent({
     mark: Number,
   },
   setup(props) {
-    const currentRouter = useRouter();
-    console.log(props.id, props.brand);
+    const router = useRouter();
+    // console.log(props.id, props.brand);
     const goProductDetail = (id: number, brand: string) => {
-      currentRouter.push({
+      router.push({
         name: "productDetail",
         query: { productId: id, productBrand: brand },
       });

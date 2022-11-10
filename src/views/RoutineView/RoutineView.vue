@@ -1,5 +1,5 @@
 <template>
-  <div class="grow flex flex-col p-6 overflow-x-hidden">
+  <div class="grow flex flex-col p-8 overflow-x-hidden">
     <div class="flex items-center justify-between">
       <p class="text-zinc-900 text-2xl font-semibold">Routine</p>
       <div class="flex space-x-2">
@@ -27,7 +27,7 @@
     <keep-alive>
       <component
         :is="routineLayoutOption[currentLayout].component()"
-        :routineProductList="routineProductList"
+        :routineItemList="routineItemList"
       ></component>
     </keep-alive>
   </div>
@@ -37,7 +37,7 @@ import { defineComponent, KeepAlive, onMounted, reactive, ref } from "vue";
 
 import { useRoute } from "vue-router";
 
-import useRoutineProductStore from "@/stores/useRoutineProductStore";
+import useRoutineItemStore from "@/stores/useRoutineItemStore";
 import { storeToRefs } from "pinia";
 
 import RoutineBoard from "./RoutineBoard.vue";
@@ -76,13 +76,13 @@ export default defineComponent({
       currentLayout.value = newVal;
     };
 
-    const routineProductStore = useRoutineProductStore();
-    const { routineProductList } = storeToRefs(routineProductStore);
-    const currentRoute = useRoute();
+    const routineItemStore = useRoutineItemStore();
+    const { routineItemList } = storeToRefs(routineItemStore);
+    const route = useRoute();
     onMounted(() => {
-      if (currentRoute.query.routineId) {
-        routineProductStore.getRoutineProductList(
-          parseInt(currentRoute.query.routineId.toString())
+      if (route.query.routineId) {
+        routineItemStore.getRoutineItemList(
+          parseInt(route.query.routineId.toString())
         );
       }
     });
@@ -92,7 +92,7 @@ export default defineComponent({
       RoutineTable,
       RoutineBoard,
       currentLayout,
-      routineProductList,
+      routineItemList,
       changeLayout,
     };
   },

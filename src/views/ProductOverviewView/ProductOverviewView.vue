@@ -1,5 +1,5 @@
 <template>
-  <div class="grow relative flex flex-col px-6 pb-6 space-y-8 overflow-hidden">
+  <div class="grow relative flex flex-col px-8 pb-8 space-y-8 overflow-hidden">
     <div class="backdrop-blur-2xl absolute top-0 left-0 w-full p-6">
       <div
         class="divide-zinc-600 shrink-0 flex items-center overflow-hidden divide-x"

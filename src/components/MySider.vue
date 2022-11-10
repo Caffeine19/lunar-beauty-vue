@@ -1,13 +1,13 @@
 <template>
-  <div class="flex flex-col h-full border-r-[1px] border-zinc-900">
+  <div class="sider-container flex flex-col h-full">
     <div class="w-fit flex flex-col justify-start py-4 space-y-4">
       <RouterLink
         v-for="(tab, index) in siderTabOption"
         :key="index"
         class="text-zinc-900 hover:bg-zinc-900/10 flex items-center px-4 py-2 space-x-6 transition-colors"
         :class="
-          currentRoute.path.includes(tab.to)
-            ? 'text-zinc-50 bg-gradient-to-r from-[#C5B1B8] to-[#DBC5CF]'
+          route.path.includes(tab.to)
+            ? 'text-zinc-50 bg-gradient-to-r from-bean-900 to-bean-800'
             : ''
         "
         :to="{ name: tab.to }"
@@ -24,7 +24,7 @@
     </div>
     <button
       @click="toggleShowingRoutineList"
-      class="text-zinc-900 hover:bg-zinc-900/10 flex items-center px-4 py-2 space-x-6 transition-all transition-colors"
+      class="text-zinc-900 hover:bg-zinc-900/10 flex items-center px-4 py-2 space-x-6 transition-colors"
     >
       <i
         class=""
@@ -39,12 +39,12 @@
       <li
         v-for="routine in routineList"
         :key="routine.id"
-        @click="routeToRoutinePage(routine.id)"
+        @click="goRoutinePage(routine.id)"
         class="text-zinc-900 space-x-7 hover:bg-zinc-900/10 flex items-center py-1 pl-5 transition-colors cursor-pointer"
         :class="
-          currentRoute.query.routineId &&
-          parseInt(currentRoute.query.routineId.toString()) === routine.id
-            ? 'text-zinc-50 bg-gradient-to-r from-[#C5B1B8] to-[#DBC5CF]'
+          route.query.routineId &&
+          parseInt(route.query.routineId.toString()) === routine.id
+            ? 'text-zinc-50 bg-gradient-to-r from-bean-900 to-bean-800'
             : ''
         "
       >
@@ -86,7 +86,7 @@ export default defineComponent({
       iconClass: "ph-map-trifold",
     });
 
-    const currentRoute = useRoute();
+    const route = useRoute();
     const router = useRouter();
 
     const routineStore = useRoutineStore();
@@ -98,20 +98,38 @@ export default defineComponent({
       routineStore.getRoutineList(userId);
       showingRoutineList.value = !showingRoutineList.value;
     };
-    const routeToRoutinePage = (routineId: number) => {
+    const goRoutinePage = (routineId: number) => {
       router.push({ name: "routine", query: { routineId } });
     };
     return {
       siderTabOption,
-      currentRoute,
+      route,
 
       toggleShowingRoutineList,
       routineList,
-      routeToRoutinePage,
+      goRoutinePage,
       showingRoutineList,
       routineTabOption,
     };
   },
 });
 </script>
-<style lang=""></style>
+<style scoped>
+.sider-container {
+  @apply relative;
+}
+.sider-container:before {
+  @apply border-r-[1px] border-zinc-900 absolute right-0 top-0 w-[1px] h-0;
+
+  content: "";
+  animation: draw-border-down 2s linear forwards;
+}
+@keyframes draw-border-down {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: 100%;
+  }
+}
+</style>

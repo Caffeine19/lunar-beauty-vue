@@ -5,11 +5,22 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      redirect: "/main",
+      redirect: "/intro",
+    },
+    {
+      path: "/intro",
+      name: "intro",
+      component: () => import("@/views/IntroductionView/IntroductionView.vue"),
+    },
+    {
+      path: "/signIn",
+      name: "signIn",
+      component: () => import("@/views/SignInView.vue"),
     },
     {
       path: "/main",
       name: "main",
+      redirect: "/main/library",
       component: () => import("@/views/MainView.vue"),
       children: [
         {
@@ -34,14 +45,18 @@ const router = createRouter({
               name: "productDetail",
               component: () => import("@/views/ProductDetailView.vue"),
             },
+            {
+              path: "/main/library/ingredient",
+              name: "ingredient",
+              component: () => import("@/views/IngredientView.vue"),
+            },
           ],
         },
         {
           path: "/main/store",
           name: "store",
-          component: () => import("@/views/StoreView.vue"),
+          component: () => import("@/views/StoreView/StoreView.vue"),
         },
-
         {
           path: "/main/routine",
           name: "routine",

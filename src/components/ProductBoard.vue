@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-3">
     <button
-      class="rounded-full bg-gradient-to-r to-[#E3E5ED] from-[#B0B6C4] flex items-center px-3 py-1 space-x-2"
+      class="bg-gradient-to-r to-moonlight-800 from-moonlight-900 flex items-center px-3 py-1 space-x-2 rounded-full"
     >
       <i class="text-zinc-50" style="font-size: 24px" :class="tagIconClass"></i>
       <p class="text-zinc-50 text-lg font-medium">{{ tag }}</p>
@@ -16,7 +16,7 @@
             ? 'bg-zinc-900 text-zinc-50 hover:bg-zinc-800/90'
             : 'text-zinc-900   hover:bg-zinc-900/10 border-zinc-600'
         "
-        class="border-[1px] flex justify-between items-center transition-all text-base font-normal rounded p-1.5 space-x-2 cursor-pointer"
+        class="border-[1px] flex justify-between items-center transition-all text-base font-normal p-1.5 space-x-2 cursor-pointer"
       >
         <p class="w-11/12 transition-colors">{{ product.product.name }}</p>
         <p
@@ -40,14 +40,14 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import type { PropType } from "vue";
-import type { IStoreProduct } from "@/types/storeProduct";
-import type { IRoutineProduct } from "@/types/routineProduct";
+import type { IStoreItem } from "@/types/storeItem";
+import type { IRoutineItem } from "@/types/routineItem";
 export default defineComponent({
   props: {
-    productList: Array as PropType<IStoreProduct[] | IRoutineProduct[]>,
+    productList: Array as PropType<IStoreItem[] | IRoutineItem[]>,
     tag: String,
     tagIconClass: String,
-    selectedProduct: Object as PropType<IStoreProduct | IRoutineProduct>,
+    selectedProduct: Object as PropType<IStoreItem | IRoutineItem>,
   },
   emits: ["productBoardItemClick"],
   setup() {},

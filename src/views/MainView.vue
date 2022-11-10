@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="bg-[url('./assets/images/Background.svg')] w-screen h-screen bg-cover bg-center flex flex-col"
-  >
+  <div class="flex flex-col w-screen h-screen">
     <MyHeader></MyHeader>
     <div class="grow flex overflow-hidden">
       <MySider></MySider> <RouterView></RouterView>
