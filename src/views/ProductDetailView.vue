@@ -121,7 +121,7 @@
             v-for="i in ingredientList"
             :key="i.id"
             class="hover:underline hover:decoration-zinc-600 cursor-pointer"
-            @click="routeToIngredient(i.id, i.name)"
+            @click="goIngredient(i.id, i.name)"
           >
             {{ i.name }}
           </li>
@@ -187,10 +187,7 @@ export default defineComponent({
     });
 
     const router = useRouter();
-    const routeToIngredient = (
-      ingredientId: number,
-      ingredientName: string
-    ) => {
+    const goIngredient = (ingredientId: number, ingredientName: string) => {
       router.push({
         name: "ingredient",
         query: {
@@ -204,7 +201,7 @@ export default defineComponent({
       relatedProductList,
       productRelatedCommentList,
       selectedProduct,
-      routeToIngredient,
+      goIngredient,
     };
   },
 });

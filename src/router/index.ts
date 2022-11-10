@@ -62,11 +62,6 @@ const router = createRouter({
           name: "routine",
           component: () => import("@/views/RoutineView/RoutineView.vue"),
         },
-        {
-          path: "/main/userSetting",
-          name: "userSetting",
-          component: () => import("@/views/UserSettingView.vue"),
-        },
       ],
     },
   ],

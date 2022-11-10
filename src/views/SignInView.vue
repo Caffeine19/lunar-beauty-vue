@@ -40,7 +40,7 @@
       </div>
       <button
         class="text-zinc-50 libertinus-semibold group relative text-6xl"
-        @click="go"
+        @click="goMain"
       >
         <svg
           width="243"
@@ -76,10 +76,10 @@ export default defineComponent({
   components: { LunarStickers },
   setup() {
     const router = useRouter();
-    const go = () => {
+    const goMain = () => {
       router.push("/main");
     };
-    return { go };
+    return { goMain };
   },
 });
 </script>

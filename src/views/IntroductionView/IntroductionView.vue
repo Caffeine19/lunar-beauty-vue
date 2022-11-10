@@ -31,7 +31,7 @@
           skincare products
         </h1>
         <button
-          @click="getStarted"
+          @click="goSingIn"
           class="text-zinc-50 bg-zinc-900 w-fit hover:bg-zinc-900/90 transition-color z-10 flex items-center px-5 py-4 rounded-full"
         >
           <p class="text-2xl">Get Started</p>
@@ -96,12 +96,12 @@ export default {
     ]);
 
     const router = useRouter();
-    const getStarted = () => {
+    const goSingIn = () => {
       router.push("/signIn");
     };
     return {
       introductionCardOptions,
-      getStarted,
+      goSingIn,
     };
   },
 };

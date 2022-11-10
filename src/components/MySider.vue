@@ -39,7 +39,7 @@
       <li
         v-for="routine in routineList"
         :key="routine.id"
-        @click="routeToRoutinePage(routine.id)"
+        @click="goRoutinePage(routine.id)"
         class="text-zinc-900 space-x-7 hover:bg-zinc-900/10 flex items-center py-1 pl-5 transition-colors cursor-pointer"
         :class="
           route.query.routineId &&
@@ -98,7 +98,7 @@ export default defineComponent({
       routineStore.getRoutineList(userId);
       showingRoutineList.value = !showingRoutineList.value;
     };
-    const routeToRoutinePage = (routineId: number) => {
+    const goRoutinePage = (routineId: number) => {
       router.push({ name: "routine", query: { routineId } });
     };
     return {
@@ -107,7 +107,7 @@ export default defineComponent({
 
       toggleShowingRoutineList,
       routineList,
-      routeToRoutinePage,
+      goRoutinePage,
       showingRoutineList,
       routineTabOption,
     };

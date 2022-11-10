@@ -2,18 +2,19 @@
   <div
     class="bg-[url('./assets/images/Background.svg')] bg-cover bg-center h-screen w-screen"
   >
-    <router-view></router-view>
-    <!-- <flex-text></flex-text> -->
+    <RouterView></RouterView>
+    <UserSettingPanel v-if="true"></UserSettingPanel>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
 import { RouterView } from "vue-router";
-import FlexText from "./components/FlexText.vue";
+
+import UserSettingPanel from "@/components/UserSettingPanel.vue";
 export default defineComponent({
   components: {
     RouterView,
-    // FlexText,
+    UserSettingPanel,
   },
 });
 </script>
