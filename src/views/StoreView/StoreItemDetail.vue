@@ -95,6 +95,7 @@ import {
   watch,
   type PropType,
   toRefs,
+  inject,
 } from "vue";
 
 import ProductOverview from "@/components/ProductOverview.vue";
@@ -106,6 +107,8 @@ import type { IStoreItem, IStoreItemUpdateOptions } from "@/types/storeItem";
 
 import { applyingTime, applyingTimeArr } from "@/types/applyingTime";
 import useStoreItemStore from "@/stores/useStoreItemStore";
+
+import { showTooltipKey } from "@/symbols/tooltip";
 
 export default defineComponent({
   components: { ProductOverview, LunarCounter, LunarSelector, LunarCalendar },
@@ -150,6 +153,8 @@ export default defineComponent({
 
     const storeItemStore = useStoreItemStore();
 
+    const showTooltip = inject(showTooltipKey);
+
     const submitUpdateOptions = async () => {
       const data: any = {};
       if (selectedProduct.value) {
@@ -163,8 +168,13 @@ export default defineComponent({
               data[i] = updateOptions[i as keyof IStoreItemUpdateOptions];
           }
         }
-        await storeItemStore.updateById(selectedProduct.value.id, data);
-
+        const res = await storeItemStore.updateById(
+          selectedProduct.value.id,
+          data
+        );
+        if (res && showTooltip) {
+          showTooltip(res);
+        }
         toggleIsEditing(false);
       }
     };
