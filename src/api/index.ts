@@ -5,6 +5,11 @@ const axiosInstance = axios.create({
   baseURL: "http://localhost:3008/api/",
   timeout: 5000,
 });
+
+export const reqUserLogin = (name: string, password: string) => {
+  return axiosInstance.post("/user/login", { name, password });
+};
+
 export const reqProductFindOverview = (category: string) => {
   return axiosInstance.post("/product/findOverview", { category });
 };

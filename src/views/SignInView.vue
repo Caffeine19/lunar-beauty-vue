@@ -27,20 +27,21 @@
         </p>
       </div>
       <div class="flex flex-col items-center w-full space-y-24">
-        <div
-          class="w-4/5 border-zinc-400 border-b-[1px] py-2 text-zinc-200 text-2xl font-medium"
-        >
-          Username
-        </div>
-        <div
-          class="w-4/5 border-zinc-400 border-b-[1px] py-2 text-zinc-200 text-2xl font-medium"
-        >
-          Password
-        </div>
+        <input
+          type="text"
+          placeholder="username"
+          v-model="username"
+          class="w-4/5 border-zinc-400 border-b-[1px] py-2 text-zinc-50 text-2xl font-medium bg-zinc-900 placeholder-zinc-200/80 focus:placeholder-zinc-200 outline-0 transition-all"
+        />
+        <input
+          placeholder="password"
+          v-model="password"
+          class="w-4/5 border-zinc-400 border-b-[1px] py-2 text-zinc-50 text-2xl font-medium bg-zinc-900 placeholder-zinc-200/80 outline-0 focus:placeholder-zinc-200 transition-all"
+        />
       </div>
       <button
         class="text-zinc-50 libertinus-semibold group relative text-6xl"
-        @click="goMain"
+        @click="submitUserInfo"
       >
         <svg
           width="243"
@@ -69,9 +70,12 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import LunarStickers from "@/components/LunarStickers.vue";
+
+import useUserStore from "@/stores/useUserStore";
+import { storeToRefs } from "pinia";
 export default defineComponent({
   components: { LunarStickers },
   setup() {
@@ -79,7 +83,23 @@ export default defineComponent({
     const goMain = () => {
       router.push("/main");
     };
-    return { goMain };
+
+    const username = ref("");
+    const password = ref("");
+
+    const userStore = useUserStore();
+
+    const { userInfo, token } = storeToRefs(userStore);
+
+    const submitUserInfo = async () => {
+      try {
+        await userStore.login(username.value, password.value);
+        goMain();
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    return { goMain, username, password, userInfo, token, submitUserInfo };
   },
 });
 </script>

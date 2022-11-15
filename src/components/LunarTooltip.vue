@@ -3,7 +3,7 @@
     <transition name="fade">
       <div
         v-if="tooltipOption?.visible"
-        class="bg-zinc-900 h-fit flex items-center p-4 mt-8 space-x-4 rounded-full shadow-2xl"
+        class="bg-zinc-900/90 backdrop-blur-2xl h-fit flex items-center p-4 mt-8 space-x-4 rounded-full shadow-2xl"
       >
         <i
           class="text-zinc-50 lunar-tooltip-content"
