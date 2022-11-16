@@ -41,7 +41,7 @@
       />
 
       <h1 class="text-zinc-900 libertinus-regular text-2xl font-normal">
-        Lazy Fish
+        {{ userInfo?.name || "unnamed" }}
       </h1>
       <i
         class="ph-caret-down text-zinc-900 group-hover:translate-y-[8px] transition-transform"
@@ -64,11 +64,15 @@ import { useRouter } from "vue-router";
 import OperateMenu from "./OperateMenu.vue";
 
 import { toggleUserSettingPanelKey } from "@/symbols/userSettingPanel";
+
+import { userInfoKey } from "@/symbols/userInfoKey";
 export default defineComponent({
   components: {
     OperateMenu,
   },
   setup() {
+    const userInfo = inject(userInfoKey);
+
     const showingUserOperatorMenu = ref(false);
     const toggleShowingUserOperatorMenu = (flag: boolean) => {
       showingUserOperatorMenu.value = !showingUserOperatorMenu.value;
@@ -99,6 +103,7 @@ export default defineComponent({
       userOperatorOptions,
       showingUserOperatorMenu,
       toggleShowingUserOperatorMenu,
+      userInfo,
     };
   },
 });
