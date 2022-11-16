@@ -37,7 +37,7 @@
               <p class="text-base font-normal">Username</p>
             </div>
             <p class="libertinus-semibold text-zinc-900 text-2xl font-medium">
-              Lazy Fish
+              {{ updateOptions.name }}
             </p>
           </div>
           <div class="space-y-2">
@@ -45,7 +45,9 @@
               <i class="ph-key-light" style="font-size: 24px"></i>
               <p class="text-base font-normal">Password</p>
             </div>
-            <p class="text-zinc-900 text-2xl font-semibold">************</p>
+            <p class="text-zinc-900 text-2xl font-semibold">
+              {{ updateOptions.password }}
+            </p>
           </div>
           <div class="w-full border-b-[1px] border-zinc-300"></div>
           <div class="space-y-2">
@@ -83,16 +85,26 @@
   </transition>
 </template>
 <script lang="ts">
-import { defineComponent, inject, reactive, Transition } from "vue";
+import { defineComponent, inject, reactive, Transition, watch } from "vue";
+
 import LunarSelector from "./LunarSelector.vue";
 
 import { toggleUserSettingPanelKey } from "@/symbols/userSettingPanel";
+
+import useUserStore from "@/stores/useUserStore";
+import { storeToRefs } from "pinia";
+
+import type { IUserUpdateOptions } from "@/types/user";
 export default defineComponent({
   components: {
     LunarSelector,
     Transition,
   },
   setup() {
+    const userStore = useUserStore();
+    const { userInfo } = storeToRefs(userStore);
+    const updateOptions = reactive<IUserUpdateOptions>({});
+
     const languageOptions = reactive(["Chinese", "English"]);
     const selectedLanguage = "English";
 
@@ -106,6 +118,17 @@ export default defineComponent({
         console.log("missing toggleUserSettingKey");
       });
 
+    watch(
+      () => openingUserSettingPanel,
+      () => {
+        updateOptions.name = userInfo.value.name;
+        updateOptions.password = userInfo.value.password;
+        updateOptions.avatar = userInfo.value.avatar;
+        updateOptions.gender = userInfo.value.gender;
+        updateOptions.email = userInfo.value.email;
+        updateOptions.phone = userInfo.value.phone;
+      }
+    );
     return {
       languageOptions,
       selectedLanguage,
@@ -113,6 +136,8 @@ export default defineComponent({
       selectedTheme,
       openingUserSettingPanel,
       toggleOpeningUserSettingPanel,
+      userInfo,
+      updateOptions,
     };
   },
 });

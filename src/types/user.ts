@@ -7,3 +7,11 @@ export interface IUser {
   email?: String;
   gender: String;
 }
+export interface IUserUpdateOptions {
+  name?: string;
+  password?: string;
+  avatar?: string;
+  phone?: String;
+  email?: String;
+  gender?: String;
+}

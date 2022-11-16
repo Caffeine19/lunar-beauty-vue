@@ -1,14 +1,23 @@
 import { defineStore } from "pinia";
 
-import { reqUserLogin } from "@/api";
+import { reqUserLogin, reqUserUpdateById } from "@/api";
 
 import type { ITooltipInfo } from "@/types/Tooltip";
 
-import type { IUser } from "@/types/user";
+import type { IUser, IUserUpdateOptions } from "@/types/user";
 const useUserStore = defineStore({
   id: "user",
   state: () => {
-    return { userInfo: {} as IUser, token: "" as string };
+    return {
+      userInfo: {
+        name: "",
+        id: 0,
+        avatar: "",
+        password: "",
+        gender: "",
+      } as IUser,
+      token: "" as string,
+    };
   },
   actions: {
     async login(username: string, password: string): Promise<ITooltipInfo> {
@@ -25,6 +34,25 @@ const useUserStore = defineStore({
           return { status: false, content: error.message };
         } else {
           return { status: false, content: "login failed" };
+        }
+      }
+    },
+    async updateById(
+      userId: number,
+      data: IUserUpdateOptions
+    ): Promise<ITooltipInfo> {
+      try {
+        const res = await reqUserUpdateById(userId, data);
+        const { updatedUser } = res.data;
+        console.log({ updatedUser });
+        this.userInfo = updatedUser;
+
+        return { status: true, content: "update succeeded" };
+      } catch (error) {
+        if (error instanceof Error) {
+          return { status: false, content: error.message };
+        } else {
+          return { status: false, content: "update failed" };
         }
       }
     },

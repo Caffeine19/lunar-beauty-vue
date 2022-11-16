@@ -1,4 +1,5 @@
 import type { IStoreItemUpdateOptions } from "@/types/storeItem";
+import type { IUserUpdateOptions } from "@/types/user";
 
 import axios from "axios";
 const axiosInstance = axios.create({
@@ -23,7 +24,9 @@ axiosInstance.interceptors.response.use(
 export const reqUserLogin = (name: string, password: string) => {
   return axiosInstance.post("/user/login", { name, password });
 };
-
+export const reqUserUpdateById = (userId: number, data: IUserUpdateOptions) => {
+  return axiosInstance.post("/user/updateById", { userId, ...data });
+};
 export const reqProductFindOverview = (category: string) => {
   return axiosInstance.post("/product/findOverview", { category });
 };

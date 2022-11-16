@@ -2,11 +2,8 @@
   <div
     class="bg-[url('./assets/images/Background.svg')] bg-cover bg-center h-screen w-screen"
   >
-    <n-provider-config>
-      <RouterView></RouterView>
-      <UserSettingPanel></UserSettingPanel>
-      <LunarTooltip></LunarTooltip
-    ></n-provider-config>
+    <RouterView></RouterView>
+    <LunarTooltip></LunarTooltip>
   </div>
 </template>
 <script lang="ts">
@@ -18,7 +15,6 @@ import useUserStore from "./stores/useUserStore";
 import { userInfoKey } from "@/symbols/userInfoKey";
 import { storeToRefs } from "pinia";
 
-import UserSettingPanel from "@/components/UserSettingPanel.vue";
 import { toggleUserSettingPanelKey } from "@/symbols/userSettingPanel";
 
 import LunarTooltip from "./components/LunarTooltip.vue";
@@ -32,7 +28,7 @@ import {
 export default defineComponent({
   components: {
     RouterView,
-    UserSettingPanel,
+
     LunarTooltip,
   },
   setup() {
