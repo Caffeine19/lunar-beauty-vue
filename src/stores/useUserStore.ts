@@ -3,10 +3,12 @@ import { defineStore } from "pinia";
 import { reqUserLogin } from "@/api";
 
 import type { ITooltipInfo } from "@/types/Tooltip";
+
+import type { IUser } from "@/types/user";
 const useUserStore = defineStore({
   id: "user",
   state: () => {
-    return { userInfo: {}, token: "" };
+    return { userInfo: {} as IUser, token: "" as string };
   },
   actions: {
     async login(username: string, password: string): Promise<ITooltipInfo> {
