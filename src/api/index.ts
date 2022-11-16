@@ -6,6 +6,20 @@ const axiosInstance = axios.create({
   timeout: 5000,
 });
 
+axiosInstance.interceptors.response.use(
+  (res) => {
+    return res;
+  },
+  (err) => {
+    console.log("response failed", err);
+    if (err.response.data.err) {
+      throw new Error(err.response.data.err);
+    } else {
+      throw new Error("response failed");
+    }
+  }
+);
+
 export const reqUserLogin = (name: string, password: string) => {
   return axiosInstance.post("/user/login", { name, password });
 };

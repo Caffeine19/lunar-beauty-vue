@@ -77,7 +77,7 @@ const useStoreItemStore = defineStore({
         return { status: true, content: "update succeeded" };
       } catch (error) {
         console.log(error);
-        return { status: false, content: "update:error" };
+        return { status: false, content: "update failed" };
       }
     },
   },

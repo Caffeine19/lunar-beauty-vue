@@ -19,8 +19,11 @@ const useUserStore = defineStore({
 
         return { status: true, content: "login succeeded" };
       } catch (error) {
-        console.log(error);
-        return { status: false, content: "login failed" };
+        if (error instanceof Error) {
+          return { status: false, content: error.message };
+        } else {
+          return { status: false, content: "login failed" };
+        }
       }
     },
   },
