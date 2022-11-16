@@ -45,8 +45,25 @@
               <i class="ph-key-light" style="font-size: 24px"></i>
               <p class="text-base font-normal">Password</p>
             </div>
-            <p class="text-zinc-900 text-2xl font-semibold">
-              {{ updateOptions.password }}
+            <p class="text-zinc-900 text-lg font-medium">*********</p>
+          </div>
+          <div class="w-full border-b-[1px] border-zinc-300"></div>
+          <div class="space-y-2">
+            <div class="text-zinc-700 flex items-center space-x-2">
+              <i class="ph-phone-light" style="font-size: 24px"></i>
+              <p class="text-base font-normal">Phone</p>
+            </div>
+            <p class="libertinus-semibold text-zinc-900 text-lg font-medium">
+              {{ updateOptions.phone }}
+            </p>
+          </div>
+          <div class="space-y-2">
+            <div class="text-zinc-700 flex items-center space-x-2">
+              <i class="ph-envelope-light" style="font-size: 24px"></i>
+              <p class="text-base font-normal">Email</p>
+            </div>
+            <p class="text-zinc-900 libertinus-semibold text-lg font-medium">
+              {{ updateOptions.email }}
             </p>
           </div>
           <div class="w-full border-b-[1px] border-zinc-300"></div>
@@ -127,7 +144,8 @@ export default defineComponent({
         updateOptions.gender = userInfo.value.gender;
         updateOptions.email = userInfo.value.email;
         updateOptions.phone = userInfo.value.phone;
-      }
+      },
+      { immediate: true }
     );
     return {
       languageOptions,
