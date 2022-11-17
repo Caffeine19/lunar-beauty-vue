@@ -2,7 +2,7 @@
   <transition name="fade">
     <div
       v-if="openingUserSettingPanel"
-      class="top-1/2 flex flex-col left-1/2 bg-zinc-50 h-1/2 w-[36rem] absolute z-10 px-6 -translate-x-1/2 -translate-y-1/2 shadow-2xl max-w-[66vw]"
+      class="top-1/2 flex flex-col left-1/2 bg-zinc-50 h-2/3 w-[36rem] absolute z-10 px-6 -translate-x-1/2 -translate-y-1/2 shadow-2xl max-w-[66vw]"
     >
       <div
         class="flex items-center justify-between py-3 border-b-[1px] border-zinc-500"
@@ -48,14 +48,43 @@
             <p class="text-zinc-900 text-lg font-medium">*********</p>
           </div>
           <div class="w-full border-b-[1px] border-zinc-300"></div>
-          <div class="space-y-2">
-            <div class="text-zinc-700 flex items-center space-x-2">
-              <i class="ph-phone-light" style="font-size: 24px"></i>
-              <p class="text-base font-normal">Phone</p>
+          <div class="group space-y-2">
+            <div class="flex items-center justify-between">
+              <div class="text-zinc-700 flex items-center space-x-2">
+                <i class="ph-phone-light" style="font-size: 24px"></i>
+                <p class="text-base font-normal">Phone</p>
+              </div>
+              <div
+                class="flex items-center space-x-1 border-zinc-900 border-l-[1px] pl-2"
+                v-show="editingStatus.phone"
+              >
+                <button
+                  class="flex items-center justify-center"
+                  @click="submitEditedInfo('phone')"
+                >
+                  <i
+                    class="ph-upload-simple text-zinc-900"
+                    style="font-size: 24px"
+                  >
+                  </i>
+                </button>
+                <button
+                  class="flex items-center justify-center"
+                  @click="reset('phone')"
+                >
+                  <i
+                    class="ph-eraser text-zinc-900"
+                    style="font-size: 24px"
+                  ></i>
+                </button>
+              </div>
             </div>
-            <p class="libertinus-semibold text-zinc-900 text-lg font-medium">
-              {{ updateOptions.phone }}
-            </p>
+            <LunarInput
+              v-model:given-value="updateOptions.phone"
+              @dblclick="toggleEditStatus('phone')"
+              :disabled="!editingStatus.phone"
+            >
+            </LunarInput>
           </div>
           <div class="space-y-2">
             <div class="text-zinc-700 flex items-center space-x-2">
@@ -111,11 +140,20 @@ import { toggleUserSettingPanelKey } from "@/symbols/userSettingPanel";
 import useUserStore from "@/stores/useUserStore";
 import { storeToRefs } from "pinia";
 
-import type { IUserUpdateOptions } from "@/types/user";
+import type {
+  IUserUpdateOptions,
+  IUserEditingStatus,
+  IUser,
+} from "@/types/user";
+
+import LunarInput from "./LunarInput.vue";
+
+import { showTooltipKey } from "@/symbols/tooltip";
 export default defineComponent({
   components: {
     LunarSelector,
     Transition,
+    LunarInput,
   },
   setup() {
     const userStore = useUserStore();
@@ -147,6 +185,38 @@ export default defineComponent({
       },
       { immediate: true }
     );
+
+    const editingStatus = reactive<IUserEditingStatus>({
+      name: false,
+      password: false,
+      phone: false,
+      email: false,
+      avatar: false,
+    });
+
+    const toggleEditStatus = (key: keyof IUserEditingStatus) => {
+      console.log({ updateKey: key });
+
+      editingStatus[key] = !editingStatus[key];
+    };
+
+    const showTooltip = inject(showTooltipKey);
+    const submitEditedInfo = async (key: keyof IUserUpdateOptions) => {
+      try {
+        const res = await userStore.updateById(userInfo.value.id, {
+          [key]: updateOptions[key],
+        });
+        if (showTooltip) {
+          showTooltip(res);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const reset = (key: keyof IUserUpdateOptions) => {
+      updateOptions[key] = userInfo.value[key];
+    };
     return {
       languageOptions,
       selectedLanguage,
@@ -156,6 +226,10 @@ export default defineComponent({
       toggleOpeningUserSettingPanel,
       userInfo,
       updateOptions,
+      editingStatus,
+      toggleEditStatus,
+      submitEditedInfo,
+      reset,
     };
   },
 });

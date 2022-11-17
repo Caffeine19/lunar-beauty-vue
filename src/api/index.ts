@@ -24,8 +24,14 @@ axiosInstance.interceptors.response.use(
 export const reqUserLogin = (name: string, password: string) => {
   return axiosInstance.post("/user/login", { name, password });
 };
-export const reqUserUpdateById = (userId: number, data: IUserUpdateOptions) => {
-  return axiosInstance.post("/user/updateById", { userId, ...data });
+export const reqUserUpdateById = (
+  userId: number,
+  userData: IUserUpdateOptions
+) => {
+  return axiosInstance.post("/user/updateById", {
+    userId,
+    userData,
+  });
 };
 export const reqProductFindOverview = (category: string) => {
   return axiosInstance.post("/product/findOverview", { category });

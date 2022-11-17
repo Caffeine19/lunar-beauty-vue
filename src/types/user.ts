@@ -3,15 +3,18 @@ export interface IUser {
   name: string;
   password: string;
   avatar: string;
-  phone?: String;
-  email?: String;
-  gender: String;
+  phone?: string;
+  email?: string;
+  gender: string;
 }
 export interface IUserUpdateOptions {
   name?: string;
   password?: string;
   avatar?: string;
-  phone?: String;
-  email?: String;
-  gender?: String;
+  phone?: string;
+  email?: string;
+  gender?: string;
 }
+export type IUserEditingStatus = {
+  [key in keyof IUserUpdateOptions]: boolean;
+};

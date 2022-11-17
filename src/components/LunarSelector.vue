@@ -87,8 +87,8 @@ export default {
     const selectorHeader = ref<null | HTMLElement>(null);
 
     onMounted(() => {
-      console.log(selectorHeader.value?.getBoundingClientRect());
-      console.dir(selectorHeader.value);
+      // console.log(selectorHeader.value?.getBoundingClientRect());
+      // console.dir(selectorHeader.value);
     });
 
     const selectorBodyWidth = computed(() => {

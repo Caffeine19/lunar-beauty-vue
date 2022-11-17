@@ -93,7 +93,6 @@ export default defineComponent({
     const userStore = useUserStore();
 
     const { userInfo, token } = storeToRefs(userStore);
-
     const showTooltip = inject(showTooltipKey);
 
     const submitUserInfo = async () => {
