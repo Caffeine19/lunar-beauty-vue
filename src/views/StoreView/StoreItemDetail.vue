@@ -76,9 +76,16 @@
         <p>Status:</p>
         <p>{{ selectedProduct?.amount }}</p>
       </li>
-      <li class="text-zinc-600 flex justify-between text-base font-medium">
+      <li
+        class="text-zinc-600 flex items-center justify-between text-base font-medium"
+      >
         <p>expense:</p>
-        <p>{{ selectedProduct?.expense }}</p>
+        <LunarInput
+          :disabled="!isEditing"
+          v-model:given-value="updateOptions.expense"
+          class="w-1/2"
+        >
+        </LunarInput>
       </li>
     </ul>
     <div class="w-full h-[1px] border-b-[1px] border-zinc-900 my-2"></div>
@@ -102,6 +109,7 @@ import ProductOverview from "@/components/ProductOverview.vue";
 import LunarCounter from "@/components/LunarCounter.vue";
 import LunarSelector from "@/components/LunarSelector.vue";
 import LunarCalendar from "@/components/LunarCalendar.vue";
+import LunarInput from "@/components/LunarInput.vue";
 
 import type { IStoreItem, IStoreItemUpdateOptions } from "@/types/storeItem";
 
@@ -111,7 +119,13 @@ import useStoreItemStore from "@/stores/useStoreItemStore";
 import { showTooltipKey } from "@/symbols/tooltip";
 
 export default defineComponent({
-  components: { ProductOverview, LunarCounter, LunarSelector, LunarCalendar },
+  components: {
+    ProductOverview,
+    LunarCounter,
+    LunarSelector,
+    LunarCalendar,
+    LunarInput,
+  },
   props: {
     selectedProduct: {
       type: Object as PropType<IStoreItem>,
@@ -138,6 +152,7 @@ export default defineComponent({
     watch(
       () => props.selectedProduct,
       (newVal) => {
+        console.log({ newVal });
         updateOptions.amount = newVal.amount;
         updateOptions.applyingTime = newVal.applyingTime;
         updateOptions.expense = newVal.expense;

@@ -1,6 +1,6 @@
 {
   "editor.formatOnSave": true,
-  "workbench.colorTheme": "GitHub Dark Default",
+  "workbench.colorTheme": "Ayu Dark",
   "css.lint.unknownAtRules": "ignore",
   "cSpell.words": ["libertinus"]
 }

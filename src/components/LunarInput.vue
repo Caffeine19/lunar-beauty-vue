@@ -4,7 +4,7 @@
     :class="
       !disabled
         ? 'border-zinc-700 bg-zinc-900/10 border-[1px]'
-        : 'group-hover:border-b-zinc-300 border-b-transparent  border-[1px]   border-transparent'
+        : 'border-b-zinc-300 border-transparent border-[1px]'
     "
   >
     <input
