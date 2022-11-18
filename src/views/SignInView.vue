@@ -1,6 +1,6 @@
 <template>
   <div class="flex w-screen h-full">
-    <div class="basis-7/12 flex flex-col justify-between p-12">
+    <div class="xl:basis-7/12 xl:flex flex-col justify-between hidden p-12">
       <div
         class="flex items-center space-x-6 border-r-[1px] border-r-zinc-800 pr-4 w-fit"
       >
@@ -12,7 +12,7 @@
       <LunarStickers></LunarStickers>
     </div>
     <div
-      class="basis-5/12 bg-zinc-900 flex flex-col items-center justify-between px-12 py-32"
+      class="xl:basis-5/12 basis-full bg-zinc-900 flex flex-col items-center justify-between px-12 py-32"
     >
       <div class="relative">
         <img
@@ -27,20 +27,22 @@
         </p>
       </div>
       <div class="flex flex-col items-center w-full space-y-24">
-        <div
-          class="w-4/5 border-zinc-400 border-b-[1px] py-2 text-zinc-200 text-2xl font-medium"
-        >
-          Username
-        </div>
-        <div
-          class="w-4/5 border-zinc-400 border-b-[1px] py-2 text-zinc-200 text-2xl font-medium"
-        >
-          Password
-        </div>
+        <input
+          type="text"
+          placeholder="username"
+          v-model="username"
+          class="test w-4/5 border-zinc-400 border-b-[1px] py-2 text-zinc-50 text-2xl font-medium bg-zinc-900 placeholder-zinc-200/80 focus:placeholder-zinc-200 outline-0 transition-all"
+        />
+        <input
+          type="password"
+          placeholder="password"
+          v-model="password"
+          class="test w-4/5 border-zinc-400 border-b-[1px] py-2 text-zinc-50 text-2xl font-medium bg-zinc-900 placeholder-zinc-200/80 outline-0 focus:placeholder-zinc-200 transition-all"
+        />
       </div>
       <button
         class="text-zinc-50 libertinus-semibold group relative text-6xl"
-        @click="goMain"
+        @click="submitUserInfo"
       >
         <svg
           width="243"
@@ -69,9 +71,14 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, inject, ref } from "vue";
 import { useRouter } from "vue-router";
 import LunarStickers from "@/components/LunarStickers.vue";
+
+import useUserStore from "@/stores/useUserStore";
+import { storeToRefs } from "pinia";
+
+import { showTooltipKey } from "@/symbols/tooltip";
 export default defineComponent({
   components: { LunarStickers },
   setup() {
@@ -79,8 +86,36 @@ export default defineComponent({
     const goMain = () => {
       router.push("/main");
     };
-    return { goMain };
+
+    const username = ref("");
+    const password = ref("");
+
+    const userStore = useUserStore();
+
+    const { userInfo, token } = storeToRefs(userStore);
+    const showTooltip = inject(showTooltipKey);
+
+    const submitUserInfo = async () => {
+      try {
+        const res = await userStore.login(username.value, password.value);
+        if (res && showTooltip) {
+          showTooltip(res);
+        }
+        if (res.status) goMain();
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    return { username, password, userInfo, token, submitUserInfo };
   },
 });
 </script>
-<style></style>
+<style>
+input:-internal-autofill-selected.test {
+  appearance: none !important;
+
+  background-color: red !important;
+  color: red !important;
+}
+</style>

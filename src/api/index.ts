@@ -1,10 +1,38 @@
 import type { IStoreItemUpdateOptions } from "@/types/storeItem";
+import type { IUserUpdateOptions } from "@/types/user";
 
 import axios from "axios";
 const axiosInstance = axios.create({
   baseURL: "http://localhost:3008/api/",
   timeout: 5000,
 });
+
+axiosInstance.interceptors.response.use(
+  (res) => {
+    return res;
+  },
+  (err) => {
+    console.log("response failed", err);
+    if (err.response.data.err) {
+      throw new Error(err.response.data.err);
+    } else {
+      throw new Error("response failed");
+    }
+  }
+);
+
+export const reqUserLogin = (name: string, password: string) => {
+  return axiosInstance.post("/user/login", { name, password });
+};
+export const reqUserUpdateById = (
+  userId: number,
+  userData: IUserUpdateOptions
+) => {
+  return axiosInstance.post("/user/updateById", {
+    userId,
+    userData,
+  });
+};
 export const reqProductFindOverview = (category: string) => {
   return axiosInstance.post("/product/findOverview", { category });
 };

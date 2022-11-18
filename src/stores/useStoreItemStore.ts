@@ -2,6 +2,9 @@ import { defineStore } from "pinia";
 import { reqStoreItemFindByUser, reqStoreItemUpdateById } from "@/api";
 import type { IStoreItem, IStoreItemUpdateOptions } from "@/types/storeItem";
 import dayjs from "dayjs";
+
+import type { ITooltipInfo } from "@/types/Tooltip";
+
 const useStoreItemStore = defineStore({
   id: "storeItem",
   state: () => {
@@ -46,7 +49,10 @@ const useStoreItemStore = defineStore({
     //   });
     // },
 
-    async updateById(storeItemId: number, data: IStoreItemUpdateOptions) {
+    async updateById(
+      storeItemId: number,
+      data: IStoreItemUpdateOptions
+    ): Promise<ITooltipInfo> {
       try {
         const res = await reqStoreItemUpdateById(storeItemId, data);
         const { updatedStoreItem } = res.data;
@@ -54,7 +60,7 @@ const useStoreItemStore = defineStore({
 
         this.storeItemList.forEach((sI, index) => {
           if (sI.id == storeItemId) {
-            console.log(sI.id);
+            // console.log(sI.id);
             this.storeItemList[index].amount = updatedStoreItem.amount;
             this.storeItemList[index].applyingTime =
               updatedStoreItem.applyingTime;
@@ -66,9 +72,12 @@ const useStoreItemStore = defineStore({
             this.storeItemList[index].isRunout = updatedStoreItem.isRunout;
           }
         });
-        console.log(this.storeItemList);
+        // console.log(this.storeItemList);
+
+        return { status: true, content: "update succeeded" };
       } catch (error) {
         console.log(error);
+        return { status: false, content: "update failed" };
       }
     },
   },

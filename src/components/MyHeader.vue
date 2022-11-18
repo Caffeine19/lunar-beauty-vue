@@ -41,7 +41,7 @@
       />
 
       <h1 class="text-zinc-900 libertinus-regular text-2xl font-normal">
-        Lazy Fish
+        {{ userInfo?.name || "unnamed" }}
       </h1>
       <i
         class="ph-caret-down text-zinc-900 group-hover:translate-y-[8px] transition-transform"
@@ -57,16 +57,22 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref, inject } from "vue";
 
 import { useRouter } from "vue-router";
 
 import OperateMenu from "./OperateMenu.vue";
+
+import { toggleUserSettingPanelKey } from "@/symbols/userSettingPanel";
+
+import { userInfoKey } from "@/symbols/userInfoKey";
 export default defineComponent({
   components: {
     OperateMenu,
   },
   setup() {
+    const userInfo = inject(userInfoKey);
+
     const showingUserOperatorMenu = ref(false);
     const toggleShowingUserOperatorMenu = (flag: boolean) => {
       showingUserOperatorMenu.value = !showingUserOperatorMenu.value;
@@ -77,12 +83,19 @@ export default defineComponent({
       router.push({ name: "signIn" });
     };
 
-    const goUserSetting = () => {
-      router.push({ name: "userSetting" });
-    };
+    const toggleOpeningUserSettingPanel =
+      inject(toggleUserSettingPanelKey) ||
+      (() => {
+        console.log("missing toggleUserSettingKey");
+      });
+
     const userOperatorOptions = reactive([
       { name: "Logout", iconClass: "ph-sign-out", action: goSingIn },
-      { name: "Settings", iconClass: "ph-nut", action: goUserSetting },
+      {
+        name: "Settings",
+        iconClass: "ph-nut",
+        action: () => toggleOpeningUserSettingPanel(true),
+      },
       { name: "Theme", iconClass: "ph-sun" },
     ]);
 
@@ -90,6 +103,7 @@ export default defineComponent({
       userOperatorOptions,
       showingUserOperatorMenu,
       toggleShowingUserOperatorMenu,
+      userInfo,
     };
   },
 });
