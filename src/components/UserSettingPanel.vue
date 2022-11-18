@@ -1,5 +1,5 @@
 <template>
-  <transition name="fade">
+  <Transition name="fade">
     <div
       v-if="openingUserSettingPanel"
       class="top-1/2 flex flex-col left-1/2 bg-zinc-50 h-2/3 w-[36rem] absolute z-10 px-6 -translate-x-1/2 -translate-y-1/2 shadow-2xl max-w-[66vw]"
@@ -48,6 +48,58 @@
             <p class="text-zinc-900 text-lg font-medium">*********</p>
           </div>
           <div class="w-full border-b-[1px] border-zinc-300"></div>
+          <div id="gender-section" class="group space-y-2">
+            <div class="flex items-center justify-between">
+              <div class="text-zinc-700 flex items-center space-x-2">
+                <i class="ph-gender-intersex-light" style="font-size: 24px"></i>
+                <p class="text-base font-normal">Gender</p>
+              </div>
+              <div
+                class="flex items-center space-x-1 border-zinc-900 border-l-[1px] pl-2"
+                v-show="editingStatus.phone"
+              >
+                <button
+                  class="flex items-center justify-center"
+                  @click="submitEditedInfo('phone')"
+                >
+                  <i
+                    class="ph-upload-simple text-zinc-900"
+                    style="font-size: 24px"
+                  >
+                  </i>
+                </button>
+                <button
+                  class="flex items-center justify-center"
+                  @click="reset('phone')"
+                >
+                  <i
+                    class="ph-eraser text-zinc-900"
+                    style="font-size: 24px"
+                  ></i>
+                </button>
+              </div>
+            </div>
+            <div class="gap-x-4 grid grid-cols-2">
+              <LunarLabelRadio
+                :givenValue="'MAN'"
+                v-model:selectedValue="updateOptions.gender"
+              >
+                <div class="text-zinc-900 flex items-center space-x-3">
+                  <i class="ph-gender-male-light" style="font-size: 24px"></i>
+                  <p class="text-base font-medium">Male</p>
+                </div></LunarLabelRadio
+              >
+              <LunarLabelRadio
+                :givenValue="'WOMEN'"
+                v-model:selectedValue="updateOptions.gender"
+              >
+                <div class="text-zinc-900 flex items-center space-x-3">
+                  <i class="ph-gender-female-light" style="font-size: 24px"></i>
+                  <p class="text-base font-medium">Female</p>
+                </div>
+              </LunarLabelRadio>
+            </div>
+          </div>
           <div id="phone-section" class="group space-y-2">
             <div class="flex items-center justify-between">
               <div class="text-zinc-700 flex items-center space-x-2">
@@ -80,7 +132,7 @@
               </div>
             </div>
             <LunarInput
-              v-model:given-value="updateOptions.phone"
+              v-model:givenValue="updateOptions.phone"
               @dblclick="toggleEditStatus('phone')"
               :disabled="!editingStatus.phone"
             >
@@ -118,7 +170,7 @@
               </div>
             </div>
             <LunarInput
-              v-model:given-value="updateOptions.email"
+              v-model:givenValue="updateOptions.email"
               @dblclick="toggleEditStatus('email')"
               :disabled="!editingStatus.email"
             >
@@ -134,8 +186,8 @@
               <p class="text-base font-normal">Language</p>
             </div>
             <LunarSelector
-              :selected-tap="selectedLanguage"
-              :tap-options="languageOptions"
+              :selectedTap="selectedLanguage"
+              :tapOptions="languageOptions"
             ></LunarSelector>
           </div>
           <div class="w-full border-b-[1px] border-zinc-300"></div>
@@ -145,8 +197,8 @@
               <p class="text-base font-normal">Theme</p>
             </div>
             <LunarSelector
-              :selected-tap="selectedTheme"
-              :tap-options="themeOptions"
+              :selectedTap="selectedTheme"
+              :tapOptions="themeOptions"
             ></LunarSelector>
           </div>
           <div class="w-full border-b-[1px] border-zinc-300"></div>
@@ -160,7 +212,7 @@
         </div>
       </div>
     </div>
-  </transition>
+  </Transition>
 </template>
 <script lang="ts">
 import { defineComponent, inject, reactive, Transition, watch } from "vue";
@@ -177,11 +229,15 @@ import type { IUserUpdateOptions, IUserEditingStatus } from "@/types/user";
 import LunarInput from "./LunarInput.vue";
 
 import { showTooltipKey } from "@/symbols/tooltip";
+
+import LunarLabelRadio from "./LunarLabelRadio.vue";
+
 export default defineComponent({
   components: {
     LunarSelector,
     Transition,
     LunarInput,
+    LunarLabelRadio,
   },
   setup() {
     const userStore = useUserStore();
