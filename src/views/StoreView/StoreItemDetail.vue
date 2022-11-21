@@ -18,7 +18,7 @@
         <button v-show="isEditing" @click="resetAndExit">
           <i class="ph-eraser text-zinc-900" style="font-size: 28px"></i>
         </button>
-        <button>
+        <button @click="deleteStoreItem">
           <i class="ph-trash text-zinc-900" style="font-size: 28px"></i>
         </button>
       </div>
@@ -117,6 +117,7 @@ import { applyingTime, applyingTimeArr } from "@/types/applyingTime";
 import useStoreItemStore from "@/stores/useStoreItemStore";
 
 import { showTooltipKey } from "@/symbols/tooltip";
+import { showDialogKey } from "@/symbols/dialog";
 
 export default defineComponent({
   components: {
@@ -152,7 +153,7 @@ export default defineComponent({
     watch(
       () => props.selectedProduct,
       (newVal) => {
-        console.log({ newVal });
+        console.log({ newVal: newVal });
         updateOptions.amount = newVal.amount;
         updateOptions.applyingTime = newVal.applyingTime;
         updateOptions.expense = newVal.expense;
@@ -205,6 +206,24 @@ export default defineComponent({
       toggleIsEditing(false);
     };
 
+    const showDialog = inject(showDialogKey);
+
+    const deleteStoreItem = async () => {
+      if (showDialog) {
+        console.log("123");
+        showDialog(
+          "Are you sure you want to delete this store item?",
+          "this may never came back",
+          async () => {
+            const res = await storeItemStore.deleteById(
+              selectedProduct.value.id
+            );
+            if (showTooltip) showTooltip(res);
+          }
+        );
+      }
+    };
+
     return {
       isEditing,
       toggleIsEditing,
@@ -212,6 +231,7 @@ export default defineComponent({
       resetAndExit,
       updateOptions,
       applyingTimeArr,
+      deleteStoreItem,
     };
   },
 });

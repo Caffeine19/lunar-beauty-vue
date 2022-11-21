@@ -1,5 +1,9 @@
 import { defineStore } from "pinia";
-import { reqStoreItemFindByUser, reqStoreItemUpdateById } from "@/api";
+import {
+  reqStoreItemDeleteById,
+  reqStoreItemFindByUser,
+  reqStoreItemUpdateById,
+} from "@/api";
 import type { IStoreItem, IStoreItemUpdateOptions } from "@/types/storeItem";
 import dayjs from "dayjs";
 
@@ -78,6 +82,20 @@ const useStoreItemStore = defineStore({
       } catch (error) {
         console.log(error);
         return { status: false, content: "update failed" };
+      }
+    },
+    async deleteById(storeItemId: number): Promise<ITooltipInfo> {
+      try {
+        const res = await reqStoreItemDeleteById(storeItemId);
+        const { deletedStoreItem } = res.data;
+        this.storeItemList = this.storeItemList.filter((sI) => {
+          return sI.id != storeItemId;
+        });
+        console.log({ storeItemList: this.storeItemList });
+        return { status: true, content: "delete succeeded" };
+      } catch (error) {
+        console.log(error);
+        return { status: false, content: "delete failed" };
       }
     },
   },

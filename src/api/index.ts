@@ -62,6 +62,9 @@ export const reqStoreItemUpdateById = (
     ...data,
   });
 };
+export const reqStoreItemDeleteById = (storeItemId: number) => {
+  return axiosInstance.post("/storeItem/deleteById", { storeItemId });
+};
 export const reqRoutineFindByUser = (userId: number) => {
   return axiosInstance.post("/routine/findByUser", { userId });
 };

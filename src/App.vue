@@ -88,6 +88,7 @@ export default defineComponent({
       confirmCallback?: () => unknown,
       cancelCallback?: () => unknown
     ) => {
+      dialogOption.visible = true;
       dialogOption.title = title;
       dialogOption.desc = desc;
       dialogOption.confirmCallback = confirmCallback;
