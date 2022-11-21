@@ -1,9 +1,9 @@
 <template>
   <div
-    class="flex items-center justify-between p-1 transition-colors"
+    class="hover:bg-zinc-900/10 hover:border-zinc-900 flex items-center justify-between p-1 transition-colors"
     :class="
       !disabled
-        ? 'border-zinc-700 bg-zinc-900/10 border-[1px]'
+        ? 'border-zinc-300  border-[1px]'
         : 'border-b-zinc-300 border-transparent border-[1px]'
     "
   >
