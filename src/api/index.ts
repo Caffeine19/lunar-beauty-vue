@@ -72,5 +72,5 @@ export const reqRoutineFindEdge = (routineId: number) => {
   return axiosInstance.post("/routine/findEdge", { routineId });
 };
 export const reqRoutineItemFindByRoutine = (routineId: number) => {
-  return axiosInstance.post("/routineItem/findByRoutine", routineId);
+  return axiosInstance.post("/routineItem/findByRoutine", { routineId });
 };
