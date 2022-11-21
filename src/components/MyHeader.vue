@@ -56,7 +56,7 @@ import OperateMenu from "./OperateMenu.vue";
 
 import { toggleUserSettingPanelKey } from "@/symbols/userSettingPanel";
 
-import { userInfoKey } from "@/symbols/userInfoKey";
+import { userInfoKey } from "@/symbols/userInfo";
 
 import LunarInput from "./LunarInput.vue";
 export default defineComponent({

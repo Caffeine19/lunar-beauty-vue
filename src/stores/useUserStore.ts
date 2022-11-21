@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 
 import { reqUserLogin, reqUserUpdateById } from "@/api";
 
-import type { ITooltipInfo } from "@/types/Tooltip";
+import type { ITooltipInfo } from "@/types/tooltip";
 
 import type { IUser, IUserUpdateOptions } from "@/types/user";
 const useUserStore = defineStore({

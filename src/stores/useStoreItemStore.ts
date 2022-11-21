@@ -3,7 +3,7 @@ import { reqStoreItemFindByUser, reqStoreItemUpdateById } from "@/api";
 import type { IStoreItem, IStoreItemUpdateOptions } from "@/types/storeItem";
 import dayjs from "dayjs";
 
-import type { ITooltipInfo } from "@/types/Tooltip";
+import type { ITooltipInfo } from "@/types/tooltip";
 
 const useStoreItemStore = defineStore({
   id: "storeItem",
