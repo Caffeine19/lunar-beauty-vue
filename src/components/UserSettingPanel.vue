@@ -22,11 +22,18 @@
             src="@/assets/images/Avatar.svg"
             alt="avatar"
           />
-          <button
-            class="text-zinc-900 transition-colors hover:bg-zinc-900/10 border-zinc-900 absolute bottom-0 right-0 flex items-center justify-center p-0.5 border-2 rounded-full"
-          >
-            <i class="ph-palette" style="font-size: 32px"></i>
-          </button>
+
+          <label class="w-fit h-fit">
+            <div
+              class="text-zinc-900 cursor-pointer transition-colors hover:bg-zinc-900/10 border-zinc-900 absolute bottom-0 right-0 flex items-center justify-center p-0.5 border-2 rounded-full"
+            >
+              <i class="ph-palette" style="font-size: 32px"> </i>
+            </div>
+            <input
+              type="file"
+              @change="(event) => avatarUploadHandler(event)"
+            />
+          </label>
         </div>
         <div
           class="grow hide-scrollbar flex flex-col space-y-5 overflow-y-auto"
@@ -241,12 +248,10 @@
               :tapOptions="themeOptions"
             ></LunarSelector>
           </div>
-          <div
-            class="w-full border-b-[1px] border-zinc-300 user-info-section"
-          ></div>
+          <div class="w-full border-b-[1px] border-zinc-300"></div>
           <div
             id="delete-account-section"
-            class="text-zinc-700 flex items-center space-x-2"
+            class="text-zinc-700 user-info-section flex items-center space-x-2"
           >
             <i class="ph-warning-light" style="font-size: 24px"></i>
             <p class="text-base font-normal">Delete account</p>
@@ -345,6 +350,20 @@ export default defineComponent({
       updateOptions[key] = userInfo.value[key];
       toggleEditStatus(key);
     };
+
+    const avatarUploadHandler = (event: Event) => {
+      console.dir(event.target as HTMLInputElement);
+
+      const files = (event.target as HTMLInputElement).files;
+      if (files && files.length > 0) {
+        const reader = new FileReader();
+        reader.readAsDataURL(files[0]);
+        reader.onload = (env: ProgressEvent<FileReader>) => {
+          console.log({ env });
+          if (env) console.log(env.target?.result);
+        };
+      }
+    };
     return {
       languageOptions,
       selectedLanguage,
@@ -358,6 +377,7 @@ export default defineComponent({
       toggleEditStatus,
       submitEditedInfo,
       reset,
+      avatarUploadHandler,
     };
   },
 });
@@ -392,6 +412,9 @@ export default defineComponent({
   left: 0;
   height: 100%;
   width: 4px;
-  @apply bg-zinc-900/30;
+  @apply bg-zinc-900/40 animate-pulse;
+}
+input[type="file"] {
+  display: none;
 }
 </style>
