@@ -60,6 +60,8 @@ import { useRoute, useRouter, RouterLink } from "vue-router";
 
 import { storeToRefs } from "pinia";
 import useRoutineStore from "@/stores/useRoutineStore";
+
+import type { IOperatorButton } from "@/types/operatorButton";
 export default defineComponent({
   components: { RouterLink },
   setup() {
@@ -101,6 +103,11 @@ export default defineComponent({
     const goRoutinePage = (routineId: number) => {
       router.push({ name: "routine", query: { routineId } });
     };
+
+    const routineOperationMenu = reactive<IOperatorButton[]>([
+      { name: "rename", iconClass: "ph-textbox" },
+      { name: "delete", iconClass: "ph-trash" },
+    ]);
     return {
       siderTabOption,
       route,
@@ -110,6 +117,7 @@ export default defineComponent({
       goRoutinePage,
       showingRoutineList,
       routineTabOption,
+      routineOperationMenu,
     };
   },
 });

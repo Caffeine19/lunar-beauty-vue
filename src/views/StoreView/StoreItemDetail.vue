@@ -210,7 +210,6 @@ export default defineComponent({
 
     const deleteStoreItem = async () => {
       if (showDialog) {
-        console.log("123");
         showDialog(
           "Are you sure you want to delete this store item?",
           "this may never came back",
