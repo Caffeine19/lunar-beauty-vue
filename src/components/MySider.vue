@@ -37,10 +37,13 @@
     </button>
     <ul v-show="showingRoutineList" class="space-y-1.5 transition-all">
       <li
-        v-for="routine in routineList"
+        v-for="(routine, index) in routineList"
         :key="routine.id"
         @click="goRoutinePage(routine.id)"
-        class="text-zinc-900 space-x-7 hover:bg-zinc-900/10 flex items-center py-1 pl-5 transition-colors cursor-pointer"
+        ref="operatorTrigger"
+        @click.right.prevent="openUserOperatorMenu2(index)"
+        @blur="hideOperatorMenu"
+        class="text-zinc-900 space-x-7 hover:bg-zinc-900/10 relative flex items-center py-1 pl-5 transition-colors cursor-pointer"
         :class="
           route.query.routineId &&
           parseInt(route.query.routineId.toString()) === routine.id
@@ -52,6 +55,13 @@
         <p class="text-lg font-medium">{{ routine.name }}</p>
       </li>
     </ul>
+    <OperateMenu
+      class="transition-all"
+      :operator-button-options="routineOperationMenu"
+      :operatorMenuStyle="operatorMenuPosition"
+      v-if="showingUserOperatorMenu"
+    >
+    </OperateMenu>
   </div>
 </template>
 <script lang="ts">
@@ -61,9 +71,10 @@ import { useRoute, useRouter, RouterLink } from "vue-router";
 import { storeToRefs } from "pinia";
 import useRoutineStore from "@/stores/useRoutineStore";
 
+import OperateMenu from "./OperateMenu.vue";
 import type { IOperatorButton } from "@/types/operatorButton";
 export default defineComponent({
-  components: { RouterLink },
+  components: { RouterLink, OperateMenu },
   setup() {
     const siderTabOption = reactive([
       {
@@ -104,10 +115,55 @@ export default defineComponent({
       router.push({ name: "routine", query: { routineId } });
     };
 
+    const showingUserOperatorMenu = ref(false);
+    const operatorMenuPosition = reactive({ x: 0, y: 0, w: 0 });
+    const toggleShowingUserOperatorMenu = (event: Event, flag: boolean) => {
+      console.log({ event: event });
+      console.log((event.srcElement as HTMLElement)?.getBoundingClientRect());
+      if ((event.target as HTMLElement)?.getBoundingClientRect()) {
+        const { x, y, width } = (
+          event.target as HTMLElement
+        ).getBoundingClientRect();
+        console.log(x, y);
+        operatorMenuPosition.x = parseInt(x.toFixed(2));
+        operatorMenuPosition.y = parseInt(y.toFixed(2));
+        operatorMenuPosition.w = parseInt(width.toFixed(2));
+        console.log({ operatorMenuPosition });
+      }
+
+      showingUserOperatorMenu.value = !showingUserOperatorMenu.value;
+    };
+
+    const operatorTrigger = ref<null | HTMLElement | HTMLElement[]>(null);
+    const openUserOperatorMenu2 = (index: number) => {
+      if (!showingUserOperatorMenu.value) {
+        if (operatorTrigger.value) {
+          console.log({ operatorTrigger });
+          if ("length" in operatorTrigger.value) {
+            const trigger = operatorTrigger.value[index];
+            const { x, y, width } = trigger.getBoundingClientRect();
+            console.log({ x, y, width });
+            operatorMenuPosition.x = parseInt(x.toFixed(2));
+            operatorMenuPosition.y = parseInt(y.toFixed(2)) + 40;
+            operatorMenuPosition.w = parseInt(width.toFixed(2));
+            console.log({ operatorMenuPosition });
+            showingUserOperatorMenu.value = true;
+          }
+        }
+      } else {
+        hideOperatorMenu();
+      }
+    };
+
+    const hideOperatorMenu = () => {
+      showingUserOperatorMenu.value = false;
+    };
+
     const routineOperationMenu = reactive<IOperatorButton[]>([
       { name: "rename", iconClass: "ph-textbox" },
       { name: "delete", iconClass: "ph-trash" },
     ]);
+
     return {
       siderTabOption,
       route,
@@ -118,6 +174,12 @@ export default defineComponent({
       showingRoutineList,
       routineTabOption,
       routineOperationMenu,
+      toggleShowingUserOperatorMenu,
+      showingUserOperatorMenu,
+      operatorMenuPosition,
+      operatorTrigger,
+      openUserOperatorMenu2,
+      hideOperatorMenu,
     };
   },
 });

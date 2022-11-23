@@ -1,6 +1,11 @@
 <template>
   <div
-    class="bg-zinc-900 border-zinc-700 absolute z-10 py-1.5 border-2 shadow-2xl"
+    class="bg-zinc-900 border-zinc-700 fixed z-10 py-1.5 border-2 shadow-2xl"
+    :style="{
+      top: operatorMenuStyle?.y + 'px',
+      left: operatorMenuStyle?.x + 'px',
+      width: operatorMenuStyle?.w + 'px',
+    }"
   >
     <button
       v-for="(button, index) in operatorButtonOptions"
@@ -18,10 +23,18 @@ import { defineComponent } from "vue";
 import type { PropType } from "vue";
 
 import type { IOperatorButton } from "@/types/operatorButton";
+interface IOperatorMenuStyle {
+  x: number;
+  y: number;
+  w: number;
+}
 export default defineComponent({
   props: {
     operatorButtonOptions: {
       type: Array as PropType<IOperatorButton[]>,
+    },
+    operatorMenuStyle: {
+      type: Object as PropType<IOperatorMenuStyle>,
     },
   },
   setup() {},

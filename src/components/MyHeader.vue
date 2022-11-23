@@ -22,7 +22,8 @@
     </div>
     <div
       class="header-section-container-right group hover:bg-zinc-900/10 flex items-center py-4 pl-4 pr-2 space-x-3 transition-colors"
-      @click="toggleShowingUserOperatorMenu(true)"
+      @click="toggleShowingUserOperatorMenu"
+      ref="operatorTrigger"
       :class="showingUserOperatorMenu ? 'bg-zinc-900/10' : ''"
     >
       <img
@@ -38,14 +39,15 @@
         class="ph-caret-down text-zinc-900 group-hover:translate-y-[8px] transition-transform"
         style="font-size: 24px"
       ></i>
-      <OperateMenu
-        class="top-full right-0 transition-all"
-        :operator-button-options="userOperatorOptions"
-        v-if="showingUserOperatorMenu"
-      >
-      </OperateMenu>
     </div>
   </div>
+  <OperateMenu
+    class="transition-all"
+    :operator-button-options="userOperatorOptions"
+    :operatorMenuStyle="operatorMenuPosition"
+    v-if="showingUserOperatorMenu"
+  >
+  </OperateMenu>
 </template>
 <script lang="ts">
 import { defineComponent, reactive, ref, inject } from "vue";
@@ -68,8 +70,31 @@ export default defineComponent({
     const userInfo = inject(userInfoKey);
 
     const showingUserOperatorMenu = ref(false);
-    const toggleShowingUserOperatorMenu = (flag: boolean) => {
-      showingUserOperatorMenu.value = !showingUserOperatorMenu.value;
+
+    const operatorTrigger = ref<null | HTMLElement | HTMLElement[]>(null);
+
+    const operatorMenuPosition = reactive({ x: 0, y: 0, w: 0 });
+    const toggleShowingUserOperatorMenu = () => {
+      if (!showingUserOperatorMenu.value) {
+        if (operatorTrigger.value) {
+          console.log({ operatorTrigger });
+          if (!("length" in operatorTrigger.value)) {
+            const trigger = operatorTrigger.value;
+            const { x, y, width } = trigger.getBoundingClientRect();
+            console.log({ x, y, width });
+            operatorMenuPosition.x = parseInt(x.toFixed(2));
+            operatorMenuPosition.y = parseInt(y.toFixed(2)) + 80;
+            operatorMenuPosition.w = parseInt(width.toFixed(2));
+            console.log({ operatorMenuPosition });
+            showingUserOperatorMenu.value = true;
+          }
+        }
+      } else {
+        hideOperatorMenu();
+      }
+    };
+    const hideOperatorMenu = () => {
+      showingUserOperatorMenu.value = false;
     };
 
     const router = useRouter();
@@ -98,6 +123,8 @@ export default defineComponent({
       showingUserOperatorMenu,
       toggleShowingUserOperatorMenu,
       userInfo,
+      operatorTrigger,
+      operatorMenuPosition,
     };
   },
 });
