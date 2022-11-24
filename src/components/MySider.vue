@@ -55,13 +55,14 @@
         <p class="text-lg font-medium">{{ routine.name }}</p>
       </li>
     </ul>
-    <OperateMenu
-      class="transition-all"
-      :operator-button-options="routineOperationMenu"
-      :operatorMenuStyle="operatorMenuPosition"
-      v-if="showingRoutineOperatorMenu"
-    >
-    </OperateMenu>
+    <Transition name="fade">
+      <OperateMenu
+        :operator-button-options="routineOperationMenu"
+        :operatorMenuStyle="operatorMenuPosition"
+        v-if="showingRoutineOperatorMenu"
+      >
+      </OperateMenu
+    ></Transition>
   </div>
 </template>
 <script lang="ts">
@@ -215,5 +216,21 @@ export default defineComponent({
   100% {
     height: 100%;
   }
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-to {
+  opacity: 1;
+}
+.fade-leave-from {
+  opacity: 1;
 }
 </style>

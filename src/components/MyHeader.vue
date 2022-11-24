@@ -41,13 +41,15 @@
       ></i>
     </div>
   </div>
-  <OperateMenu
-    class="transition-all"
-    :operator-button-options="userOperatorOptions"
-    :operatorMenuStyle="operatorMenuPosition"
-    v-if="showingUserOperatorMenu"
-  >
-  </OperateMenu>
+  <Transition name="fade">
+    <OperateMenu
+      class="transition-all"
+      :operator-button-options="userOperatorOptions"
+      :operatorMenuStyle="operatorMenuPosition"
+      v-if="showingUserOperatorMenu"
+    >
+    </OperateMenu
+  ></Transition>
 </template>
 <script lang="ts">
 import { defineComponent, reactive, ref, inject } from "vue";
@@ -179,5 +181,21 @@ export default defineComponent({
   100% {
     height: 100%;
   }
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-to {
+  opacity: 1;
+}
+.fade-leave-from {
+  opacity: 1;
 }
 </style>
