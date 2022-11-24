@@ -216,6 +216,14 @@ export default defineComponent({
     };
 
     const routineOperationMenu = reactive<IOperatorButton[]>([
+      {
+        name: "open",
+        iconClass: "ph-arrows-out",
+        action: () => {
+          hideOperatorMenu();
+          goRoutinePage(routineList.value[triggeredRoutine.value].id);
+        },
+      },
       { name: "rename", iconClass: "ph-textbox", action: renameRoutine },
       {
         name: "delete",
