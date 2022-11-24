@@ -22,7 +22,7 @@
             </p>
           </div>
         </div>
-        <LunarDivider margin="my-4"></LunarDivider>
+        <LunarDivider :margin="4"></LunarDivider>
         <div class="float-right space-x-4">
           <button
             @click="confirmClickHandler"

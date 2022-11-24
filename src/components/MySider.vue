@@ -41,7 +41,7 @@
         :key="routine.id"
         @click="goRoutinePage(routine.id)"
         ref="operatorTrigger"
-        @click.right.prevent="openUserOperatorMenu2(index)"
+        @click.right.prevent="openRoutineOperatorMenu(index)"
         @blur="hideOperatorMenu"
         class="text-zinc-900 space-x-7 hover:bg-zinc-900/10 relative flex items-center py-1 pl-5 transition-colors cursor-pointer"
         :class="
@@ -59,13 +59,13 @@
       class="transition-all"
       :operator-button-options="routineOperationMenu"
       :operatorMenuStyle="operatorMenuPosition"
-      v-if="showingUserOperatorMenu"
+      v-if="showingRoutineOperatorMenu"
     >
     </OperateMenu>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, inject, reactive, ref } from "vue";
 import { useRoute, useRouter, RouterLink } from "vue-router";
 
 import { storeToRefs } from "pinia";
@@ -73,6 +73,9 @@ import useRoutineStore from "@/stores/useRoutineStore";
 
 import OperateMenu from "./OperateMenu.vue";
 import type { IOperatorButton } from "@/types/operatorButton";
+
+import { showTooltipKey } from "@/symbols/tooltip";
+import { showDialogKey } from "@/symbols/dialog";
 export default defineComponent({
   components: { RouterLink, OperateMenu },
   setup() {
@@ -115,28 +118,12 @@ export default defineComponent({
       router.push({ name: "routine", query: { routineId } });
     };
 
-    const showingUserOperatorMenu = ref(false);
+    const showingRoutineOperatorMenu = ref(false);
     const operatorMenuPosition = reactive({ x: 0, y: 0, w: 0 });
-    const toggleShowingUserOperatorMenu = (event: Event, flag: boolean) => {
-      console.log({ event: event });
-      console.log((event.srcElement as HTMLElement)?.getBoundingClientRect());
-      if ((event.target as HTMLElement)?.getBoundingClientRect()) {
-        const { x, y, width } = (
-          event.target as HTMLElement
-        ).getBoundingClientRect();
-        console.log(x, y);
-        operatorMenuPosition.x = parseInt(x.toFixed(2));
-        operatorMenuPosition.y = parseInt(y.toFixed(2));
-        operatorMenuPosition.w = parseInt(width.toFixed(2));
-        console.log({ operatorMenuPosition });
-      }
-
-      showingUserOperatorMenu.value = !showingUserOperatorMenu.value;
-    };
-
     const operatorTrigger = ref<null | HTMLElement | HTMLElement[]>(null);
-    const openUserOperatorMenu2 = (index: number) => {
-      if (!showingUserOperatorMenu.value) {
+    const triggeredRoutine = ref(-1);
+    const openRoutineOperatorMenu = (index: number) => {
+      if (!showingRoutineOperatorMenu.value) {
         if (operatorTrigger.value) {
           console.log({ operatorTrigger });
           if ("length" in operatorTrigger.value) {
@@ -147,38 +134,65 @@ export default defineComponent({
             operatorMenuPosition.y = parseInt(y.toFixed(2)) + 40;
             operatorMenuPosition.w = parseInt(width.toFixed(2));
             console.log({ operatorMenuPosition });
-            showingUserOperatorMenu.value = true;
+            triggeredRoutine.value = index;
+            console.log({ trigger: triggeredRoutine.value });
+
+            showingRoutineOperatorMenu.value = true;
           }
         }
       } else {
         hideOperatorMenu();
       }
     };
-
     const hideOperatorMenu = () => {
-      showingUserOperatorMenu.value = false;
+      showingRoutineOperatorMenu.value = false;
+    };
+
+    const showTooltip = inject(showTooltipKey);
+    const showDialog = inject(showDialogKey);
+    const renameRoutine = () => {};
+
+    const deleteRoutine = async () => {
+      hideOperatorMenu();
+      console.log({ routineId: routineList.value[triggeredRoutine.value].id });
+      if (showDialog) {
+        showDialog(
+          "Are you sure you want to delete this store item?",
+          "this may never came back",
+          async () => {
+            const res = await routineStore.deleteById(
+              routineList.value[triggeredRoutine.value].id
+            );
+            if (res && showTooltip) {
+              showTooltip(res);
+            }
+          }
+        );
+      }
     };
 
     const routineOperationMenu = reactive<IOperatorButton[]>([
       { name: "rename", iconClass: "ph-textbox" },
-      { name: "delete", iconClass: "ph-trash" },
+      {
+        name: "delete",
+        iconClass: "ph-trash",
+        action: deleteRoutine,
+      },
     ]);
 
     return {
       siderTabOption,
       route,
-
       toggleShowingRoutineList,
       routineList,
       goRoutinePage,
       showingRoutineList,
       routineTabOption,
       routineOperationMenu,
-      toggleShowingUserOperatorMenu,
-      showingUserOperatorMenu,
+      showingRoutineOperatorMenu,
       operatorMenuPosition,
       operatorTrigger,
-      openUserOperatorMenu2,
+      openRoutineOperatorMenu,
       hideOperatorMenu,
     };
   },

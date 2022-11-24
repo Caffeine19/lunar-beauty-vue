@@ -74,6 +74,13 @@ export const reqRoutineFindNode = (routineId: number) => {
 export const reqRoutineFindEdge = (routineId: number) => {
   return axiosInstance.post("/routine/findEdge", { routineId });
 };
+export const reqRoutineUpdateById = (routineId: number, name: string) => {
+  return axiosInstance.post("/routine/updateById", { routineId, name });
+};
+
+export const reqRoutineDeleteById = (routineId: number) => {
+  return axiosInstance.post("/routine/deleteById", { routineId });
+};
 export const reqRoutineItemFindByRoutine = (routineId: number) => {
   return axiosInstance.post("/routineItem/findByRoutine", { routineId });
 };
