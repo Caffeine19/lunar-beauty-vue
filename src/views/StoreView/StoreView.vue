@@ -68,7 +68,8 @@ export default defineComponent({
     const { storeItemList } = storeToRefs(storeItemStore);
     const userId = 1;
     onMounted(async () => {
-      await storeItemStore.getStoreItem(userId);
+      if (storeItemList.value.length == 0)
+        await storeItemStore.getStoreItem(userId);
     });
 
     /*filtered by applyingTime*/

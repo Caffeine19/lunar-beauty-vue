@@ -52,7 +52,7 @@
           route.query.routineId &&
           parseInt(route.query.routineId.toString()) === routine.id &&
           editingRoutine != routine.id
-            ? 'text-zinc-50 bg-gradient-to-r from-bean-900 to-bean-800'
+            ? 'text-zinc-50 bg-gradient-to-r from-bean-900 to-bean-800 hover:from-bean-900/90 hover:to-bean-800/90'
             : '',
           editingRoutine == routine.id ? 'bg-zinc-900/10' : '',
         ]"
@@ -133,7 +133,7 @@ export default defineComponent({
     const showingRoutineList = ref(false);
     const toggleShowingRoutineList = () => {
       const userId = 1;
-      routineStore.getRoutineList(userId);
+      if (routineList.value.length == 0) routineStore.getRoutineList(userId);
       showingRoutineList.value = !showingRoutineList.value;
     };
     const goRoutinePage = (routineId: number) => {
@@ -223,6 +223,10 @@ export default defineComponent({
           hideOperatorMenu();
           goRoutinePage(routineList.value[triggeredRoutine.value].id);
         },
+      },
+      {
+        name: "create",
+        iconClass: "ph-plus",
       },
       { name: "rename", iconClass: "ph-textbox", action: renameRoutine },
       {

@@ -96,7 +96,7 @@ export default defineComponent({
     watch(
       () => route.query.routineId,
       () => {
-        if (route.query.routineId) {
+        if (route.query.routineId && routineItemList.value.length == 0) {
           routineItemStore.getRoutineItemList(
             parseInt(route.query.routineId.toString())
           );

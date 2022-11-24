@@ -41,7 +41,8 @@ export default defineComponent({
     const productStore = useProductStore();
     const { productOverviewList } = storeToRefs(productStore);
     onMounted(async () => {
-      await productStore.getProductOverviewList("All");
+      if (productOverviewList.value.length == 0)
+        await productStore.getProductOverviewList("All");
     });
 
     const changeCategory = async (category: string) => {
