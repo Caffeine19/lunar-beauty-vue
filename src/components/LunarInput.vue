@@ -10,7 +10,7 @@
     <input
       type="text"
       :value="givenValue"
-      class="libertinus-semibold text-zinc-900 outline-0 flex-1 w-full text-lg font-medium bg-transparent"
+      class="text-zinc-900 outline-0 flex-1 w-full text-lg font-medium bg-transparent"
       :disabled="disabled"
       @input="
         $emit('update:givenValue', ($event.target as HTMLInputElement).value)

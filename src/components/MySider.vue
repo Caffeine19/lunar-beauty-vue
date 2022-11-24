@@ -1,5 +1,7 @@
 <template>
-  <div class="sider-container flex flex-col h-full">
+  <div
+    class="sider-container flex flex-col h-full max-w-[200px] overflow-hidden"
+  >
     <div class="w-fit flex flex-col justify-start py-4 space-y-4">
       <RouterLink
         v-for="(tab, index) in siderTabOption"
@@ -35,24 +37,41 @@
         {{ routineTabOption.name }}
       </p>
     </button>
-    <ul v-show="showingRoutineList" class="space-y-1.5 transition-all">
+    <ul
+      v-show="showingRoutineList"
+      class="space-y-1.5 transition-all w-full overflow-hidden"
+    >
       <li
         v-for="(routine, index) in routineList"
         :key="routine.id"
         @click="goRoutinePage(routine.id)"
         ref="operatorTrigger"
         @click.right.prevent="openRoutineOperatorMenu(index)"
-        @blur="hideOperatorMenu"
         class="text-zinc-900 space-x-7 hover:bg-zinc-900/10 relative flex items-center py-1 pl-5 transition-colors cursor-pointer"
-        :class="
+        :class="[
           route.query.routineId &&
-          parseInt(route.query.routineId.toString()) === routine.id
+          parseInt(route.query.routineId.toString()) === routine.id &&
+          editingRoutine != routine.id
             ? 'text-zinc-50 bg-gradient-to-r from-bean-900 to-bean-800'
-            : ''
-        "
+            : '',
+          editingRoutine == routine.id ? 'bg-zinc-900/10' : '',
+        ]"
       >
-        <i class="ph-file" style="font-size: 24px"></i>
-        <p class="text-lg font-medium">{{ routine.name }}</p>
+        <i
+          class="ph-file"
+          style="font-size: 24px"
+          v-if="routine.id != editingRoutine"
+        ></i>
+        <p class="text-lg font-medium" v-if="routine.id != editingRoutine">
+          {{ routine.name }}
+        </p>
+        <LunarInput
+          @keyup.enter="submitRenamedRoutine"
+          @keyup.esc="cancelRenameRoutine"
+          v-model:given-value="editingName"
+          class="max-w-[10rem]"
+          v-else
+        ></LunarInput>
       </li>
     </ul>
     <Transition name="fade">
@@ -77,8 +96,10 @@ import type { IOperatorButton } from "@/types/operatorButton";
 
 import { showTooltipKey } from "@/symbols/tooltip";
 import { showDialogKey } from "@/symbols/dialog";
+
+import LunarInput from "./LunarInput.vue";
 export default defineComponent({
-  components: { RouterLink, OperateMenu },
+  components: { RouterLink, OperateMenu, LunarInput },
   setup() {
     const siderTabOption = reactive([
       {
@@ -122,7 +143,9 @@ export default defineComponent({
     const showingRoutineOperatorMenu = ref(false);
     const operatorMenuPosition = reactive({ x: 0, y: 0, w: 0 });
     const operatorTrigger = ref<null | HTMLElement | HTMLElement[]>(null);
+
     const triggeredRoutine = ref(-1);
+
     const openRoutineOperatorMenu = (index: number) => {
       if (!showingRoutineOperatorMenu.value) {
         if (operatorTrigger.value) {
@@ -151,7 +174,27 @@ export default defineComponent({
 
     const showTooltip = inject(showTooltipKey);
     const showDialog = inject(showDialogKey);
-    const renameRoutine = () => {};
+
+    const editingRoutine = ref(-1);
+    const editingName = ref("");
+    const renameRoutine = () => {
+      editingRoutine.value = routineList.value[triggeredRoutine.value].id;
+      editingName.value = routineList.value[triggeredRoutine.value].name;
+      hideOperatorMenu();
+    };
+    const submitRenamedRoutine = async () => {
+      const res = await routineStore.updateById(
+        editingRoutine.value,
+        editingName.value
+      );
+      if (res && showTooltip) {
+        showTooltip(res);
+      }
+      editingRoutine.value = -1;
+    };
+    const cancelRenameRoutine = () => {
+      editingRoutine.value = -1;
+    };
 
     const deleteRoutine = async () => {
       hideOperatorMenu();
@@ -173,7 +216,7 @@ export default defineComponent({
     };
 
     const routineOperationMenu = reactive<IOperatorButton[]>([
-      { name: "rename", iconClass: "ph-textbox" },
+      { name: "rename", iconClass: "ph-textbox", action: renameRoutine },
       {
         name: "delete",
         iconClass: "ph-trash",
@@ -195,6 +238,10 @@ export default defineComponent({
       operatorTrigger,
       openRoutineOperatorMenu,
       hideOperatorMenu,
+      editingRoutine,
+      editingName,
+      submitRenamedRoutine,
+      cancelRenameRoutine,
     };
   },
 });
