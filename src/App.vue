@@ -25,12 +25,23 @@ import {
   hideTooltipKey,
 } from "./symbols/tooltip";
 
-import type { IDialogOption, IHideDialog, ISHowDialog } from "./types/dialog";
+import type { IDialogOption, IHideDialog, IShowDialog } from "./types/dialog";
+
+import {
+  routineCreatePanelOptionKey,
+  hideRoutineCreatePanelKey,
+  showRoutineCreatePanelKey,
+} from "@/symbols/routineCreatePanel";
 import {
   dialogOptionKey,
   showDialogKey,
   hideDialogKey,
 } from "@/symbols/dialog";
+import type {
+  IHideRoutineCreatePanel,
+  IRoutineCreatePanelOption,
+  IShowRoutineCreatePanel,
+} from "./types/routineCreatePanel";
 
 export default defineComponent({
   components: {
@@ -82,7 +93,7 @@ export default defineComponent({
     });
     provide(dialogOptionKey, dialogOption);
 
-    const showDialog: ISHowDialog = (
+    const showDialog: IShowDialog = (
       desc: string,
       title: string,
       confirmCallback?: () => unknown,
@@ -109,7 +120,49 @@ export default defineComponent({
       }
     };
     provide(hideDialogKey, hideDialog);
-    return { dialogOption };
+
+    /* provide routine create panel*/
+    const routineCreatePanelOption = reactive<IRoutineCreatePanelOption>({
+      givenValue: "",
+      visible: false,
+    });
+    provide(routineCreatePanelOptionKey, routineCreatePanelOption);
+    const showRoutineCreatePanel: IShowRoutineCreatePanel = (
+      confirmCallback?: (givenValue: string) => unknown,
+      cancelCallback?: () => unknown
+    ) => {
+      routineCreatePanelOption.visible = true;
+
+      console.log(confirmCallback, "confirm");
+      if (confirmCallback) {
+        routineCreatePanelOption.confirmCallback = () =>
+          confirmCallback(routineCreatePanelOption.givenValue);
+
+        console.log(routineCreatePanelOption.confirmCallback, "confirm");
+      }
+
+      routineCreatePanelOption.cancelCallback = cancelCallback;
+    };
+    provide(showRoutineCreatePanelKey, showRoutineCreatePanel);
+
+    const hideRoutineCreatePanel: IHideRoutineCreatePanel = (
+      operationName: "confirm" | "cancel"
+    ) => {
+      if (
+        routineCreatePanelOption.confirmCallback &&
+        operationName == "confirm"
+      )
+        routineCreatePanelOption.confirmCallback(
+          routineCreatePanelOption.givenValue
+        );
+
+      if (routineCreatePanelOption.cancelCallback && operationName == "cancel")
+        routineCreatePanelOption.cancelCallback();
+
+      routineCreatePanelOption.visible = false;
+    };
+    provide(hideRoutineCreatePanelKey, hideRoutineCreatePanel);
+    return { dialogOption, routineCreatePanelOption };
   },
 });
 </script>

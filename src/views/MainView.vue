@@ -6,6 +6,7 @@
     </div>
     <UserSettingPanel></UserSettingPanel>
     <LunarDialog></LunarDialog>
+    <RoutineCreatePanel></RoutineCreatePanel>
   </div>
 </template>
 <script lang="ts">
@@ -15,8 +16,16 @@ import MyHeader from "@/components/MyHeader.vue";
 import MySider from "@/components/MySider.vue";
 import UserSettingPanel from "@/components/UserSettingPanel.vue";
 import LunarDialog from "@/components/LunarDialog.vue";
+import RoutineCreatePanel from "@/components/RoutineCreatePanel.vue";
 export default defineComponent({
-  components: { RouterView, MyHeader, MySider, UserSettingPanel, LunarDialog },
+  components: {
+    RouterView,
+    MyHeader,
+    MySider,
+    UserSettingPanel,
+    LunarDialog,
+    RoutineCreatePanel,
+  },
 });
 </script>
 <style lang=""></style>

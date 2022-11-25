@@ -5,7 +5,7 @@ export interface IDialogOption {
   confirmCallback?: () => unknown;
   cancelCallback?: () => unknown;
 }
-export interface ISHowDialog {
+export interface IShowDialog {
   (
     desc: string,
     title: string,

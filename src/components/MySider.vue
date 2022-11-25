@@ -98,6 +98,7 @@ import { showTooltipKey } from "@/symbols/tooltip";
 import { showDialogKey } from "@/symbols/dialog";
 
 import LunarInput from "./LunarInput.vue";
+import { showRoutineCreatePanelKey } from "@/symbols/routineCreatePanel";
 export default defineComponent({
   components: { RouterLink, OperateMenu, LunarInput },
   setup() {
@@ -153,13 +154,13 @@ export default defineComponent({
           if ("length" in operatorTrigger.value) {
             const trigger = operatorTrigger.value[index];
             const { x, y, width } = trigger.getBoundingClientRect();
-            console.log({ x, y, width });
+            // console.log({ x, y, width });
             operatorMenuPosition.x = parseInt(x.toFixed(2));
             operatorMenuPosition.y = parseInt(y.toFixed(2)) + 40;
             operatorMenuPosition.w = parseInt(width.toFixed(2));
-            console.log({ operatorMenuPosition });
+            // console.log({ operatorMenuPosition });
             triggeredRoutine.value = index;
-            console.log({ trigger: triggeredRoutine.value });
+            // console.log({ trigger: triggeredRoutine.value });
 
             showingRoutineOperatorMenu.value = true;
           }
@@ -215,6 +216,29 @@ export default defineComponent({
       }
     };
 
+    const showRoutineCreatePanel = inject(showRoutineCreatePanelKey);
+
+    const createRoutine = async (name: string) => {
+      console.log("new routine name", name);
+      const userId = 1;
+      const res = await routineStore.createByUser(userId, name);
+      if (res && showTooltip) {
+        showTooltip(res);
+      }
+      if (res.data) {
+        console.log(res.data);
+        goRoutinePage(res.data);
+      }
+    };
+
+    const beginCreateRoutine = async () => {
+      if (showRoutineCreatePanel) {
+        hideOperatorMenu();
+        showRoutineCreatePanel(createRoutine);
+      }
+      // const res = await routineStore.createByUser();
+    };
+
     const routineOperationMenu = reactive<IOperatorButton[]>([
       {
         name: "open",
@@ -227,6 +251,7 @@ export default defineComponent({
       {
         name: "create",
         iconClass: "ph-plus",
+        action: beginCreateRoutine,
       },
       { name: "rename", iconClass: "ph-textbox", action: renameRoutine },
       {

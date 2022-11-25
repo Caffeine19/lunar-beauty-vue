@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import {
+  reqRoutineCreateByUser,
   reqRoutineDeleteById,
   reqRoutineFindByUser,
   reqRoutineUpdateById,
@@ -44,13 +45,6 @@ const useRoutineStore = defineStore({
       try {
         const res = await reqRoutineDeleteById(routineId);
         const { deletedRoutine } = res.data;
-        // this.routineList.forEach((routine, index) => {
-        //   if (routine.id == deletedRoutine.id) {
-        //     console.log(index);
-        //     this.routineList = this.routineList.splice(index, 1);
-        //     return;
-        //   }
-        // });
         this.routineList = this.routineList.filter((routine) => {
           return routine.id != deletedRoutine.id;
         });
@@ -58,6 +52,25 @@ const useRoutineStore = defineStore({
       } catch (error) {
         console.log(error);
         return { status: false, content: "delete failed" };
+      }
+    },
+    async createByUser(
+      userId: number,
+      name: string
+    ): Promise<ITooltipInfo<number>> {
+      try {
+        const res = await reqRoutineCreateByUser(userId, name);
+        const { createdRoutine } = res.data;
+        console.log({ createdRoutine });
+        this.routineList.push(createdRoutine);
+        return {
+          status: true,
+          content: "create succeeded",
+          data: createdRoutine.id as number,
+        };
+      } catch (error) {
+        console.log(error);
+        return { status: false, content: "create failed" };
       }
     },
   },

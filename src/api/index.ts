@@ -81,6 +81,9 @@ export const reqRoutineUpdateById = (routineId: number, name: string) => {
 export const reqRoutineDeleteById = (routineId: number) => {
   return axiosInstance.post("/routine/deleteById", { routineId });
 };
+export const reqRoutineCreateByUser = (userId: number, name: string) => {
+  return axiosInstance.post("/routine/createByUser", { userId, name });
+};
 export const reqRoutineItemFindByRoutine = (routineId: number) => {
   return axiosInstance.post("/routineItem/findByRoutine", { routineId });
 };
