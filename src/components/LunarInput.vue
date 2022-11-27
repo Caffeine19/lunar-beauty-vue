@@ -17,7 +17,7 @@
       "
     />
     <i
-      class="ph-pencil-light transition-colors"
+      class="ph-pencil-simple-light transition-colors"
       style="font-size: 20px"
       :class="!disabled ? 'text-zinc-900 animate-pulse' : 'text-zinc-300'"
     ></i>

@@ -1,6 +1,6 @@
 <template>
-  <div class="grow relative flex flex-col px-8 pb-8 space-y-8 overflow-hidden">
-    <div class="backdrop-blur-2xl absolute top-0 left-0 w-full p-6">
+  <div class="grow relative flex flex-col overflow-hidden">
+    <div class="backdrop-blur-2xl absolute top-0 left-0 w-full px-6 py-3">
       <div
         class="divide-zinc-600 shrink-0 flex items-center overflow-hidden divide-x"
       >
@@ -16,7 +16,7 @@
     </div>
 
     <div
-      class="pt-16 justify-between gap-x-4 gap-y-4 grid test grid-cols-[repeat(auto-fill,230px)] overflow-y-scroll product-overview-container"
+      class="pt-20 px-8 justify-between gap-x-4 gap-y-4 grid test grid-cols-[repeat(auto-fill,230px)] overflow-y-scroll product-overview-container"
     >
       <ProductOverView
         v-for="product in productOverviewList"
@@ -25,6 +25,7 @@
       >
       </ProductOverView>
     </div>
+    <LunarPagination></LunarPagination>
   </div>
 </template>
 <script lang="ts">
@@ -36,6 +37,7 @@ import ProductOverView from "@/components/ProductOverview.vue";
 import { storeToRefs } from "pinia";
 import useProductStore from "@/stores/useProductStore";
 
+import LunarPagination from "@/components/LunarPagination.vue";
 export default defineComponent({
   setup() {
     const productStore = useProductStore();
@@ -57,6 +59,7 @@ export default defineComponent({
   components: {
     ProductCategories,
     ProductOverView,
+    LunarPagination,
   },
 });
 </script>

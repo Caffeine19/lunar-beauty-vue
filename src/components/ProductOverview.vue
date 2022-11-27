@@ -1,5 +1,5 @@
 <template>
-  <div class="group w-[230px] col-span-1">
+  <div class="group w-[230px] col-span-1 mb-4">
     <img
       :src="'data:image/png;base64,' + images"
       alt="productImg"
