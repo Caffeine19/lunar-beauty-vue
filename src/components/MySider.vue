@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="sider-container flex flex-col h-full max-w-[200px] overflow-hidden"
-  >
+  <div class="sider-container flex flex-col h-full">
     <div class="w-fit flex flex-col justify-start py-4 space-y-4">
       <RouterLink
         v-for="(tab, index) in siderTabOption"
@@ -37,10 +35,7 @@
         {{ routineTabOption.name }}
       </p>
     </button>
-    <ul
-      v-show="showingRoutineList"
-      class="space-y-1.5 transition-all w-full overflow-hidden"
-    >
+    <ul v-show="showingRoutineList" class="space-y-1.5 transition-all">
       <li
         v-for="(routine, index) in routineList"
         :key="routine.id"
