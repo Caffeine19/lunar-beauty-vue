@@ -8,7 +8,7 @@
       ]"
       ref="selectorHeader"
     >
-      <p class="text-zinc-900 text-base font-medium">{{ selectedTap }}</p>
+      <p class="text-zinc-900 text-base font-medium">{{ selectedTab }}</p>
       <i
         class="text-zinc-900 ph-caret-up rotate-180"
         style="font-size: 20px"
@@ -20,44 +20,45 @@
       >
       </i>
     </div>
-
     <div
-      class="bg-zinc-900 absolute z-30 flex flex-col justify-center w-full py-1 mt-2 space-y-1 shadow-2xl"
+      class="bg-zinc-900 absolute z-30 flex flex-col justify-center w-full py-1 space-y-1 shadow-2xl"
+      :class="selectorBodyPosition"
       @mouseleave="closeDropMenu"
       v-show="openingDropMenu"
+      ref="selectorBody"
     >
       <button
         class="w-full py-0.5 px-1 font-base text-normal text-zinc-50 hover:bg-zinc-700 transition-colors flex space-x-1 items-center justify-around"
-        v-for="(tab, index) in tapOptions"
-        :key="index"
-        @click="setSelectedTab(tab)"
+        v-for="tab in tabs"
+        :key="tab"
+        @click.stop="setSelectedTab(tab)"
       >
         <i
           class="ph-arrow-right-light"
           style="font-size: 20px"
-          v-show="selectedTap == tab"
+          :class="selectedTab == tab ? 'opacity-100' : 'opacity-0'"
         ></i>
         <p>{{ tab }}</p>
 
         <i
           class="ph-arrow-left-light"
           style="font-size: 20px"
-          v-show="selectedTap == tab"
+          :class="selectedTab == tab ? 'opacity-100' : 'opacity-0'"
         ></i>
       </button>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { onMounted, ref, computed } from "vue";
+import { ref, nextTick, toRefs } from "vue";
 import type { PropType } from "vue";
 
 export default {
   props: {
-    selectedTap: {
+    selectedTab: {
       type: String,
     },
-    tapOptions: {
+    tabOptions: {
       type: Array as PropType<string[]>,
     },
     disabled: {
@@ -65,59 +66,62 @@ export default {
       default: false,
     },
   },
-  emits: ["update:selectedTap"],
+  emits: ["update:selectedTab"],
   setup(props, { emit }) {
-    const openingDropMenu = ref<boolean>(false);
+    let tabs = ref(props.tabOptions);
 
-    const openDropMenu = () => {
-      if (!props.disabled) {
-        console.log(props.disabled);
-        openingDropMenu.value = true;
+    const selectorHeader = ref<null | HTMLElement>(null);
+    const selectorBody = ref<null | HTMLElement>(null);
+    const selectorBodyPosition = ref<"top-0 mt-10" | "bottom-0 mb-10">(
+      "top-0 mt-10"
+    );
+    const calculatePosition = () => {
+      if (selectorHeader.value && selectorBody.value) {
+        const header = selectorHeader.value;
+        const body = selectorBody.value;
+        const { bottom } = header.getBoundingClientRect();
+        const { height } = body.getBoundingClientRect();
+        console.log({ bottom, height, window: window.innerHeight });
+
+        if (bottom + height > window.innerHeight) {
+          selectorBodyPosition.value = "bottom-0 mb-10";
+
+          const arr: string[] = [];
+          if (tabs.value) {
+            tabs.value.forEach((tab) => {
+              console.log(tab);
+              arr.unshift(tab);
+              console.log(arr);
+            });
+            tabs.value = arr;
+          }
+        }
       }
     };
 
+    const openingDropMenu = ref<boolean>(false);
+    const openDropMenu = () => {
+      if (!props.disabled) {
+        // console.log(props.disabled);
+        openingDropMenu.value = true;
+        nextTick(calculatePosition);
+      }
+    };
+    const setSelectedTab = (tab: string) => {
+      emit("update:selectedTab", tab);
+    };
     const closeDropMenu = () => {
       openingDropMenu.value = false;
     };
-
-    const setSelectedTab = (tab: string) => {
-      emit("update:selectedTap", tab);
-    };
-
-    const selectorHeader = ref<null | HTMLElement>(null);
-
-    onMounted(() => {
-      // console.log(selectorHeader.value?.getBoundingClientRect());
-      // console.dir(selectorHeader.value);
-    });
-
-    const selectorBodyWidth = computed(() => {
-      return selectorHeader.value?.clientWidth;
-    });
-    const selectorBodyX = computed(() => {
-      return selectorHeader.value?.offsetLeft;
-    });
-    const selectorBodyY = computed(() => {
-      if (
-        selectorHeader.value?.offsetTop &&
-        selectorHeader.value?.clientHeight
-      ) {
-        return (
-          selectorHeader.value.offsetTop + selectorHeader.value.clientHeight
-        );
-      } else {
-        return 0;
-      }
-    });
     return {
+      tabs,
       openingDropMenu,
       openDropMenu,
       closeDropMenu,
       setSelectedTab,
       selectorHeader,
-      selectorBodyWidth,
-      selectorBodyX,
-      selectorBodyY,
+      selectorBody,
+      selectorBodyPosition,
     };
   },
 };
