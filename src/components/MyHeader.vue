@@ -115,7 +115,9 @@ export default defineComponent({
       {
         name: "Settings",
         iconClass: "ph-nut",
-        action: () => toggleOpeningUserSettingPanel(true),
+        action: () => {
+          toggleOpeningUserSettingPanel(true), toggleShowingUserOperatorMenu();
+        },
       },
       { name: "Theme", iconClass: "ph-sun" },
     ]);
