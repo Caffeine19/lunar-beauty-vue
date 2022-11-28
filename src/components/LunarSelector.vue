@@ -75,6 +75,9 @@ export default {
     const selectorBodyPosition = ref<"top-0 mt-10" | "bottom-0 mb-10">(
       "top-0 mt-10"
     );
+
+    let bodyReversed = false;
+    let dataReversed = false;
     const calculatePosition = () => {
       if (selectorHeader.value && selectorBody.value) {
         const header = selectorHeader.value;
@@ -83,17 +86,24 @@ export default {
         const { height } = body.getBoundingClientRect();
         console.log({ bottom, height, window: window.innerHeight });
 
-        if (bottom + height > window.innerHeight) {
-          selectorBodyPosition.value = "bottom-0 mb-10";
-
-          const arr: string[] = [];
-          if (tabs.value) {
-            tabs.value.forEach((tab) => {
-              console.log(tab);
-              arr.unshift(tab);
-              console.log(arr);
-            });
-            tabs.value = arr;
+        if (bottom + height > window.innerHeight || bodyReversed) {
+          if (bodyReversed) {
+            selectorBodyPosition.value = "top-0 mt-10";
+          } else {
+            selectorBodyPosition.value = "bottom-0 mb-10";
+          }
+          bodyReversed = true;
+          if (!dataReversed) {
+            const arr: string[] = [];
+            if (tabs.value) {
+              tabs.value.forEach((tab) => {
+                // console.log(tab);
+                arr.unshift(tab);
+                // console.log(arr);
+              });
+              tabs.value = arr;
+              dataReversed = true;
+            }
           }
         }
       }
@@ -101,7 +111,7 @@ export default {
 
     const openingDropMenu = ref<boolean>(false);
     const openDropMenu = () => {
-      if (!props.disabled) {
+      if (!props.disabled && !openingDropMenu.value) {
         // console.log(props.disabled);
         openingDropMenu.value = true;
         nextTick(calculatePosition);
