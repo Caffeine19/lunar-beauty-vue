@@ -36,8 +36,8 @@
         <p>applyingTime:</p>
         <!-- <p>{{ selectedProduct?.applyingTime }}</p> -->
         <LunarSelector
-          v-model:selectedTap="updateOptions.applyingTime"
-          :tapOptions="applyingTimeArr"
+          v-model:selectedTab="updateOptions.applyingTime"
+          :tabOptions="applyingTimeArr"
           class="w-24"
           :disabled="!isEditing"
         ></LunarSelector>

@@ -2,7 +2,7 @@
   <Transition name="fade">
     <div
       v-if="openingUserSettingPanel"
-      class="top-1/2 flex flex-col left-1/2 bg-zinc-50/70 backdrop-blur-2xl h-2/3 w-[36rem] absolute z-10 px-6 -translate-x-1/2 -translate-y-1/2 shadow-2xl max-w-[66vw] border-zinc-200 border-[1px]"
+      class="top-1/2 flex flex-col left-1/2 bg-zinc-50/70 backdrop-blur-xl h-2/3 w-[36rem] absolute z-10 px-6 -translate-x-1/2 -translate-y-1/2 shadow-2xl max-w-[66vw] border-zinc-200 border-[1px]"
     >
       <div
         class="flex items-center justify-between py-3 border-b-[1px] border-zinc-500"
@@ -233,8 +233,8 @@
               <p class="text-base font-normal">Language</p>
             </div>
             <LunarSelector
-              :selectedTap="selectedLanguage"
-              :tapOptions="languageOptions"
+              v-model:selectedTab="selectedLanguage"
+              :tabOptions="languageOptions"
             ></LunarSelector>
           </div>
           <div class="w-full border-b-[1px] border-zinc-300"></div>
@@ -244,8 +244,8 @@
               <p class="text-base font-normal">Theme</p>
             </div>
             <LunarSelector
-              :selectedTap="selectedTheme"
-              :tapOptions="themeOptions"
+              v-model:selectedTab="selectedTheme"
+              :tabOptions="themeOptions"
             ></LunarSelector>
           </div>
           <div class="w-full border-b-[1px] border-zinc-300"></div>
