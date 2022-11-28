@@ -49,91 +49,79 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { ref, nextTick, toRefs } from "vue";
-import type { PropType } from "vue";
+<script setup lang="ts">
+import { nextTick, ref } from "vue";
 
-export default {
-  props: {
-    selectedTab: {
-      type: String,
-    },
-    tabOptions: {
-      type: Array as PropType<string[]>,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  emits: ["update:selectedTab"],
-  setup(props, { emit }) {
-    let tabs = ref(props.tabOptions);
+type Props<T = number | string> = {
+  selectedTab: T;
+  tabOptions: T[];
+  disabled?: boolean;
+};
 
-    const selectorHeader = ref<null | HTMLElement>(null);
-    const selectorBody = ref<null | HTMLElement>(null);
-    const selectorBodyPosition = ref<"top-0 mt-10" | "bottom-0 mb-10">(
-      "top-0 mt-10"
-    );
+enum BodyPosition {
+  top = "top-0 mt-10",
+  bottom = "bottom-0 mb-10",
+}
 
-    let bodyReversed = false;
-    let dataReversed = false;
-    const calculatePosition = () => {
-      if (selectorHeader.value && selectorBody.value) {
-        const header = selectorHeader.value;
-        const body = selectorBody.value;
-        const { bottom } = header.getBoundingClientRect();
-        const { height } = body.getBoundingClientRect();
-        console.log({ bottom, height, window: window.innerHeight });
+const props = withDefaults(defineProps<Props>(), {
+  disabled: false,
+});
 
-        if (bottom + height > window.innerHeight || bodyReversed) {
-          if (bodyReversed) {
-            selectorBodyPosition.value = "top-0 mt-10";
-          } else {
-            selectorBodyPosition.value = "bottom-0 mb-10";
-          }
-          bodyReversed = true;
-          if (!dataReversed) {
-            const arr: string[] = [];
-            if (tabs.value) {
-              tabs.value.forEach((tab) => {
-                // console.log(tab);
-                arr.unshift(tab);
-                // console.log(arr);
-              });
-              tabs.value = arr;
-              dataReversed = true;
-            }
-          }
+const emit = defineEmits(["update:selectedTab"]);
+
+let tabs = ref(props.tabOptions);
+
+const selectorHeader = ref<null | HTMLElement>(null);
+const selectorBody = ref<null | HTMLElement>(null);
+const selectorBodyPosition = ref<BodyPosition>(BodyPosition.top);
+
+let bodyReversed = false;
+let dataReversed = false;
+const calculatePosition = () => {
+  if (selectorHeader.value && selectorBody.value) {
+    const header = selectorHeader.value;
+    const body = selectorBody.value;
+    const { bottom } = header.getBoundingClientRect();
+    const { height } = body.getBoundingClientRect();
+    console.log({ bottom, height, window: window.innerHeight });
+
+    if (bottom + height > window.innerHeight || bodyReversed) {
+      if (bodyReversed) {
+        selectorBodyPosition.value = BodyPosition.top;
+      } else {
+        selectorBodyPosition.value = BodyPosition.bottom;
+      }
+      bodyReversed = true;
+      if (!dataReversed) {
+        const arr: Props["selectedTab"][] = [];
+        if (tabs.value) {
+          tabs.value.forEach((tab) => {
+            // console.log(tab);
+            arr.unshift(tab);
+            // console.log(arr);
+          });
+          tabs.value = arr;
+          dataReversed = true;
         }
       }
-    };
+    }
+  }
+};
 
-    const openingDropMenu = ref<boolean>(false);
-    const openDropMenu = () => {
-      if (!props.disabled && !openingDropMenu.value) {
-        // console.log(props.disabled);
-        openingDropMenu.value = true;
-        nextTick(calculatePosition);
-      }
-    };
-    const setSelectedTab = (tab: string) => {
-      emit("update:selectedTab", tab);
-    };
-    const closeDropMenu = () => {
-      openingDropMenu.value = false;
-    };
-    return {
-      tabs,
-      openingDropMenu,
-      openDropMenu,
-      closeDropMenu,
-      setSelectedTab,
-      selectorHeader,
-      selectorBody,
-      selectorBodyPosition,
-    };
-  },
+const openingDropMenu = ref<boolean>(false);
+const openDropMenu = () => {
+  if (!props.disabled && !openingDropMenu.value) {
+    // console.log(props.disabled);
+    openingDropMenu.value = true;
+    nextTick(calculatePosition);
+  }
+};
+const setSelectedTab = (tab: Props["selectedTab"]) => {
+  if (!props.disabled) emit("update:selectedTab", tab);
+};
+const closeDropMenu = () => {
+  openingDropMenu.value = false;
 };
 </script>
+
 <style></style>
