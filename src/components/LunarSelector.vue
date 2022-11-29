@@ -75,8 +75,6 @@ const selectorHeader = ref<null | HTMLElement>(null);
 const selectorBody = ref<null | HTMLElement>(null);
 const selectorBodyPosition = ref<BodyPosition>(BodyPosition.top);
 
-let bodyReversed = false;
-let dataReversed = false;
 const calculatePosition = () => {
   if (selectorHeader.value && selectorBody.value) {
     const header = selectorHeader.value;
@@ -85,25 +83,20 @@ const calculatePosition = () => {
     const { height } = body.getBoundingClientRect();
     console.log({ bottom, height, window: window.innerHeight });
 
-    if (bottom + height > window.innerHeight || bodyReversed) {
-      if (bodyReversed) {
-        selectorBodyPosition.value = BodyPosition.top;
-      } else {
-        selectorBodyPosition.value = BodyPosition.bottom;
+    if (bottom + height > window.innerHeight) {
+      selectorBodyPosition.value = BodyPosition.bottom;
+      const arr: Props["selectedTab"][] = [];
+      if (tabs.value) {
+        tabs.value.forEach((tab) => {
+          // console.log(tab);
+          arr.unshift(tab);
+          // console.log(arr);
+        });
+        tabs.value = arr;
       }
-      bodyReversed = true;
-      if (!dataReversed) {
-        const arr: Props["selectedTab"][] = [];
-        if (tabs.value) {
-          tabs.value.forEach((tab) => {
-            // console.log(tab);
-            arr.unshift(tab);
-            // console.log(arr);
-          });
-          tabs.value = arr;
-          dataReversed = true;
-        }
-      }
+    } else {
+      selectorBodyPosition.value = BodyPosition.top;
+      tabs.value = props.tabOptions;
     }
   }
 };
