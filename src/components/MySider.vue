@@ -4,11 +4,11 @@
       <RouterLink
         v-for="(tab, index) in siderTabOption"
         :key="index"
-        class="text-zinc-900 hover:bg-zinc-900/10 flex items-center px-4 py-2 space-x-6 transition-colors"
+        class="flex items-center px-4 py-2 space-x-6 transition-colors"
         :class="
           route.path.includes(tab.to)
             ? 'text-zinc-50 bg-gradient-to-r from-bean-900 to-bean-800'
-            : ''
+            : 'text-zinc-900 hover:bg-zinc-900/10'
         "
         :to="{ name: tab.to }"
       >
