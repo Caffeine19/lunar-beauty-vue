@@ -50,7 +50,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { nextTick, ref } from "vue";
+import { nextTick, ref, toRefs, watch } from "vue";
 
 type Props<T = number | string> = {
   selectedTab: T;
@@ -67,14 +67,15 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
 });
 
-const emit = defineEmits(["update:selectedTab"]);
+const emit = defineEmits(["update:selectedTab", "update:tabOptions"]);
 
-let tabs = ref(props.tabOptions);
+const tabs = ref(props.tabOptions);
 
 const selectorHeader = ref<null | HTMLElement>(null);
 const selectorBody = ref<null | HTMLElement>(null);
 const selectorBodyPosition = ref<BodyPosition>(BodyPosition.top);
 
+let dataReverser = false;
 const calculatePosition = () => {
   if (selectorHeader.value && selectorBody.value) {
     const header = selectorHeader.value;
@@ -85,14 +86,19 @@ const calculatePosition = () => {
 
     if (bottom + height > window.innerHeight) {
       selectorBodyPosition.value = BodyPosition.bottom;
-      const arr: Props["selectedTab"][] = [];
-      if (tabs.value) {
-        tabs.value.forEach((tab) => {
-          // console.log(tab);
-          arr.unshift(tab);
-          // console.log(arr);
-        });
-        tabs.value = arr;
+      if (!dataReverser) {
+        const arr: Props["selectedTab"][] = [];
+        if (tabs.value) {
+          tabs.value.forEach((tab) => {
+            // console.log(tab);
+            arr.unshift(tab);
+            console.log(arr);
+          });
+          tabs.value = arr;
+          // emit("update:tabOptions", arr);
+          console.log("reversed tabs", tabs.value);
+        }
+        dataReverser = true;
       }
     } else {
       selectorBodyPosition.value = BodyPosition.top;
@@ -100,6 +106,14 @@ const calculatePosition = () => {
     }
   }
 };
+
+watch(
+  () => JSON.stringify(props.tabOptions),
+  (newVal) => {
+    tabs.value = JSON.parse(newVal);
+    dataReverser = false;
+  }
+);
 
 const openingDropMenu = ref<boolean>(false);
 const openDropMenu = () => {

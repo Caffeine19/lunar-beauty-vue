@@ -4,37 +4,134 @@
       class="text-zinc-900 flex items-center p-3 space-x-4 border-r-[1px] border-zinc-900"
     >
       <p class="text-lg font-normal">Items per page:</p>
-
-      <button class="flex items-center space-x-2">
-        <p class="font-medium">10</p>
-        <i class="ph-caret-down" style="font-size: 28px"></i>
-      </button>
+      <LunarSelector
+        class="w-20"
+        v-model:selected-tab="selectedItemTab"
+        v-model:tab-options="tabOptionItem"
+      >
+      </LunarSelector>
     </div>
     <div class="text-zinc-900 p-3 border-r-[1px] border-zinc-900 pr-8">
-      <p class="text-lg font-normal">1-10 of 103 items</p>
+      <p class="text-lg font-normal">
+        {{ (currentPage - 1) * itemPerPage + 1 }}-{{
+          currentPage * itemPerPage > itemAmount
+            ? itemAmount
+            : currentPage * itemPerPage
+        }}
+        of {{ itemAmount }} items
+      </p>
     </div>
     <div
       class="text-zinc-900 flex items-center p-3 space-x-4 border-r-[1px] border-zinc-900"
     >
-      <button class="flex items-center space-x-2">
-        <p class="font-medium">1</p>
-        <i class="ph-caret-down" style="font-size: 28px"></i>
-      </button>
-      <p class="text-lg font-normal">of 11 pages</p>
+      <LunarSelector
+        class="w-20"
+        v-model:selected-tab="selectedPageTab"
+        v-model:tab-options="tabOptionPage"
+      >
+      </LunarSelector>
+      <p class="text-lg font-normal">of {{ pageOption.length }} pages</p>
     </div>
 
     <button
-      class="flex items-center border-r-[1px] border-zinc-900 p-3 text-zinc-900"
+      @click="prevPage"
+      class="flex items-center border-r-[1px] border-zinc-900 p-3 text-zinc-900 hover:bg-zinc-900/10 transition-colors group"
     >
-      <i class="ph-caret-left-fill" style="font-size: 28px"></i>
+      <i
+        class="ph-caret-left-fill group-hover:-translate-x-1 transition-transform"
+        style="font-size: 28px"
+      ></i>
     </button>
-    <button class="text-zinc-900 flex items-center p-3">
-      <i class="ph-caret-right-fill" style="font-size: 28px"></i>
+    <button
+      @click="nextPage"
+      class="text-zinc-900 hover:bg-zinc-900/10 group flex items-center p-3 transition-colors"
+    >
+      <i
+        class="ph-caret-right-fill group-hover:translate-x-1 transition-transform"
+        style="font-size: 28px"
+      ></i>
     </button>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({});
+import { computed, defineComponent, ref, watch, type PropType } from "vue";
+
+import LunarSelector from "./LunarSelector.vue";
+export default defineComponent({
+  props: {
+    currentPage: {
+      type: Number,
+      required: true,
+    },
+    pageOption: {
+      type: Array as PropType<number[]>,
+      required: true,
+    },
+    itemPerPage: {
+      type: Number,
+      required: true,
+    },
+    itemAmount: {
+      type: Number,
+      required: true,
+    },
+    itemPerPageOption: {
+      type: Array as PropType<number[]>,
+      required: true,
+    },
+  },
+  emits: ["update:itemPerPage", "update:currentPage"],
+  components: {
+    LunarSelector,
+  },
+  setup(props, { emit }) {
+    const selectedItemTab = ref(props.itemPerPage);
+    const selectedPageTab = ref(props.currentPage);
+    const tabOptionPage = ref(props.pageOption);
+    const tabOptionItem = ref(props.itemPerPageOption);
+
+    watch(
+      () => JSON.stringify(props.pageOption),
+      (newVal) => {
+        tabOptionPage.value = JSON.parse(newVal);
+      }
+    );
+    watch(
+      () => props.itemPerPageOption,
+      (newVal) => {
+        console.log({ newVal });
+        tabOptionItem.value = newVal;
+      }
+    );
+    watch(selectedItemTab, (newVal) => {
+      emit("update:itemPerPage", newVal);
+      selectedPageTab.value = 1;
+    });
+    watch(selectedPageTab, (newVal) => {
+      emit("update:currentPage", newVal);
+    });
+
+    const prevPage = () => {
+      if (selectedPageTab.value > 1) {
+        emit("update:currentPage", selectedPageTab.value - 1);
+        selectedPageTab.value -= 1;
+      }
+    };
+    const nextPage = () => {
+      if (selectedPageTab.value < props.pageOption.length) {
+        emit("update:currentPage", selectedPageTab.value + 1);
+        selectedPageTab.value += 1;
+      }
+    };
+    return {
+      selectedItemTab,
+      selectedPageTab,
+      prevPage,
+      nextPage,
+      tabOptionItem,
+      tabOptionPage,
+    };
+  },
+});
 </script>
 <style scoped></style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="grow relative flex flex-col overflow-hidden">
+  <div class="grow relative flex flex-col justify-between overflow-hidden">
     <div class="backdrop-blur-2xl absolute top-0 left-0 w-full px-6 py-3">
       <div
         class="divide-zinc-600 shrink-0 flex items-center overflow-hidden divide-x"
@@ -25,11 +25,17 @@
       >
       </ProductOverView>
     </div>
-    <LunarPagination></LunarPagination>
+    <LunarPagination
+      v-model:itemPerPage="queryOption.itemPerPage"
+      :itemPerPageOption="queryOption.itemPerPageOption"
+      v-model:currentPage="queryOption.currentPage"
+      :pageOption="queryOption.pageOption"
+      :itemAmount="queryOption.itemAmount"
+    ></LunarPagination>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
+import { defineComponent, onMounted, reactive, watch, watchEffect } from "vue";
 
 import ProductCategories from "./ProductCategories.vue";
 import ProductOverView from "@/components/ProductOverview.vue";
@@ -41,19 +47,61 @@ import LunarPagination from "@/components/LunarPagination.vue";
 export default defineComponent({
   setup() {
     const productStore = useProductStore();
-    const { productOverviewList } = storeToRefs(productStore);
+    const { productOverviewList, productCount } = storeToRefs(productStore);
+
+    const queryOption = reactive({
+      category: "All",
+      currentPage: 1,
+      pageOption: [0],
+      itemPerPage: 8,
+      itemPerPageOption: [8, 12, 16, 20, 24],
+      itemAmount: 107,
+    });
+
+    const getProductOverviewList = async () => {
+      await productStore.getProductOverviewList(
+        queryOption.category,
+        (queryOption.currentPage - 1) * queryOption.itemPerPage,
+        queryOption.itemPerPage
+      );
+      queryOption.itemAmount = productCount.value;
+      const pageNum = Math.ceil(productCount.value / queryOption.itemPerPage);
+      console.log({ pageNum });
+
+      let index = 1;
+      const arr = [];
+      do {
+        arr.push(index);
+        index += 1;
+      } while (index <= pageNum);
+
+      queryOption.pageOption = arr;
+      console.log(queryOption.pageOption);
+    };
+
     onMounted(async () => {
-      if (productOverviewList.value.length == 0)
-        await productStore.getProductOverviewList("All");
+      if (productOverviewList.value.length == 0) {
+        await getProductOverviewList();
+      }
     });
 
     const changeCategory = async (category: string) => {
-      await productStore.getProductOverviewList(category);
+      queryOption.currentPage = 1;
+      queryOption.category = category;
     };
+
+    // watch(queryOption, async (newVal) => {
+    //   console.log(newVal);
+    //   await getProductOverviewList();
+    // });
+    watchEffect(() => {
+      getProductOverviewList();
+    });
 
     return {
       productOverviewList,
       changeCategory,
+      queryOption,
     };
   },
   components: {

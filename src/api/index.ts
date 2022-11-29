@@ -33,8 +33,12 @@ export const reqUserUpdateById = (
     userData,
   });
 };
-export const reqProductFindOverview = (category: string) => {
-  return axiosInstance.post("/product/findOverview", { category });
+export const reqProductFindOverview = (
+  category: string,
+  skip: number,
+  take: number
+) => {
+  return axiosInstance.post("/product/findOverview", { category, skip, take });
 };
 export const reqProductFindByBrand = (brand: string) => {
   return axiosInstance.post("/product/findByBrand", { brand });
