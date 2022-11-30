@@ -1,7 +1,7 @@
 import type { applyingTime } from "./applyingTime";
 import type { IProduct } from "./product";
 
-export interface IStoreItem {
+export type IStoreItem = {
   id: number;
 
   amount: number;
@@ -19,16 +19,26 @@ export interface IStoreItem {
   isRunout: boolean;
 
   product: IProduct;
-}
-export interface IStoreItemUpdateOptions {
-  amount?: number;
-  applyingTime?: applyingTime;
+};
+// export type IStoreItemUpdateOptions= {
+//   amount?: IStoreItem["amount"];
+//   applyingTime?: IStoreItem["applyingTime"];
 
-  expense?: string;
+//   expense?: IStoreItem["expense"];
 
-  openedTime?: string | null;
-  productionTime?: string;
-  shelfTime?: number;
+//   openedTime?: IStoreItem["openedTime"];
+//   productionTime?: IStoreItem["productionTime"];
+//   shelfTime?: IStoreItem["shelfTime"];
 
-  isRunout?: boolean;
-}
+//   isRunout?: IStoreItem["isRunout"];
+// }
+export type IStoreItemUpdateOptions = Pick<
+  IStoreItem,
+  | "amount"
+  | "applyingTime"
+  | "expense"
+  | "openedTime"
+  | "productionTime"
+  | "shelfTime"
+  | "isRunout"
+>;

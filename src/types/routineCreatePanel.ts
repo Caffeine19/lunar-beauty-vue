@@ -1,14 +1,14 @@
-export interface IRoutineCreatePanelOption {
+export type IRoutineCreatePanelOption = {
   visible: boolean;
   givenValue: string;
   confirmCallback?: (givenValue: string) => unknown;
   cancelCallback?: () => unknown;
-}
+};
 
 export interface IShowRoutineCreatePanel {
   (
-    confirmCallback?: (givenValue: string) => unknown,
-    cancelCallback?: () => unknown
+    confirmCallback?: IRoutineCreatePanelOption["confirmCallback"],
+    cancelCallback?: IRoutineCreatePanelOption["cancelCallback"]
   ): unknown;
 }
 export interface IHideRoutineCreatePanel {
