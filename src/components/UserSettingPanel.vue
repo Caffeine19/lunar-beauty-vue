@@ -289,7 +289,12 @@ export default defineComponent({
   setup() {
     const userStore = useUserStore();
     const { userInfo } = storeToRefs(userStore);
-    const updateOptions = reactive<IUserUpdateOptions>({});
+    const updateOptions = reactive<IUserUpdateOptions>({
+      name: "",
+      password: "",
+      avatar: "",
+      gender: "",
+    });
 
     const languageOptions = reactive(["Chinese", "English"]);
     const selectedLanguage = "English";
@@ -323,6 +328,7 @@ export default defineComponent({
       phone: false,
       email: false,
       avatar: false,
+      gender: false,
     });
 
     const toggleEditStatus = (key: keyof IUserEditingStatus) => {
@@ -334,20 +340,29 @@ export default defineComponent({
     const showTooltip = inject(showTooltipKey);
     const submitEditedInfo = async (key: keyof IUserUpdateOptions) => {
       try {
-        const res = await userStore.updateById(userInfo.value.id, {
-          [key]: updateOptions[key],
-        });
-        if (showTooltip) {
-          showTooltip(res);
+        const newVal = {
+          [key as keyof IUserUpdateOptions]: updateOptions[key],
+        };
+        if (newVal) {
+          const res = await userStore.updateById(
+            userInfo.value.id,
+            newVal as IUserUpdateOptions
+          );
+          if (showTooltip) {
+            showTooltip(res);
+          }
+          toggleEditStatus(key);
         }
-        toggleEditStatus(key);
       } catch (error) {
         console.log(error);
       }
     };
 
     const reset = (key: keyof IUserUpdateOptions) => {
-      updateOptions[key] = userInfo.value[key];
+      const oldVal = userInfo.value[key];
+      if (oldVal) {
+        updateOptions[key] = oldVal;
+      }
       toggleEditStatus(key);
     };
 
