@@ -1,5 +1,5 @@
 import type { InjectionKey } from "vue";
-import type { ISHowDialog, IHideDialog, IDialogOption } from "@/types/dialog";
+import type { IShowDialog, IHideDialog, IDialogOption } from "@/types/dialog";
 
 export const dialogOptionKey = Symbol(
   "dialogOptionKey"
@@ -7,7 +7,7 @@ export const dialogOptionKey = Symbol(
 
 export const showDialogKey = Symbol(
   "showDialogKey"
-) as InjectionKey<ISHowDialog>;
+) as InjectionKey<IShowDialog>;
 
 export const hideDialogKey = Symbol(
   "hideDialogKey"
