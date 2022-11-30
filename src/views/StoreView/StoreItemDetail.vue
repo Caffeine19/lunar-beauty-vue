@@ -149,7 +149,15 @@ export default defineComponent({
     };
 
     const { selectedProduct } = toRefs(props);
-    const updateOptions = reactive<IStoreItemUpdateOptions>({});
+    const updateOptions = reactive<IStoreItemUpdateOptions>({
+      amount: 0,
+      applyingTime: applyingTime.ALL,
+      expense: "0",
+      openedTime: null,
+      productionTime: "",
+      shelfTime: 0,
+      isRunout: false,
+    });
 
     watch(
       () => props.selectedProduct,
