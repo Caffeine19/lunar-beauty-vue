@@ -91,15 +91,14 @@ export default defineComponent({
     const tabOptionItem = ref(props.itemPerPageOption);
 
     watch(
-      () => JSON.stringify(props.pageOption),
+      () => props.pageOption,
       (newVal) => {
-        tabOptionPage.value = JSON.parse(newVal);
+        tabOptionPage.value = newVal;
       }
     );
     watch(
       () => props.itemPerPageOption,
       (newVal) => {
-        console.log({ newVal });
         tabOptionItem.value = newVal;
       }
     );

@@ -108,9 +108,9 @@ const calculatePosition = () => {
 };
 
 watch(
-  () => JSON.stringify(props.tabOptions),
+  () => props.tabOptions,
   (newVal) => {
-    tabs.value = JSON.parse(newVal);
+    tabs.value = newVal;
     dataReverser = false;
   }
 );

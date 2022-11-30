@@ -68,14 +68,19 @@ export default defineComponent({
       const pageNum = Math.ceil(productCount.value / queryOption.itemPerPage);
       console.log({ pageNum });
 
-      let index = 1;
-      const arr = [];
-      do {
-        arr.push(index);
-        index += 1;
-      } while (index <= pageNum);
+      queryOption.pageOption.length = 0;
+      for (let i = 0; i < pageNum; i++) {
+        queryOption.pageOption.push(i + 1);
+      }
 
-      queryOption.pageOption = arr;
+      // let index = 1;
+      // const arr = [];
+      // do {
+      //   arr.push(index);
+      //   index += 1;
+      // } while (index <= pageNum);
+
+      // queryOption.pageOption = arr;
       console.log(queryOption.pageOption);
     };
 
