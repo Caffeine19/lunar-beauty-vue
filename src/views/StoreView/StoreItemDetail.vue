@@ -36,6 +36,7 @@
         <p>applyingTime:</p>
         <!-- <p>{{ selectedProduct?.applyingTime }}</p> -->
         <LunarSelector
+          v-if="updateOptions.applyingTime"
           v-model:selectedTab="updateOptions.applyingTime"
           :tabOptions="applyingTimeArr"
           class="w-24"
@@ -82,7 +83,7 @@
         <p>expense:</p>
         <LunarInput
           :disabled="!isEditing"
-          v-model:given-value="updateOptions.expense"
+          v-model:givenValue="updateOptions.expense"
           class="w-1/2"
         >
         </LunarInput>
