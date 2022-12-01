@@ -33,6 +33,7 @@ const useRoutineStore = defineStore({
         this.routineList.forEach((routine, index) => {
           if (routine.id == updatedRoutine.id) {
             this.routineList[index].name = updatedRoutine.name;
+            return;
           }
         });
         return { status: true, content: "update succeeded" };

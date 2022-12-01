@@ -82,7 +82,7 @@ const calculatePosition = () => {
     const body = selectorBody.value;
     const { bottom } = header.getBoundingClientRect();
     const { height } = body.getBoundingClientRect();
-    console.log({ bottom, height, window: window.innerHeight });
+    // console.log({ bottom, height, window: window.innerHeight });
 
     if (bottom + height > window.innerHeight) {
       selectorBodyPosition.value = BodyPosition.bottom;
@@ -110,6 +110,8 @@ const calculatePosition = () => {
 watch(
   () => props.tabOptions,
   (newVal) => {
+    console.log({ newVal });
+
     tabs.value = newVal;
     dataReverser = false;
   }

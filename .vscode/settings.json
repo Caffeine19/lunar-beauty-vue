@@ -1,6 +1,6 @@
 {
   "editor.formatOnSave": true,
-  "workbench.colorTheme": "Ayu Dark Bordered",
+  "workbench.colorTheme": "Tokyo Night",
   "css.lint.unknownAtRules": "ignore",
   "cSpell.words": ["libertinus"]
 }

@@ -96,16 +96,19 @@ export default defineComponent({
         tabOptionPage.value = newVal;
       }
     );
+
     watch(
       () => props.itemPerPageOption,
       (newVal) => {
         tabOptionItem.value = newVal;
       }
     );
+
     watch(selectedItemTab, (newVal) => {
       emit("update:itemPerPage", newVal);
       selectedPageTab.value = 1;
     });
+
     watch(selectedPageTab, (newVal) => {
       emit("update:currentPage", newVal);
     });

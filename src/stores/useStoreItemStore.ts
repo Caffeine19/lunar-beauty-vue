@@ -89,7 +89,7 @@ const useStoreItemStore = defineStore({
         const res = await reqStoreItemDeleteById(storeItemId);
         const { deletedStoreItem } = res.data;
         this.storeItemList = this.storeItemList.filter((sI) => {
-          return sI.id != storeItemId;
+          return sI.id != deletedStoreItem.id;
         });
         console.log({ storeItemList: this.storeItemList });
         return { status: true, content: "delete succeeded" };

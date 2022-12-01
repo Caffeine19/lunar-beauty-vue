@@ -1,5 +1,5 @@
 <template>
-  <div class="grow flex overflow-x-hidden">
+  <div class="grow flex overflow-x-hidden overflow-y-hidden">
     <div
       class="p-8 overflow-x-hidden"
       :class="showingProductDetail ? 'basis-1/2 xl:basis-3/4' : 'basis-full'"

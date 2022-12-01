@@ -35,7 +35,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, reactive, watch, watchEffect } from "vue";
+import { defineComponent, onMounted, reactive, watchEffect } from "vue";
 
 import ProductCategories from "./ProductCategories.vue";
 import ProductOverView from "@/components/ProductOverview.vue";
@@ -95,10 +95,6 @@ export default defineComponent({
       queryOption.category = category;
     };
 
-    // watch(queryOption, async (newVal) => {
-    //   console.log(newVal);
-    //   await getProductOverviewList();
-    // });
     watchEffect(() => {
       getProductOverviewList();
     });
