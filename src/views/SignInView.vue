@@ -34,11 +34,15 @@
           class="test w-4/5 border-zinc-400 border-b-[1px] py-2 text-zinc-50 text-2xl font-medium bg-zinc-900 placeholder-zinc-200/80 focus:placeholder-zinc-200 outline-0 transition-all"
         />
         <input
-          type="password"
           placeholder="password"
           v-model="password"
           class="test w-4/5 border-zinc-400 border-b-[1px] py-2 text-zinc-50 text-2xl font-medium bg-zinc-900 placeholder-zinc-200/80 outline-0 focus:placeholder-zinc-200 transition-all"
         />
+        <LunarCheckbox
+          label="register"
+          v-model:checked="isRegister"
+          :checkBoxStyle="checkBoxStyle"
+        ></LunarCheckbox>
       </div>
       <button
         class="text-zinc-50 libertinus-semibold group relative text-6xl"
@@ -73,14 +77,19 @@
 <script lang="ts">
 import { defineComponent, inject, ref } from "vue";
 import { useRouter } from "vue-router";
+
 import LunarStickers from "@/components/LunarStickers.vue";
 
 import useUserStore from "@/stores/useUserStore";
 import { storeToRefs } from "pinia";
 
 import { showTooltipKey } from "@/symbols/tooltip";
+
+import LunarCheckbox, {
+  type CheckBoxStyle,
+} from "@/components/LunarCheckbox.vue";
 export default defineComponent({
-  components: { LunarStickers },
+  components: { LunarStickers, LunarCheckbox },
   setup() {
     const router = useRouter();
     const goMain = () => {
@@ -95,6 +104,17 @@ export default defineComponent({
     const { userInfo, token } = storeToRefs(userStore);
     const showTooltip = inject(showTooltipKey);
 
+    const isRegister = ref<boolean>(false);
+    const checkBoxStyle: CheckBoxStyle = {
+      textStyle: "text-zinc-50 text-2xl font-medium",
+      pathStyle: "stroke-zinc-900",
+      buttonStyle: {
+        checked: "bg-zinc-50 hover:bg-zinc-50/90",
+        unchecked: "hover:bg-zinc-50/10",
+        basic: "border-zinc-50",
+      },
+    };
+
     const submitUserInfo = async () => {
       try {
         const res = await userStore.login(username.value, password.value);
@@ -107,7 +127,15 @@ export default defineComponent({
       }
     };
 
-    return { username, password, userInfo, token, submitUserInfo };
+    return {
+      checkBoxStyle,
+      username,
+      password,
+      userInfo,
+      token,
+      submitUserInfo,
+      isRegister,
+    };
   },
 });
 </script>
