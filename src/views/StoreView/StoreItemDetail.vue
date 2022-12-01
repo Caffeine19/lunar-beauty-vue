@@ -1,6 +1,6 @@
 <template>
   <div
-    class="border-l-[1px] border-zinc-900 p-8"
+    class="border-l-[1px] border-zinc-900 p-8 overflow-y-auto hide-scrollbar"
     :class="showingProductDetail ? 'basis-1/2 xl:basis-1/4 ' : 'basis-0 hidden'"
   >
     <div class="flex justify-between">
@@ -73,10 +73,6 @@
         <p>ShelfTime:</p>
         <p>{{ selectedProduct?.shelfTime + "months" }}</p>
       </li>
-      <li class="text-zinc-600 flex justify-between text-base font-medium">
-        <p>Status:</p>
-        <p>{{ selectedProduct?.amount }}</p>
-      </li>
       <li
         class="text-zinc-600 flex items-center justify-between text-base font-medium"
       >
@@ -87,6 +83,54 @@
           class="w-1/2"
         >
         </LunarInput>
+      </li>
+      <li
+        class="text-zinc-600 flex flex-col justify-between space-y-2 text-base font-medium"
+      >
+        <p>Status:</p>
+        <div
+          class="bg-zinc-900 px-1 py-2 grid grid-cols-3 hover:bg-zinc-900/90 transition-colors divide-zinc-600 justify-between items-center rounded divide-x-[1px]"
+        >
+          <div class="flex flex-col items-center space-y-2">
+            <p class="text-zinc-50">Opened</p>
+            <i
+              v-if="selectedProduct.isOpened"
+              class="ph-check-circle-fill text-bean-800"
+              style="font-size: 28px"
+            ></i>
+            <i
+              v-else
+              class="ph-prohibit-inset-fill text-moonlight-800"
+              style="font-size: 28px"
+            ></i>
+          </div>
+          <div class="flex flex-col items-center space-y-2">
+            <p class="text-zinc-50">Expired</p>
+            <i
+              v-if="selectedProduct.isExpired"
+              class="ph-check-circle-fill text-bean-800"
+              style="font-size: 28px"
+            ></i>
+            <i
+              v-else
+              class="ph-prohibit-inset-fill text-moonlight-800"
+              style="font-size: 28px"
+            ></i>
+          </div>
+          <div class="flex flex-col items-center space-y-2">
+            <p class="text-zinc-50">Runout</p>
+            <i
+              v-if="selectedProduct.isRunout"
+              class="ph-check-circle-fill text-bean-800"
+              style="font-size: 28px"
+            ></i>
+            <i
+              v-else
+              class="ph-prohibit-inset-fill text-moonlight-800"
+              style="font-size: 28px"
+            ></i>
+          </div>
+        </div>
       </li>
     </ul>
     <div class="w-full h-[1px] border-b-[1px] border-zinc-900 my-2"></div>
