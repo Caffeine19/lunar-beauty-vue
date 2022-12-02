@@ -1,18 +1,20 @@
 <template>
   <div class="flex items-center space-x-3">
     <button
-      @click="$emit('update:checked', !checked)"
+      @click="toggleChecked"
       :class="[
         checked
           ? checkBoxStyle.buttonStyle?.checked
           : checkBoxStyle.buttonStyle?.unchecked,
+        disabled ? 'cursor-not-allowed' : 'cursor-pointer',
         checkBoxStyle.buttonStyle?.basic,
+        checkBoxStyle.buttonStyle?.size,
       ]"
-      class="w-6 h-6 flex items-center justify-center rounded-sm border-[2px] transition-colors"
+      class="flex items-center justify-center rounded-sm border-[2px] transition-colors"
     >
       <svg
         v-if="checked"
-        class="w-6 h-6"
+        :class="checkBoxStyle.buttonStyle?.size"
         viewBox="0 0 32 32"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -38,6 +40,7 @@ export interface CheckBoxStyle {
     checked?: string;
     unchecked?: string;
     basic?: string;
+    size?: string;
   };
 }
 export interface Props {
@@ -47,7 +50,7 @@ export interface Props {
   checkBoxStyle?: CheckBoxStyle;
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   checked: false,
   disabled: false,
   checkBoxStyle: () => ({
@@ -57,17 +60,24 @@ withDefaults(defineProps<Props>(), {
       checked: "bg-zinc-50 hover:bg-zinc-50/90",
       unchecked: "hover:bg-zinc-50/10",
       basic: "border-zinc-50",
+      size: "w-8 h-8",
     },
   }),
 });
-defineEmits(["update:checked", "update:disabled"]);
+const emit = defineEmits(["update:checked", "update:disabled"]);
+
+const toggleChecked = () => {
+  if (!props.disabled) {
+    emit("update:checked", !props.checked);
+  }
+};
 </script>
 
 <style scoped>
 .check-path {
   stroke-dasharray: 200;
   stroke-dashoffset: 200;
-  animation: dash 1.6s linear;
+  animation: dash 1.2s linear;
   animation-delay: 0.2s;
   animation-fill-mode: forwards;
 }
