@@ -85,6 +85,17 @@
         </LunarInput>
       </li>
       <li
+        class="text-zinc-600 flex items-center justify-between text-base font-medium"
+      >
+        <p>Runout:</p>
+        <LunarCheckbox
+          :disabled="!isEditing"
+          :check-box-style="checkBoxStyle"
+          label="status"
+          v-model:checked="updateOptions.isRunout"
+        ></LunarCheckbox>
+      </li>
+      <li
         class="text-zinc-600 flex flex-col justify-between space-y-2 text-base font-medium"
       >
         <p>Status:</p>
@@ -155,6 +166,9 @@ import LunarCounter from "@/components/LunarCounter.vue";
 import LunarSelector from "@/components/LunarSelector.vue";
 import LunarCalendar from "@/components/LunarCalendar.vue";
 import LunarInput from "@/components/LunarInput.vue";
+import LunarCheckbox, {
+  type CheckBoxStyle,
+} from "@/components/LunarCheckbox.vue";
 
 import type { IStoreItem, IStoreItemUpdateOptions } from "@/types/storeItem";
 
@@ -171,6 +185,7 @@ export default defineComponent({
     LunarSelector,
     LunarCalendar,
     LunarInput,
+    LunarCheckbox,
   },
   props: {
     selectedProduct: {
@@ -192,7 +207,6 @@ export default defineComponent({
       isEditing.value = flag;
     };
 
-    const { selectedProduct } = toRefs(props);
     const updateOptions = reactive<IStoreItemUpdateOptions>({
       amount: 0,
       applyingTime: applyingTime.ALL,
@@ -203,6 +217,7 @@ export default defineComponent({
       isRunout: false,
     });
 
+    const { selectedProduct } = toRefs(props);
     watch(
       () => props.selectedProduct,
       (newVal) => {
@@ -219,6 +234,17 @@ export default defineComponent({
       },
       { immediate: true }
     );
+
+    const checkBoxStyle: CheckBoxStyle = {
+      textStyle: "text-zinc-900 text-base font-medium",
+      pathStyle: "stroke-zinc-50",
+      buttonStyle: {
+        checked: "bg-zinc-900 hover:bg-zinc-900/90",
+        unchecked: "hover:bg-zinc-900/10",
+        basic: "border-zinc-900",
+        size: "w-4 h-4",
+      },
+    };
 
     const storeItemStore = useStoreItemStore();
 
@@ -284,6 +310,7 @@ export default defineComponent({
       updateOptions,
       applyingTimeArr,
       deleteStoreItem,
+      checkBoxStyle,
     };
   },
 });

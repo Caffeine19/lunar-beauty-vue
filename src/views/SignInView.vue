@@ -112,16 +112,24 @@ export default defineComponent({
         checked: "bg-zinc-50 hover:bg-zinc-50/90",
         unchecked: "hover:bg-zinc-50/10",
         basic: "border-zinc-50",
+        size: "w-6 h-6",
       },
     };
 
     const submitUserInfo = async () => {
       try {
-        const res = await userStore.login(username.value, password.value);
-        if (res && showTooltip) {
-          showTooltip(res);
+        if (isRegister.value) {
+          const res = await userStore.register(username.value, password.value);
+          if (res && showTooltip) {
+            showTooltip(res);
+          }
+        } else {
+          const res = await userStore.login(username.value, password.value);
+          if (res && showTooltip) {
+            showTooltip(res);
+          }
+          if (res.status) goMain();
         }
-        if (res.status) goMain();
       } catch (error) {
         console.log(error);
       }

@@ -33,6 +33,9 @@ export const reqUserUpdateById = (
     userData,
   });
 };
+export const reqUserRegister = (username: string, password: string) => {
+  return axiosInstance.post("/user/register", { username, password });
+};
 export const reqProductFindOverview = (
   category: string,
   skip: number,
