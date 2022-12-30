@@ -50,7 +50,6 @@ export default defineComponent({
     const { relatedProductList } = storeToRefs(productStore);
     onMounted(async () => {
       if (route.query.ingredientId) {
-        console.log(123);
         await productStore.getIngredientRelatedProduct(
           parseInt(route.query.ingredientId.toString())
         );

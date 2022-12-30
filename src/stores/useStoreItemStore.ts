@@ -63,7 +63,7 @@ const useStoreItemStore = defineStore({
         console.log({ updatedStoreItem });
 
         this.storeItemList.forEach((sI, index) => {
-          if (sI.id == storeItemId) {
+          if (sI.id === storeItemId) {
             // console.log(sI.id);
             this.storeItemList[index].amount = updatedStoreItem.amount;
             this.storeItemList[index].applyingTime =
@@ -89,7 +89,7 @@ const useStoreItemStore = defineStore({
         const res = await reqStoreItemDeleteById(storeItemId);
         const { deletedStoreItem } = res.data;
         this.storeItemList = this.storeItemList.filter((sI) => {
-          return sI.id != deletedStoreItem.id;
+          return sI.id !== deletedStoreItem.id;
         });
         console.log({ storeItemList: this.storeItemList });
         return { status: true, content: "delete succeeded" };

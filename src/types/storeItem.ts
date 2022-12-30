@@ -20,25 +20,5 @@ export type IStoreItem = {
 
   product: IProduct;
 };
-// export type IStoreItemUpdateOptions= {
-//   amount?: IStoreItem["amount"];
-//   applyingTime?: IStoreItem["applyingTime"];
 
-//   expense?: IStoreItem["expense"];
-
-//   openedTime?: IStoreItem["openedTime"];
-//   productionTime?: IStoreItem["productionTime"];
-//   shelfTime?: IStoreItem["shelfTime"];
-
-//   isRunout?: IStoreItem["isRunout"];
-// }
-export type IStoreItemUpdateOptions = Pick<
-  IStoreItem,
-  | "amount"
-  | "applyingTime"
-  | "expense"
-  | "openedTime"
-  | "productionTime"
-  | "shelfTime"
-  | "isRunout"
->;
+export type IStoreItemUpdateOptions = Pick<IStoreItem, "amount" | "applyingTime" | "expense" | "openedTime" | "productionTime" | "shelfTime" | "isRunout">;
