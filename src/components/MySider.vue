@@ -46,13 +46,13 @@
         @click="goRoutinePage(routine.id)"
         ref="operatorTrigger"
         @click.right.prevent="openRoutineOperatorMenu(index)"
-        class="text-zinc-900 space-x-7 hover:bg-zinc-900/10 relative flex items-center py-1 pl-5 transition-colors cursor-pointer"
+        class="space-x-7 hover:bg-zinc-900/10 relative flex items-center py-1 pl-5 transition-colors cursor-pointer"
         :class="[
           route.query.routineId &&
           parseInt(route.query.routineId.toString()) === routine.id &&
           editingRoutine != routine.id
             ? 'text-zinc-50 bg-gradient-to-r from-bean-900 to-bean-800 hover:from-bean-900/90 hover:to-bean-800/90'
-            : '',
+            : 'text-zinc-900',
           editingRoutine == routine.id ? 'bg-zinc-900/10' : '',
         ]"
       >
