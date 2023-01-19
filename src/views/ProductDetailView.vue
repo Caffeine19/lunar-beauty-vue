@@ -10,21 +10,21 @@
           <div class="flex flex-col justify-between">
             <div class="bg-zinc-50 w-16 h-16">
               <img
-                src="@/assets/images/Product/mas-nid-survival-0-lifestyle 1.png"
+                src="@/assets/images/Product/mas-nid-survival-0-lifestyle1.png"
                 class="w-full h-full rounded"
                 alt="productDetailImg"
               />
             </div>
             <div class="bg-zinc-50 w-16 h-16">
               <img
-                src="@/assets/images/Product/nid-survival-0-30ml 1.png"
+                src="@/assets/images/Product/nid-survival-0-30ml1.png"
                 class="w-full h-full rounded"
                 alt="productDetailImg"
               />
             </div>
             <div class="bg-zinc-50 w-16 h-16">
               <img
-                src="@/assets/images/Product/nid-survival-0-30ml-swatch 1.png"
+                src="@/assets/images/Product/nid-survival-0-30ml-swatch1.png"
                 class="w-full h-full rounded"
                 alt="productDetailImg"
               />

@@ -150,7 +150,6 @@ export default defineComponent({
 <style>
 input:-internal-autofill-selected.test {
   appearance: none !important;
-
   background-color: red !important;
   color: red !important;
 }
