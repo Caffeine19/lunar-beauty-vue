@@ -137,27 +137,27 @@ export default defineComponent({
         {
           value: unopenedStoreItem,
           tag: preservationStatus.unopened,
-          tagIconClass: "ph-moon-stars-fill",
+          tagIconClass: "ph-record-fill",
         },
         {
           value: openedStoreItem,
           tag: preservationStatus.opened,
-          tagIconClass: "ph-moon-stars-fill",
+          tagIconClass: "ph-play-circle-fill",
         },
         {
           value: unexpiredStoreItem,
           tag: preservationStatus.unexpired,
-          tagIconClass: "ph-moon-stars-fill",
+          tagIconClass: "ph-check-circle-fill",
         },
         {
           value: expiredStoreItem,
           tag: preservationStatus.expired,
-          tagIconClass: "ph-moon-stars-fill",
+          tagIconClass: "ph-warning-circle-fill",
         },
         {
           value: runoutStoreItem,
           tag: preservationStatus.runout,
-          tagIconClass: "ph-moon-stars-fill",
+          tagIconClass: "ph-prohibit-inset-fill",
         },
       ],
     });
