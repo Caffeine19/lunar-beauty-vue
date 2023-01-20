@@ -84,7 +84,8 @@
       <OperateMenu
         :operator-button-options="routineOperationMenu"
         :operatorMenuStyle="operatorMenuPosition"
-        v-if="showingRoutineOperatorMenu"
+        :visible="showingRoutineOperatorMenu"
+        @on-click-outside="hideOperatorMenu"
       >
       </OperateMenu
     ></Transition>

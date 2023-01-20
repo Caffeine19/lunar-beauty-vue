@@ -1,6 +1,8 @@
 <template>
   <Transition name="fade">
     <div
+      v-if="visible"
+      ref="operatorMenuRef"
       class="bg-zinc-900 border-zinc-700 fixed z-10 py-1.5 border-2 shadow-2xl"
       :style="{
         top: operatorMenuStyle?.y + 'px',
@@ -21,8 +23,9 @@
   </Transition>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import type { PropType } from "vue";
+import { onClickOutside } from "@vueuse/core";
 
 import type { IOperatorButton } from "@/types/operatorButton";
 interface IOperatorMenuStyle {
@@ -38,8 +41,25 @@ export default defineComponent({
     operatorMenuStyle: {
       type: Object as PropType<IOperatorMenuStyle>,
     },
+    visible: {
+      type: Boolean,
+      required: true,
+    },
   },
-  setup() {},
+  emits: ["onClickOutside"],
+  setup(props, { emit }) {
+    const operatorMenuRef = ref<null | HTMLElement>(null);
+    onClickOutside(operatorMenuRef, () => {
+      if (props.visible) {
+        console.log("click outside");
+        // hideOperatorMenu();
+        emit("onClickOutside");
+      }
+    });
+    return {
+      operatorMenuRef,
+    };
+  },
 });
 </script>
 <style scoped>

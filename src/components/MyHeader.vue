@@ -41,19 +41,17 @@
       ></i>
     </div>
   </div>
-  <Transition name="fade">
-    <OperateMenu
-      class="transition-all"
-      :operator-button-options="userOperatorOptions"
-      :operatorMenuStyle="operatorMenuPosition"
-      v-if="showingUserOperatorMenu"
-    >
-    </OperateMenu
-  ></Transition>
+  <OperateMenu
+    class="transition-all"
+    :operator-button-options="userOperatorOptions"
+    :operatorMenuStyle="operatorMenuPosition"
+    :visible="showingUserOperatorMenu"
+    @on-click-outside="hideOperatorMenu"
+  >
+  </OperateMenu>
 </template>
 <script lang="ts">
 import { defineComponent, reactive, ref, inject } from "vue";
-
 import { useRouter } from "vue-router";
 
 import OperateMenu from "./OperateMenu.vue";
@@ -129,6 +127,7 @@ export default defineComponent({
       userInfo,
       operatorTrigger,
       operatorMenuPosition,
+      hideOperatorMenu,
     };
   },
 });
@@ -183,21 +182,5 @@ export default defineComponent({
   100% {
     height: 100%;
   }
-}
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease-out;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.fade-enter-to {
-  opacity: 1;
-}
-.fade-leave-from {
-  opacity: 1;
 }
 </style>
