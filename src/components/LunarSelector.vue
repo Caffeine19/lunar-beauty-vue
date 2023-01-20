@@ -1,12 +1,13 @@
 <template>
-  <div @click="openDropMenu" class="relative">
+  <div class="relative" ref="selector">
     <div
+      ref="selectorHeader"
+      @click="handleSelectorHeaderClick"
       class="hover:border-zinc-900 border-[1px] py-0.5 px-2 space-x-3 flex items-center justify-between hover:bg-zinc-900/10 group"
       :class="[
         openingDropMenu ? 'bg-zinc-900/10 border-zinc-900' : 'border-zinc-300',
         disabled ? 'cursor-not-allowed' : 'cursor-pointer',
       ]"
-      ref="selectorHeader"
     >
       <p class="text-zinc-900 text-base font-medium">{{ selectedTab }}</p>
       <i
@@ -20,37 +21,40 @@
       >
       </i>
     </div>
-    <div
-      class="bg-zinc-900 absolute z-30 flex flex-col justify-center w-full py-1 space-y-1 shadow-2xl"
-      :class="selectorBodyPosition"
-      @mouseleave="closeDropMenu"
-      v-show="openingDropMenu"
-      ref="selectorBody"
-    >
-      <button
-        class="w-full py-0.5 px-1 font-base text-normal text-zinc-50 hover:bg-zinc-700 transition-colors flex space-x-1 items-center justify-around"
-        v-for="tab in tabs"
-        :key="tab"
-        @click.stop="setSelectedTab(tab)"
-      >
-        <i
-          class="ph-arrow-right-light"
-          style="font-size: 20px"
-          :class="selectedTab == tab ? 'opacity-100' : 'opacity-0'"
-        ></i>
-        <p>{{ tab }}</p>
 
-        <i
-          class="ph-arrow-left-light"
-          style="font-size: 20px"
-          :class="selectedTab == tab ? 'opacity-100' : 'opacity-0'"
-        ></i>
-      </button>
-    </div>
+    <transition name="fade">
+      <div
+        ref="selectorBody"
+        v-show="openingDropMenu"
+        class="bg-zinc-900 absolute z-30 flex flex-col justify-center w-full py-1 space-y-1 shadow-2xl"
+        :class="selectorBodyPosition"
+      >
+        <button
+          class="w-full py-0.5 px-1 font-base text-normal text-zinc-50 hover:bg-zinc-700 transition-colors flex space-x-1 items-center justify-around"
+          v-for="tab in tabs"
+          :key="tab"
+          @click.stop="setSelectedTab(tab)"
+        >
+          <i
+            class="ph-arrow-right-light"
+            style="font-size: 20px"
+            :class="selectedTab == tab ? 'opacity-100' : 'opacity-0'"
+          ></i>
+          <p>{{ tab }}</p>
+
+          <i
+            class="ph-arrow-left-light"
+            style="font-size: 20px"
+            :class="selectedTab == tab ? 'opacity-100' : 'opacity-0'"
+          ></i>
+        </button>
+      </div>
+    </transition>
   </div>
 </template>
 <script setup lang="ts">
-import { nextTick, ref, toRefs, watch } from "vue";
+import { nextTick, ref, watch } from "vue";
+import { onClickOutside } from "@vueuse/core";
 
 type Props<T = number | string> = {
   selectedTab: T;
@@ -71,8 +75,10 @@ const emit = defineEmits(["update:selectedTab", "update:tabOptions"]);
 
 const tabs = ref(props.tabOptions);
 
+const selector = ref<null | HTMLElement>(null);
 const selectorHeader = ref<null | HTMLElement>(null);
 const selectorBody = ref<null | HTMLElement>(null);
+
 const selectorBodyPosition = ref<BodyPosition>(BodyPosition.top);
 
 let dataReverser = false;
@@ -131,6 +137,38 @@ const setSelectedTab = (tab: Props["selectedTab"]) => {
 const closeDropMenu = () => {
   openingDropMenu.value = false;
 };
+
+const handleSelectorHeaderClick = () => {
+  if (!openingDropMenu.value) {
+    openDropMenu();
+  } else {
+    closeDropMenu();
+  }
+};
+
+onClickOutside(selector, () => {
+  if (openingDropMenu.value) {
+    closeDropMenu();
+    console.log("click out side");
+  }
+});
 </script>
 
-<style></style>
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-to {
+  opacity: 1;
+}
+.fade-leave-from {
+  opacity: 1;
+}
+</style>

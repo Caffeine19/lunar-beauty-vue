@@ -54,7 +54,7 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref, watch, type PropType } from "vue";
+import { defineComponent, ref, watch, type PropType } from "vue";
 
 import LunarSelector from "./LunarSelector.vue";
 export default defineComponent({
