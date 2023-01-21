@@ -1,7 +1,8 @@
 <template>
-  <Transition>
+  <Transition name="fade">
     <div
       v-if="routineCreatePanelOption?.visible"
+      ref="routineCreatePanelRef"
       class="top-1/3 left-1/2 fixed -translate-x-1/2 bg-zinc-50/70 border-zinc-200 border-[1px] backdrop-blur-xl shadow-2xl p-6"
     >
       <div class="text-zinc-900 flex items-center mb-6 space-x-4">
@@ -39,7 +40,9 @@
   >
 </template>
 <script lang="ts">
-import { defineComponent, inject } from "vue";
+import { defineComponent, inject, ref } from "vue";
+import { onClickOutside } from "@vueuse/core";
+
 import LunarInput from "./LunarInput.vue";
 import LunarDivider from "./LunarDivider.vue";
 import {
@@ -66,13 +69,38 @@ export default defineComponent({
             console.log("missing hideRoutineCreatePanelKey inject");
           })("cancel");
     };
+
+    const routineCreatePanelRef = ref<HTMLElement | null>(null);
+
+    onClickOutside(routineCreatePanelRef, () => {
+      cancelClickHandler();
+    });
+
     return {
       routineCreatePanelOption,
       confirmClickHandler,
       cancelClickHandler,
+      routineCreatePanelRef,
     };
   },
   components: { LunarInput, LunarDivider },
 });
 </script>
-<style></style>
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.1s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-to {
+  opacity: 1;
+}
+.fade-leave-from {
+  opacity: 1;
+}
+</style>

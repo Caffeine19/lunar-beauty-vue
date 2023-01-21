@@ -157,7 +157,7 @@ onClickOutside(selector, () => {
 <style>
 .fade-enter-active,
 .fade-leave-active {
-  transition: all 0.2s ease;
+  transition: all 0.1s ease;
 }
 
 .fade-enter-from,

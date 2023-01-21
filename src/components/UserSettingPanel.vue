@@ -2,6 +2,7 @@
   <Transition name="fade">
     <div
       v-if="openingUserSettingPanel"
+      ref="userSettingPanelRef"
       class="top-1/2 flex flex-col left-1/2 bg-zinc-50/70 backdrop-blur-xl h-2/3 w-[36rem] absolute z-10 px-6 -translate-x-1/2 -translate-y-1/2 shadow-2xl max-w-[66vw] border-zinc-200 border-[1px]"
     >
       <div
@@ -262,22 +263,21 @@
   </Transition>
 </template>
 <script lang="ts">
-import { defineComponent, inject, reactive, Transition, watch } from "vue";
+import { defineComponent, inject, reactive, Transition, watch, ref } from "vue";
 
-import LunarSelector from "./LunarSelector.vue";
+import { onClickOutside } from "@vueuse/core";
 
-import { toggleUserSettingPanelKey } from "@/symbols/userSettingPanel";
-
-import useUserStore from "@/stores/useUserStore";
 import { storeToRefs } from "pinia";
+import useUserStore from "@/stores/useUserStore";
 
 import type { IUserUpdateOptions, IUserEditingStatus } from "@/types/user";
 
 import LunarInput from "./LunarInput.vue";
+import LunarSelector from "./LunarSelector.vue";
+import LunarLabelRadio from "./LunarLabelRadio.vue";
 
 import { showTooltipKey } from "@/symbols/tooltip";
-
-import LunarLabelRadio from "./LunarLabelRadio.vue";
+import { toggleUserSettingPanelKey } from "@/symbols/userSettingPanel";
 
 export default defineComponent({
   components: {
@@ -308,6 +308,11 @@ export default defineComponent({
       (() => {
         console.log("missing toggleUserSettingKey");
       });
+
+    const userSettingPanelRef = ref<HTMLElement | null>(null);
+    onClickOutside(userSettingPanelRef, () => {
+      toggleOpeningUserSettingPanel(false);
+    });
 
     watch(
       () => openingUserSettingPanel,
@@ -386,6 +391,7 @@ export default defineComponent({
       selectedTheme,
       openingUserSettingPanel,
       toggleOpeningUserSettingPanel,
+      userSettingPanelRef,
       userInfo,
       updateOptions,
       editingStatus,
@@ -400,7 +406,7 @@ export default defineComponent({
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.2s ease-in;
+  transition: opacity 0.1s ease-in;
 }
 
 .fade-enter-from,
