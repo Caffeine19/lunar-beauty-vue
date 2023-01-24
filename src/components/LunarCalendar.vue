@@ -101,7 +101,7 @@
           <i class="ph-anchor-simple" style="font-size: 24px"></i>
         </button>
         <button
-          @click="commitDate"
+          @click="closeDropMenu"
           class="hover:bg-zinc-700 text-zinc-300 hover:text-zinc-50 flex items-center justify-center p-1 transition-colors rounded-full"
         >
           <i class="ph-check" style="font-size: 24px"></i>
@@ -110,126 +110,122 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { ref, defineComponent, watch } from "vue";
-
+<script setup lang="ts">
+import { ref, watch } from "vue";
 import dayjs from "dayjs";
-export default defineComponent({
-  props: ["givenDate", "disabled"],
-  emits: ["update:givenDate"],
-  setup(props, { emit }) {
-    const openingDropMenu = ref<boolean>(false);
-    const openDropMenu = () => {
-      if (!props.disabled) {
-        openingDropMenu.value = true;
-      }
-    };
-    const closeDropMenu = () => {
-      openingDropMenu.value = false;
-    };
 
-    const weeks = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+type DateValue = string | null | undefined;
 
-    const selectedIndex = ref<number>(dayjs(props.givenDate).date());
-    const setSelectedDay = (index: number) => {
-      emit("update:givenDate", dayjs(props.givenDate).date(index).format());
-      selectedIndex.value = index;
-    };
+const props = defineProps<{
+  givenDate: DateValue;
+  disabled: boolean;
+}>();
 
-    const beginBrick = ref();
-    const monthBrick = ref();
-    const endBrick = ref();
+const emit = defineEmits<{
+  (e: "update:givenDate", newVal: DateValue): void;
+}>();
 
-    const drawBricks = () => {
-      console.log(dayjs(props.givenDate || undefined).format());
+const openingDropMenu = ref<boolean>(false);
+const openDropMenu = () => {
+  if (!props.disabled) {
+    openingDropMenu.value = true;
+    drawBricks();
+  }
+};
+const closeDropMenu = () => {
+  openingDropMenu.value = false;
+};
 
-      const daysInMouthAmount = dayjs(
-        props.givenDate || undefined
-      ).daysInMonth();
+const weeks = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-      const beginDay = dayjs(props.givenDate || undefined)
-        .startOf("month")
-        .day();
-      console.log(beginDay);
-      beginBrick.value = Array.from({ length: beginDay }).map((i, index) => {
-        return index;
-      });
-      monthBrick.value = Array.from({ length: daysInMouthAmount }).map(
-        (i, index) => {
-          return index;
-        }
-      );
-      endBrick.value = Array.from({
-        length: 6 * 7 - beginDay - daysInMouthAmount,
-      }).map((i, index) => {
-        return index;
-      });
-    };
+const selectedIndex = ref<number>(dayjs(props.givenDate).date());
+const setSelectedDay = (index: number) => {
+  emit("update:givenDate", dayjs(props.givenDate).date(index).format());
+  selectedIndex.value = index;
+};
 
-    watch(
-      () => props.givenDate,
-      () => {
-        drawBricks();
-      }
-    );
+const beginBrick = ref();
+const monthBrick = ref();
+const endBrick = ref();
 
-    const nextMonth = () => {
-      emit("update:givenDate", dayjs(props.givenDate).add(1, "month").format());
-    };
-    const prevMonth = () => {
-      emit(
-        "update:givenDate",
-        dayjs(props.givenDate).subtract(1, "month").format()
-      );
-    };
-    const nextYear = () => {
-      emit("update:givenDate", dayjs(props.givenDate).add(1, "year").format());
-    };
-    const prevYear = () => {
-      emit(
-        "update:givenDate",
-        dayjs(props.givenDate).subtract(1, "year").format()
-      );
-    };
+const drawBricks = () => {
+  console.log("givenDate", props.givenDate);
+  console.log("givenDate", dayjs(props.givenDate || undefined).format());
 
-    const clearDate = () => {
-      emit("update:givenDate", undefined);
-      closeDropMenu();
-    };
-    const commitDate = () => {
-      // emit("update:givenDate", dayjs(props.givenDate).format());
-      closeDropMenu();
-    };
-    const targetToday = () => {
-      emit("update:givenDate", dayjs().format());
-      selectedIndex.value = dayjs().date();
-    };
-    return {
-      openingDropMenu,
-      openDropMenu,
-      closeDropMenu,
+  const daysInMouthAmount = dayjs(props.givenDate || undefined).daysInMonth();
 
-      weeks,
+  const beginDay = dayjs(props.givenDate || undefined)
+    .startOf("month")
+    .day();
+  console.log("beginDay", beginDay);
 
-      beginBrick,
-      monthBrick,
-      endBrick,
+  beginBrick.value = Array.from({ length: beginDay }).map((i, index) => {
+    return index;
+  });
+  monthBrick.value = Array.from({ length: daysInMouthAmount }).map(
+    (i, index) => {
+      return index;
+    }
+  );
+  endBrick.value = Array.from({
+    length: 6 * 7 - beginDay - daysInMouthAmount,
+  }).map((i, index) => {
+    return index;
+  });
+};
 
-      setSelectedDay,
-      selectedIndex,
+watch(
+  () => props.givenDate,
+  () => {
+    drawBricks();
+  }
+  // {
+  //   immediate: true,
+  // }
+);
 
-      nextMonth,
-      prevMonth,
+const nextMonth = () => {
+  emit(
+    "update:givenDate",
+    dayjs(props.givenDate || undefined)
+      .add(1, "month")
+      .format()
+  );
+};
+const prevMonth = () => {
+  emit(
+    "update:givenDate",
+    dayjs(props.givenDate || undefined)
+      .subtract(1, "month")
+      .format()
+  );
+};
+const nextYear = () => {
+  emit(
+    "update:givenDate",
+    dayjs(props.givenDate || undefined)
+      .add(1, "year")
+      .format()
+  );
+};
+const prevYear = () => {
+  emit(
+    "update:givenDate",
+    dayjs(props.givenDate || undefined)
+      .subtract(1, "year")
+      .format()
+  );
+};
 
-      nextYear,
-      prevYear,
+const clearDate = () => {
+  emit("update:givenDate", null);
+  closeDropMenu();
+};
 
-      clearDate,
-      commitDate,
-      targetToday,
-    };
-  },
-});
+const targetToday = () => {
+  emit("update:givenDate", dayjs().format());
+  selectedIndex.value = dayjs().date();
+};
 </script>
 <style>
 .cal {

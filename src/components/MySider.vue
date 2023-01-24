@@ -168,7 +168,6 @@ export default defineComponent({
             // console.log({ operatorMenuPosition });
             triggeredRoutine.value = index;
             // console.log({ trigger: triggeredRoutine.value });
-
             showingRoutineOperatorMenu.value = true;
           }
         }
