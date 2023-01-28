@@ -138,9 +138,14 @@ const closeDropMenu = () => {
 
 const weeks = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-const selectedIndex = ref<number>(dayjs(props.givenDate).date());
+const selectedIndex = ref<number>(dayjs(props.givenDate || undefined).date());
 const setSelectedDay = (index: number) => {
-  emit("update:givenDate", dayjs(props.givenDate).date(index).format());
+  emit(
+    "update:givenDate",
+    dayjs(props.givenDate || undefined)
+      .date(index)
+      .format()
+  );
   selectedIndex.value = index;
 };
 
