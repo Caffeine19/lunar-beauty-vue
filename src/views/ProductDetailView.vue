@@ -53,7 +53,7 @@
             <div class="flex items-end space-x-3">
               <LunarMarkStar :mark="averageMark"></LunarMarkStar>
               <p class="text-zinc-600 text-sm">
-                ({{ productRelatedCommentList.length }})
+                (from {{ productRelatedCommentList.length }} comments)
               </p>
             </div>
           </div>
