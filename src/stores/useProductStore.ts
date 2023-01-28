@@ -3,7 +3,7 @@ import {
   reqProductFindOverview,
   reqProductFindByBrand,
   reqProductFindByIngredient,
-} from "@/api";
+} from "@/api/product";
 import type { IProduct } from "@/types/product";
 
 const useProductStore = defineStore({

@@ -4,7 +4,7 @@ import {
   reqRoutineDeleteById,
   reqRoutineFindByUser,
   reqRoutineUpdateById,
-} from "@/api";
+} from "@/api/routine";
 import type { IRoutine } from "@/types/routine";
 import type { ITooltipInfo } from "@/types/tooltip";
 const useRoutineStore = defineStore({

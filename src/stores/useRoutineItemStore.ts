@@ -1,18 +1,15 @@
 import { defineStore } from "pinia";
-import {
-  reqRoutineItemFindByRoutine,
-  reqRoutineFindNode,
-  reqRoutineFindEdge,
-} from "@/api";
-
-import type { IRoutineItem } from "@/types/routineItem";
 
 import type { IProductNode } from "@/types/productNode";
 import type { IIngredientNode } from "@/types/ingredientNode";
 import { EdgeType, type IEdge } from "@/types/edge";
+import type { IRoutineItem } from "@/types/routineItem";
 
 import { MarkerType, Position } from "@vue-flow/core";
 import type { Node, Edge } from "@vue-flow/core";
+
+import { reqRoutineFindNode, reqRoutineFindEdge } from "@/api/routine";
+import { reqRoutineItemFindByRoutine } from "@/api/routineItem";
 
 const useRoutineItemStore = defineStore({
   id: "routineItem",

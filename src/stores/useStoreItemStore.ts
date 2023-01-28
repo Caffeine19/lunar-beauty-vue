@@ -3,7 +3,7 @@ import {
   reqStoreItemDeleteById,
   reqStoreItemFindByUser,
   reqStoreItemUpdateById,
-} from "@/api";
+} from "@/api/storeItem";
 import type { IStoreItem, IStoreItemUpdateOptions } from "@/types/storeItem";
 
 import type { ITooltipInfo } from "@/types/tooltip";
