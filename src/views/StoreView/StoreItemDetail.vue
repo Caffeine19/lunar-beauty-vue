@@ -254,14 +254,12 @@ export default defineComponent({
       const data: any = {};
       if (selectedProduct.value) {
         for (let i in selectedProduct.value) {
-          if (updateOptions[i as keyof IStoreItemUpdateOptions]) {
-            if (
-              updateOptions[i as keyof IStoreItemUpdateOptions] !=
-              selectedProduct.value[i as keyof IStoreItem]
-            )
-              // console.log(i);
-              data[i] = updateOptions[i as keyof IStoreItemUpdateOptions];
-          }
+          if (
+            updateOptions[i as keyof IStoreItemUpdateOptions] !==
+            selectedProduct.value[i as keyof IStoreItem]
+          )
+            // console.log(i);
+            data[i] = updateOptions[i as keyof IStoreItemUpdateOptions];
         }
         const res = await storeItemStore.updateById(
           selectedProduct.value.id,
