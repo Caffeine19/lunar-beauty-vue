@@ -1,6 +1,11 @@
 import type { applyingTime } from "./applyingTime";
 import type { IProduct } from "./product";
 
+type CalculatedPreservationStatus = {
+  isOpened: boolean;
+  isExpired: boolean;
+};
+
 export type IStoreItem = {
   id: number;
 
@@ -9,16 +14,23 @@ export type IStoreItem = {
 
   expense: string;
 
-  isOpened: boolean;
   openedTime: string | null;
 
-  isExpired: boolean;
   productionTime: string;
   shelfTime: number;
 
   isRunout: boolean;
 
   product: IProduct;
-};
+} & CalculatedPreservationStatus;
 
-export type IStoreItemUpdateOptions = Pick<IStoreItem, "amount" | "applyingTime" | "expense" | "openedTime" | "productionTime" | "shelfTime" | "isRunout">;
+export type IStoreItemUpdateOptions = Pick<
+  IStoreItem,
+  | "amount"
+  | "applyingTime"
+  | "expense"
+  | "openedTime"
+  | "productionTime"
+  | "shelfTime"
+  | "isRunout"
+>;
