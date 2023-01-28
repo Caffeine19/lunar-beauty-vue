@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-screen h-full">
+  <div class="flex w-screen h-screen">
     <div class="xl:basis-7/12 xl:flex flex-col justify-between hidden p-12">
       <div
         class="flex items-center space-x-6 border-r-[1px] border-r-zinc-800 pr-4 w-fit"

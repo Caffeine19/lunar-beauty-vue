@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-[url('./assets/images/Background.svg')] bg-cover bg-center h-screen w-screen"
+    class="bg-[url('./assets/images/Background.svg')] bg-cover bg-center w-screen overflow-hidden"
   >
     <RouterView></RouterView>
     <LunarTooltip></LunarTooltip>
