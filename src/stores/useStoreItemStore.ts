@@ -5,7 +5,6 @@ import {
   reqStoreItemUpdateById,
 } from "@/api";
 import type { IStoreItem, IStoreItemUpdateOptions } from "@/types/storeItem";
-import dayjs from "dayjs";
 
 import type { ITooltipInfo } from "@/types/tooltip";
 
@@ -40,16 +39,23 @@ const useStoreItemStore = defineStore({
         this.storeItemList.forEach((sI, index) => {
           if (sI.id === storeItemId) {
             // console.log(sI.id);
-            this.storeItemList[index] = updatedStoreItem;
-            // this.storeItemList[index].amount = updatedStoreItem.amount;
-            // this.storeItemList[index].applyingTime =
-            //   updatedStoreItem.applyingTime;
-            // this.storeItemList[index].expense = updatedStoreItem.expense;
-            // this.storeItemList[index].productionTime =
-            //   updatedStoreItem.productionTime;
-            // this.storeItemList[index].shelfTime = updatedStoreItem.shelfTime;
-            // this.storeItemList[index].openedTime = updatedStoreItem.openedTime;
-            // this.storeItemList[index].isRunout = updatedStoreItem.isRunout;
+            // this.storeItemList[index] = updatedStoreItem;
+
+            this.storeItemList[index].amount = updatedStoreItem.amount;
+            this.storeItemList[index].applyingTime =
+              updatedStoreItem.applyingTime;
+            this.storeItemList[index].expense = updatedStoreItem.expense;
+
+            this.storeItemList[index].openedTime = updatedStoreItem.openedTime;
+
+            this.storeItemList[index].productionTime =
+              updatedStoreItem.productionTime;
+            this.storeItemList[index].shelfTime = updatedStoreItem.shelfTime;
+
+            this.storeItemList[index].isRunout = updatedStoreItem.isRunout;
+
+            this.storeItemList[index].isOpened = updatedStoreItem.isOpened;
+            this.storeItemList[index].isExpired = updatedStoreItem.isExpired;
           }
         });
         // console.log(this.storeItemList);
