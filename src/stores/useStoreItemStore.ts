@@ -22,36 +22,11 @@ const useStoreItemStore = defineStore({
         const res = await reqStoreItemFindByUser(userId);
         const { storeItemList } = res.data;
         console.log({ storeItemList });
-        storeItemList.forEach((product: IStoreItem) => {
-          if (product.openedTime) {
-            product.isOpened = true;
-          } else {
-            product.isOpened = false;
-          }
-
-          const safeTime = dayjs(product.productionTime).add(
-            product.shelfTime,
-            "month"
-          );
-          if (safeTime.unix() > dayjs().unix()) {
-            product.isExpired = false;
-          } else {
-            product.isExpired = true;
-          }
-        });
         this.storeItemList = storeItemList;
       } catch (error) {
         console.log(error);
       }
     },
-    // updateTest(storeItemId: number, amount: number) {
-    //   console.log("onUpdate");
-    //   this.storeItemList.forEach((sP, index) => {
-    //     if (sP.id == storeItemId) {
-    //       this.storeItemList[index].amount = amount;
-    //     }
-    //   });
-    // },
 
     async updateById(
       storeItemId: number,
@@ -65,19 +40,19 @@ const useStoreItemStore = defineStore({
         this.storeItemList.forEach((sI, index) => {
           if (sI.id === storeItemId) {
             // console.log(sI.id);
-            this.storeItemList[index].amount = updatedStoreItem.amount;
-            this.storeItemList[index].applyingTime =
-              updatedStoreItem.applyingTime;
-            this.storeItemList[index].expense = updatedStoreItem.expense;
-            this.storeItemList[index].productionTime =
-              updatedStoreItem.productionTime;
-            this.storeItemList[index].shelfTime = updatedStoreItem.shelfTime;
-            this.storeItemList[index].openedTime = updatedStoreItem.openedTime;
-            this.storeItemList[index].isRunout = updatedStoreItem.isRunout;
+            this.storeItemList[index] = updatedStoreItem;
+            // this.storeItemList[index].amount = updatedStoreItem.amount;
+            // this.storeItemList[index].applyingTime =
+            //   updatedStoreItem.applyingTime;
+            // this.storeItemList[index].expense = updatedStoreItem.expense;
+            // this.storeItemList[index].productionTime =
+            //   updatedStoreItem.productionTime;
+            // this.storeItemList[index].shelfTime = updatedStoreItem.shelfTime;
+            // this.storeItemList[index].openedTime = updatedStoreItem.openedTime;
+            // this.storeItemList[index].isRunout = updatedStoreItem.isRunout;
           }
         });
         // console.log(this.storeItemList);
-
         return { status: true, content: "update succeeded" };
       } catch (error) {
         console.log(error);
