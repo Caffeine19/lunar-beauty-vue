@@ -1,5 +1,5 @@
 <template>
-  <div class="grow flex overflow-x-hidden">
+  <div class="grow flex overflow-x-hidden overflow-y-hidden">
     <div
       class="p-8 overflow-x-hidden"
       :class="showingProductDetail ? 'basis-1/2 xl:basis-3/4' : 'basis-full'"
@@ -68,7 +68,8 @@ export default defineComponent({
     const { storeItemList } = storeToRefs(storeItemStore);
     const userId = 1;
     onMounted(async () => {
-      await storeItemStore.getStoreItem(userId);
+      if (storeItemList.value.length == 0)
+        await storeItemStore.getStoreItem(userId);
     });
 
     /*filtered by applyingTime*/
@@ -136,27 +137,27 @@ export default defineComponent({
         {
           value: unopenedStoreItem,
           tag: preservationStatus.unopened,
-          tagIconClass: "ph-moon-stars-fill",
+          tagIconClass: "ph-record-fill",
         },
         {
           value: openedStoreItem,
           tag: preservationStatus.opened,
-          tagIconClass: "ph-moon-stars-fill",
+          tagIconClass: "ph-play-circle-fill",
         },
         {
           value: unexpiredStoreItem,
           tag: preservationStatus.unexpired,
-          tagIconClass: "ph-moon-stars-fill",
+          tagIconClass: "ph-check-circle-fill",
         },
         {
           value: expiredStoreItem,
           tag: preservationStatus.expired,
-          tagIconClass: "ph-moon-stars-fill",
+          tagIconClass: "ph-warning-circle-fill",
         },
         {
           value: runoutStoreItem,
           tag: preservationStatus.runout,
-          tagIconClass: "ph-moon-stars-fill",
+          tagIconClass: "ph-prohibit-inset-fill",
         },
       ],
     });

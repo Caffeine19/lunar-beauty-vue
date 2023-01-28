@@ -1,6 +1,6 @@
 <template>
   <div
-    class="border-l-[1px] border-zinc-900 p-8"
+    class="border-l-[1px] border-zinc-900 p-8 overflow-y-auto hide-scrollbar"
     :class="showingProductDetail ? 'basis-1/2 xl:basis-1/4 ' : 'basis-0 hidden'"
   >
     <div class="flex justify-between">
@@ -18,7 +18,7 @@
         <button v-show="isEditing" @click="resetAndExit">
           <i class="ph-eraser text-zinc-900" style="font-size: 28px"></i>
         </button>
-        <button>
+        <button @click="deleteStoreItem">
           <i class="ph-trash text-zinc-900" style="font-size: 28px"></i>
         </button>
       </div>
@@ -36,8 +36,9 @@
         <p>applyingTime:</p>
         <!-- <p>{{ selectedProduct?.applyingTime }}</p> -->
         <LunarSelector
-          v-model:selectedTap="updateOptions.applyingTime"
-          :tapOptions="applyingTimeArr"
+          v-if="updateOptions.applyingTime"
+          v-model:selectedTab="updateOptions.applyingTime"
+          :tabOptions="applyingTimeArr"
           class="w-24"
           :disabled="!isEditing"
         ></LunarSelector>
@@ -72,20 +73,75 @@
         <p>ShelfTime:</p>
         <p>{{ selectedProduct?.shelfTime + "months" }}</p>
       </li>
-      <li class="text-zinc-600 flex justify-between text-base font-medium">
-        <p>Status:</p>
-        <p>{{ selectedProduct?.amount }}</p>
-      </li>
       <li
         class="text-zinc-600 flex items-center justify-between text-base font-medium"
       >
         <p>expense:</p>
         <LunarInput
           :disabled="!isEditing"
-          v-model:given-value="updateOptions.expense"
+          v-model:givenValue="updateOptions.expense"
           class="w-1/2"
         >
         </LunarInput>
+      </li>
+      <li
+        class="text-zinc-600 flex items-center justify-between text-base font-medium"
+      >
+        <p>Runout:</p>
+        <LunarCheckbox
+          :disabled="!isEditing"
+          :check-box-style="checkBoxStyle"
+          label="status"
+          v-model:checked="updateOptions.isRunout"
+        ></LunarCheckbox>
+      </li>
+      <li
+        class="text-zinc-600 flex flex-col justify-between space-y-2 text-base font-medium"
+      >
+        <p>Status:</p>
+        <div
+          class="bg-zinc-900 px-1 py-2 grid grid-cols-3 hover:bg-zinc-900/90 transition-colors divide-zinc-600 justify-between items-center rounded divide-x-[1px]"
+        >
+          <div class="flex flex-col items-center space-y-2">
+            <p class="text-zinc-50">Opened</p>
+            <i
+              v-if="selectedProduct.isOpened"
+              class="ph-check-circle-fill text-bean-800"
+              style="font-size: 28px"
+            ></i>
+            <i
+              v-else
+              class="ph-prohibit-inset-fill text-moonlight-800"
+              style="font-size: 28px"
+            ></i>
+          </div>
+          <div class="flex flex-col items-center space-y-2">
+            <p class="text-zinc-50">Expired</p>
+            <i
+              v-if="selectedProduct.isExpired"
+              class="ph-check-circle-fill text-bean-800"
+              style="font-size: 28px"
+            ></i>
+            <i
+              v-else
+              class="ph-prohibit-inset-fill text-moonlight-800"
+              style="font-size: 28px"
+            ></i>
+          </div>
+          <div class="flex flex-col items-center space-y-2">
+            <p class="text-zinc-50">Runout</p>
+            <i
+              v-if="selectedProduct.isRunout"
+              class="ph-check-circle-fill text-bean-800"
+              style="font-size: 28px"
+            ></i>
+            <i
+              v-else
+              class="ph-prohibit-inset-fill text-moonlight-800"
+              style="font-size: 28px"
+            ></i>
+          </div>
+        </div>
       </li>
     </ul>
     <div class="w-full h-[1px] border-b-[1px] border-zinc-900 my-2"></div>
@@ -110,6 +166,9 @@ import LunarCounter from "@/components/LunarCounter.vue";
 import LunarSelector from "@/components/LunarSelector.vue";
 import LunarCalendar from "@/components/LunarCalendar.vue";
 import LunarInput from "@/components/LunarInput.vue";
+import LunarCheckbox, {
+  type CheckBoxStyle,
+} from "@/components/LunarCheckbox.vue";
 
 import type { IStoreItem, IStoreItemUpdateOptions } from "@/types/storeItem";
 
@@ -117,6 +176,7 @@ import { applyingTime, applyingTimeArr } from "@/types/applyingTime";
 import useStoreItemStore from "@/stores/useStoreItemStore";
 
 import { showTooltipKey } from "@/symbols/tooltip";
+import { showDialogKey } from "@/symbols/dialog";
 
 export default defineComponent({
   components: {
@@ -125,6 +185,7 @@ export default defineComponent({
     LunarSelector,
     LunarCalendar,
     LunarInput,
+    LunarCheckbox,
   },
   props: {
     selectedProduct: {
@@ -146,13 +207,21 @@ export default defineComponent({
       isEditing.value = flag;
     };
 
-    const { selectedProduct } = toRefs(props);
-    const updateOptions = reactive<IStoreItemUpdateOptions>({});
+    const updateOptions = reactive<IStoreItemUpdateOptions>({
+      amount: 0,
+      applyingTime: applyingTime.ALL,
+      expense: "0",
+      openedTime: null,
+      productionTime: "",
+      shelfTime: 0,
+      isRunout: false,
+    });
 
+    const { selectedProduct } = toRefs(props);
     watch(
       () => props.selectedProduct,
       (newVal) => {
-        console.log({ newVal });
+        console.log({ newVal: newVal });
         updateOptions.amount = newVal.amount;
         updateOptions.applyingTime = newVal.applyingTime;
         updateOptions.expense = newVal.expense;
@@ -166,6 +235,17 @@ export default defineComponent({
       { immediate: true }
     );
 
+    const checkBoxStyle: CheckBoxStyle = {
+      textStyle: "text-zinc-900 text-base font-medium",
+      pathStyle: "stroke-zinc-50",
+      buttonStyle: {
+        checked: "bg-zinc-900 hover:bg-zinc-900/90",
+        unchecked: "hover:bg-zinc-900/10",
+        basic: "border-zinc-900",
+        size: "w-4 h-4",
+      },
+    };
+
     const storeItemStore = useStoreItemStore();
 
     const showTooltip = inject(showTooltipKey);
@@ -174,14 +254,12 @@ export default defineComponent({
       const data: any = {};
       if (selectedProduct.value) {
         for (let i in selectedProduct.value) {
-          if (updateOptions[i as keyof IStoreItemUpdateOptions]) {
-            if (
-              updateOptions[i as keyof IStoreItemUpdateOptions] !=
-              selectedProduct.value[i as keyof IStoreItem]
-            )
-              // console.log(i);
-              data[i] = updateOptions[i as keyof IStoreItemUpdateOptions];
-          }
+          if (
+            updateOptions[i as keyof IStoreItemUpdateOptions] !==
+            selectedProduct.value[i as keyof IStoreItem]
+          )
+            // console.log(i);
+            data[i] = updateOptions[i as keyof IStoreItemUpdateOptions];
         }
         const res = await storeItemStore.updateById(
           selectedProduct.value.id,
@@ -205,6 +283,23 @@ export default defineComponent({
       toggleIsEditing(false);
     };
 
+    const showDialog = inject(showDialogKey);
+
+    const deleteStoreItem = async () => {
+      if (showDialog) {
+        showDialog(
+          "Are you sure you want to delete this store item?",
+          "this may never came back",
+          async () => {
+            const res = await storeItemStore.deleteById(
+              selectedProduct.value.id
+            );
+            if (showTooltip) showTooltip(res);
+          }
+        );
+      }
+    };
+
     return {
       isEditing,
       toggleIsEditing,
@@ -212,6 +307,8 @@ export default defineComponent({
       resetAndExit,
       updateOptions,
       applyingTimeArr,
+      deleteStoreItem,
+      checkBoxStyle,
     };
   },
 });

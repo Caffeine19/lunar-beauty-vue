@@ -3,7 +3,7 @@ import type {
   ITooltipOption,
   IShowTooltip,
   IHideTooltip,
-} from "@/types/Tooltip";
+} from "@/types/tooltip";
 
 export const tooltipOptionKey = Symbol(
   "tooltipOptionKey"

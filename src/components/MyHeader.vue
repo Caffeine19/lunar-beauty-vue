@@ -14,16 +14,7 @@
       class="header-section-container-center grow flex items-center justify-between px-4 space-x-4"
     >
       <div class="relative w-full">
-        <input
-          type="text"
-          placeholder="Type to search"
-          class="peer bg-transparent border-[1px] outline-[1px] hover:bg-zinc-100/80 outline-zinc-600 focus:bg-zinc-100 transition-colors border-zinc-100 rounded text-zinc-900 placeholder-zinc-400 text-lg font-normal py-2 px-4 w-full"
-        />
-        <i
-          class="ph-magnifying-glass text-zinc-600 right-4 top-1/2 peer-focus:text-zinc-900 absolute -translate-y-1/2"
-          style="font-size: 32px"
-        >
-        </i>
+        <LunarInput></LunarInput>
       </div>
       <button>
         <i class="ph-bell text-zinc-900" style="font-size: 32px"> </i>
@@ -31,7 +22,8 @@
     </div>
     <div
       class="header-section-container-right group hover:bg-zinc-900/10 flex items-center py-4 pl-4 pr-2 space-x-3 transition-colors"
-      @click="toggleShowingUserOperatorMenu(true)"
+      @click="toggleShowingUserOperatorMenu"
+      ref="operatorTrigger"
       :class="showingUserOperatorMenu ? 'bg-zinc-900/10' : ''"
     >
       <img
@@ -47,35 +39,62 @@
         class="ph-caret-down text-zinc-900 group-hover:translate-y-[8px] transition-transform"
         style="font-size: 24px"
       ></i>
-      <OperateMenu
-        class="top-full right-0 transition-all"
-        :operator-button-options="userOperatorOptions"
-        v-if="showingUserOperatorMenu"
-      >
-      </OperateMenu>
     </div>
   </div>
+  <OperateMenu
+    class="transition-all"
+    :operator-button-options="userOperatorOptions"
+    :operatorMenuStyle="operatorMenuPosition"
+    :visible="showingUserOperatorMenu"
+    @on-click-outside="hideOperatorMenu"
+  >
+  </OperateMenu>
 </template>
 <script lang="ts">
 import { defineComponent, reactive, ref, inject } from "vue";
-
 import { useRouter } from "vue-router";
 
 import OperateMenu from "./OperateMenu.vue";
 
 import { toggleUserSettingPanelKey } from "@/symbols/userSettingPanel";
 
-import { userInfoKey } from "@/symbols/userInfoKey";
+import { userInfoKey } from "@/symbols/userInfo";
+
+import LunarInput from "./LunarInput.vue";
 export default defineComponent({
   components: {
     OperateMenu,
+    LunarInput,
   },
   setup() {
     const userInfo = inject(userInfoKey);
 
     const showingUserOperatorMenu = ref(false);
-    const toggleShowingUserOperatorMenu = (flag: boolean) => {
-      showingUserOperatorMenu.value = !showingUserOperatorMenu.value;
+
+    const operatorTrigger = ref<null | HTMLElement | HTMLElement[]>(null);
+
+    const operatorMenuPosition = reactive({ x: 0, y: 0, w: 0 });
+    const toggleShowingUserOperatorMenu = () => {
+      if (!showingUserOperatorMenu.value) {
+        if (operatorTrigger.value) {
+          console.log({ operatorTrigger });
+          if (!("length" in operatorTrigger.value)) {
+            const trigger = operatorTrigger.value;
+            const { x, y, width } = trigger.getBoundingClientRect();
+            console.log({ x, y, width });
+            operatorMenuPosition.x = parseInt(x.toFixed(2));
+            operatorMenuPosition.y = parseInt(y.toFixed(2)) + 80;
+            operatorMenuPosition.w = parseInt(width.toFixed(2));
+            console.log({ operatorMenuPosition });
+            showingUserOperatorMenu.value = true;
+          }
+        }
+      } else {
+        hideOperatorMenu();
+      }
+    };
+    const hideOperatorMenu = () => {
+      showingUserOperatorMenu.value = false;
     };
 
     const router = useRouter();
@@ -94,7 +113,9 @@ export default defineComponent({
       {
         name: "Settings",
         iconClass: "ph-nut",
-        action: () => toggleOpeningUserSettingPanel(true),
+        action: () => {
+          toggleOpeningUserSettingPanel(true), toggleShowingUserOperatorMenu();
+        },
       },
       { name: "Theme", iconClass: "ph-sun" },
     ]);
@@ -104,6 +125,9 @@ export default defineComponent({
       showingUserOperatorMenu,
       toggleShowingUserOperatorMenu,
       userInfo,
+      operatorTrigger,
+      operatorMenuPosition,
+      hideOperatorMenu,
     };
   },
 });

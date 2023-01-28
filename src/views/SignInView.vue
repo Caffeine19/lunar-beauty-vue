@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-screen h-full">
+  <div class="flex w-screen h-screen">
     <div class="xl:basis-7/12 xl:flex flex-col justify-between hidden p-12">
       <div
         class="flex items-center space-x-6 border-r-[1px] border-r-zinc-800 pr-4 w-fit"
@@ -34,11 +34,15 @@
           class="test w-4/5 border-zinc-400 border-b-[1px] py-2 text-zinc-50 text-2xl font-medium bg-zinc-900 placeholder-zinc-200/80 focus:placeholder-zinc-200 outline-0 transition-all"
         />
         <input
-          type="password"
           placeholder="password"
           v-model="password"
           class="test w-4/5 border-zinc-400 border-b-[1px] py-2 text-zinc-50 text-2xl font-medium bg-zinc-900 placeholder-zinc-200/80 outline-0 focus:placeholder-zinc-200 transition-all"
         />
+        <LunarCheckbox
+          label="register"
+          v-model:checked="isRegister"
+          :checkBoxStyle="checkBoxStyle"
+        ></LunarCheckbox>
       </div>
       <button
         class="text-zinc-50 libertinus-semibold group relative text-6xl"
@@ -73,14 +77,19 @@
 <script lang="ts">
 import { defineComponent, inject, ref } from "vue";
 import { useRouter } from "vue-router";
+
 import LunarStickers from "@/components/LunarStickers.vue";
 
 import useUserStore from "@/stores/useUserStore";
 import { storeToRefs } from "pinia";
 
 import { showTooltipKey } from "@/symbols/tooltip";
+
+import LunarCheckbox, {
+  type CheckBoxStyle,
+} from "@/components/LunarCheckbox.vue";
 export default defineComponent({
-  components: { LunarStickers },
+  components: { LunarStickers, LunarCheckbox },
   setup() {
     const router = useRouter();
     const goMain = () => {
@@ -95,26 +104,52 @@ export default defineComponent({
     const { userInfo, token } = storeToRefs(userStore);
     const showTooltip = inject(showTooltipKey);
 
+    const isRegister = ref<boolean>(false);
+    const checkBoxStyle: CheckBoxStyle = {
+      textStyle: "text-zinc-50 text-2xl font-medium",
+      pathStyle: "stroke-zinc-900",
+      buttonStyle: {
+        checked: "bg-zinc-50 hover:bg-zinc-50/90",
+        unchecked: "hover:bg-zinc-50/10",
+        basic: "border-zinc-50",
+        size: "w-6 h-6",
+      },
+    };
+
     const submitUserInfo = async () => {
       try {
-        const res = await userStore.login(username.value, password.value);
-        if (res && showTooltip) {
-          showTooltip(res);
+        if (isRegister.value) {
+          const res = await userStore.register(username.value, password.value);
+          if (res && showTooltip) {
+            showTooltip(res);
+          }
+        } else {
+          const res = await userStore.login(username.value, password.value);
+          if (res && showTooltip) {
+            showTooltip(res);
+          }
+          if (res.status) goMain();
         }
-        if (res.status) goMain();
       } catch (error) {
         console.log(error);
       }
     };
 
-    return { username, password, userInfo, token, submitUserInfo };
+    return {
+      checkBoxStyle,
+      username,
+      password,
+      userInfo,
+      token,
+      submitUserInfo,
+      isRegister,
+    };
   },
 });
 </script>
 <style>
 input:-internal-autofill-selected.test {
   appearance: none !important;
-
   background-color: red !important;
   color: red !important;
 }

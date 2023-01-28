@@ -2,7 +2,8 @@
   <Transition name="fade">
     <div
       v-if="openingUserSettingPanel"
-      class="top-1/2 flex flex-col left-1/2 bg-zinc-50 h-2/3 w-[36rem] absolute z-10 px-6 -translate-x-1/2 -translate-y-1/2 shadow-2xl max-w-[66vw]"
+      ref="userSettingPanelRef"
+      class="top-1/2 flex flex-col left-1/2 bg-zinc-50/70 backdrop-blur-xl h-2/3 w-[36rem] absolute z-10 px-6 -translate-x-1/2 -translate-y-1/2 shadow-2xl max-w-[66vw] border-zinc-200 border-[1px]"
     >
       <div
         class="flex items-center justify-between py-3 border-b-[1px] border-zinc-500"
@@ -15,23 +16,33 @@
           <i class="text-zinc-900 ph-x" style="font-size: 32px"></i>
         </button>
       </div>
-      <div class="flex justify-between w-full py-6 space-x-12 overflow-hidden">
+      <div class="flex justify-between w-full py-6 space-x-8 overflow-hidden">
         <div class="h-fit relative">
           <img
             class="w-40 h-40 rounded-full"
             src="@/assets/images/Avatar.svg"
             alt="avatar"
           />
-          <button
-            class="text-zinc-900 transition-colors hover:bg-zinc-900/10 border-zinc-900 absolute bottom-0 right-0 flex items-center justify-center p-0.5 border-2 rounded-full"
-          >
-            <i class="ph-palette" style="font-size: 32px"></i>
-          </button>
+
+          <label class="w-fit h-fit">
+            <div
+              class="text-zinc-900 cursor-pointer transition-colors hover:bg-zinc-900/10 border-zinc-900 absolute bottom-0 right-0 flex items-center justify-center p-0.5 border-2 rounded-full"
+            >
+              <i class="ph-palette" style="font-size: 32px"> </i>
+            </div>
+            <input
+              type="file"
+              @change="(event) => avatarUploadHandler(event)"
+            />
+          </label>
         </div>
         <div
           class="grow hide-scrollbar flex flex-col space-y-5 overflow-y-auto"
         >
-          <div id="username-section" class="space-y-2">
+          <div
+            id="username-section"
+            class="hover:bg-zinc-900/10 user-info-section space-y-2"
+          >
             <div class="text-zinc-700 flex items-center space-x-2">
               <i class="ph-user-list-light" style="font-size: 24px"></i>
               <p class="text-base font-normal">Username</p>
@@ -40,7 +51,7 @@
               {{ updateOptions.name }}
             </p>
           </div>
-          <div id="password-section" class="space-y-2">
+          <div id="password-section" class="user-info-section space-y-2">
             <div class="text-zinc-700 flex items-center space-x-2">
               <i class="ph-key-light" style="font-size: 24px"></i>
               <p class="text-base font-normal">Password</p>
@@ -48,41 +59,54 @@
             <p class="text-zinc-900 text-lg font-medium">*********</p>
           </div>
           <div class="w-full border-b-[1px] border-zinc-300"></div>
-          <div id="gender-section" class="group space-y-2">
+          <div id="gender-section" class="group user-info-section space-y-2">
             <div class="flex items-center justify-between">
               <div class="text-zinc-700 flex items-center space-x-2">
                 <i class="ph-gender-intersex-light" style="font-size: 24px"></i>
                 <p class="text-base font-normal">Gender</p>
               </div>
               <div
-                class="flex items-center space-x-1 border-zinc-900 border-l-[1px] pl-2"
-                v-show="editingStatus.phone"
+                class="border-zinc-700 border-l-[1px] pl-2 hidden group-hover:block"
               >
                 <button
+                  v-show="!editingStatus.gender"
                   class="flex items-center justify-center"
-                  @click="submitEditedInfo('phone')"
+                  @click="toggleEditStatus('gender')"
                 >
-                  <i
-                    class="ph-upload-simple text-zinc-900"
-                    style="font-size: 24px"
-                  >
+                  <i class="ph-pen-light text-zinc-700" style="font-size: 24px">
                   </i>
                 </button>
-                <button
-                  class="flex items-center justify-center"
-                  @click="reset('phone')"
+                <div
+                  class="flex items-center space-x-1"
+                  v-show="editingStatus.gender"
                 >
-                  <i
-                    class="ph-eraser text-zinc-900"
-                    style="font-size: 24px"
-                  ></i>
-                </button>
+                  <button
+                    class="flex items-center justify-center"
+                    @click="submitEditedInfo('gender')"
+                  >
+                    <i
+                      class="ph-upload-simple-light text-zinc-700"
+                      style="font-size: 24px"
+                    >
+                    </i>
+                  </button>
+                  <button
+                    class="flex items-center justify-center"
+                    @click="reset('gender')"
+                  >
+                    <i
+                      class="ph-eraser-light text-zinc-700"
+                      style="font-size: 24px"
+                    ></i>
+                  </button>
+                </div>
               </div>
             </div>
             <div class="gap-x-4 grid grid-cols-2">
               <LunarLabelRadio
                 :givenValue="'MAN'"
                 v-model:selectedValue="updateOptions.gender"
+                :disabled="!editingStatus.gender"
               >
                 <div class="text-zinc-900 flex items-center space-x-3">
                   <i class="ph-gender-male-light" style="font-size: 24px"></i>
@@ -90,8 +114,9 @@
                 </div></LunarLabelRadio
               >
               <LunarLabelRadio
-                :givenValue="'WOMEN'"
+                :givenValue="'WOMAN'"
                 v-model:selectedValue="updateOptions.gender"
+                :disabled="!editingStatus.gender"
               >
                 <div class="text-zinc-900 flex items-center space-x-3">
                   <i class="ph-gender-female-light" style="font-size: 24px"></i>
@@ -100,73 +125,96 @@
               </LunarLabelRadio>
             </div>
           </div>
-          <div id="phone-section" class="group space-y-2">
+          <div id="phone-section" class="group user-info-section space-y-2">
             <div class="flex items-center justify-between">
               <div class="text-zinc-700 flex items-center space-x-2">
                 <i class="ph-phone-light" style="font-size: 24px"></i>
                 <p class="text-base font-normal">Phone</p>
               </div>
               <div
-                class="flex items-center space-x-1 border-zinc-900 border-l-[1px] pl-2"
-                v-show="editingStatus.phone"
+                class="border-zinc-700 border-l-[1px] pl-2 hidden group-hover:block"
               >
                 <button
+                  v-show="!editingStatus.phone"
                   class="flex items-center justify-center"
-                  @click="submitEditedInfo('phone')"
+                  @click="toggleEditStatus('phone')"
                 >
-                  <i
-                    class="ph-upload-simple text-zinc-900"
-                    style="font-size: 24px"
-                  >
+                  <i class="ph-pen-light text-zinc-700" style="font-size: 24px">
                   </i>
                 </button>
-                <button
-                  class="flex items-center justify-center"
-                  @click="reset('phone')"
+                <div
+                  class="flex items-center space-x-1"
+                  v-show="editingStatus.phone"
                 >
-                  <i
-                    class="ph-eraser text-zinc-900"
-                    style="font-size: 24px"
-                  ></i>
-                </button>
+                  <button
+                    class="flex items-center justify-center"
+                    @click="submitEditedInfo('phone')"
+                  >
+                    <i
+                      class="ph-upload-simple-light text-zinc-700"
+                      style="font-size: 24px"
+                    >
+                    </i>
+                  </button>
+                  <button
+                    class="flex items-center justify-center"
+                    @click="reset('phone')"
+                  >
+                    <i
+                      class="ph-eraser-light text-zinc-700"
+                      style="font-size: 24px"
+                    ></i>
+                  </button>
+                </div>
               </div>
             </div>
             <LunarInput
               v-model:givenValue="updateOptions.phone"
-              @dblclick="toggleEditStatus('phone')"
               :disabled="!editingStatus.phone"
             >
             </LunarInput>
           </div>
-          <div id="email-section" class="space-y-2">
+          <div id="email-section" class="user-info-section group space-y-2">
             <div class="flex items-center justify-between">
               <div class="text-zinc-700 flex items-center space-x-2">
                 <i class="ph-envelope-light" style="font-size: 24px"></i>
                 <p class="text-base font-normal">Email</p>
               </div>
               <div
-                class="flex items-center space-x-1 border-zinc-900 border-l-[1px] pl-2"
-                v-show="editingStatus.email"
+                class="border-zinc-700 border-l-[1px] pl-2 hidden group-hover:block"
               >
                 <button
+                  v-show="!editingStatus.email"
                   class="flex items-center justify-center"
-                  @click="submitEditedInfo('email')"
+                  @click="toggleEditStatus('email')"
                 >
-                  <i
-                    class="ph-upload-simple text-zinc-900"
-                    style="font-size: 24px"
-                  >
+                  <i class="ph-pen-light text-zinc-700" style="font-size: 24px">
                   </i>
                 </button>
-                <button
-                  class="flex items-center justify-center"
-                  @click="reset('email')"
+                <div
+                  class="flex items-center space-x-1"
+                  v-show="editingStatus.email"
                 >
-                  <i
-                    class="ph-eraser text-zinc-900"
-                    style="font-size: 24px"
-                  ></i>
-                </button>
+                  <button
+                    class="flex items-center justify-center"
+                    @click="submitEditedInfo('email')"
+                  >
+                    <i
+                      class="ph-upload-simple-light text-zinc-700"
+                      style="font-size: 24px"
+                    >
+                    </i>
+                  </button>
+                  <button
+                    class="flex items-center justify-center"
+                    @click="reset('email')"
+                  >
+                    <i
+                      class="ph-eraser-light text-zinc-700"
+                      style="font-size: 24px"
+                    ></i>
+                  </button>
+                </div>
               </div>
             </div>
             <LunarInput
@@ -177,7 +225,7 @@
             </LunarInput>
           </div>
           <div class="w-full border-b-[1px] border-zinc-300"></div>
-          <div id="language-section" class="space-y-2">
+          <div id="language-section" class="user-info-section space-y-2">
             <div class="text-zinc-700 flex items-center space-x-2">
               <i
                 class="ph-globe-hemisphere-west-light"
@@ -186,25 +234,25 @@
               <p class="text-base font-normal">Language</p>
             </div>
             <LunarSelector
-              :selectedTap="selectedLanguage"
-              :tapOptions="languageOptions"
+              v-model:selectedTab="selectedLanguage"
+              :tabOptions="languageOptions"
             ></LunarSelector>
           </div>
           <div class="w-full border-b-[1px] border-zinc-300"></div>
-          <div id="theme-section" class="space-y-2">
+          <div id="theme-section" class="user-info-section space-y-2">
             <div class="text-zinc-700 flex items-center space-x-2">
               <i class="ph-paint-brush-broad-light" style="font-size: 24px"></i>
               <p class="text-base font-normal">Theme</p>
             </div>
             <LunarSelector
-              :selectedTap="selectedTheme"
-              :tapOptions="themeOptions"
+              v-model:selectedTab="selectedTheme"
+              :tabOptions="themeOptions"
             ></LunarSelector>
           </div>
           <div class="w-full border-b-[1px] border-zinc-300"></div>
           <div
             id="delete-account-section"
-            class="text-zinc-700 flex items-center space-x-2"
+            class="text-zinc-700 user-info-section flex items-center space-x-2"
           >
             <i class="ph-warning-light" style="font-size: 24px"></i>
             <p class="text-base font-normal">Delete account</p>
@@ -215,22 +263,21 @@
   </Transition>
 </template>
 <script lang="ts">
-import { defineComponent, inject, reactive, Transition, watch } from "vue";
+import { defineComponent, inject, reactive, Transition, watch, ref } from "vue";
 
-import LunarSelector from "./LunarSelector.vue";
+import { onClickOutside } from "@vueuse/core";
 
-import { toggleUserSettingPanelKey } from "@/symbols/userSettingPanel";
-
-import useUserStore from "@/stores/useUserStore";
 import { storeToRefs } from "pinia";
+import useUserStore from "@/stores/useUserStore";
 
 import type { IUserUpdateOptions, IUserEditingStatus } from "@/types/user";
 
 import LunarInput from "./LunarInput.vue";
+import LunarSelector from "./LunarSelector.vue";
+import LunarLabelRadio from "./LunarLabelRadio.vue";
 
 import { showTooltipKey } from "@/symbols/tooltip";
-
-import LunarLabelRadio from "./LunarLabelRadio.vue";
+import { toggleUserSettingPanelKey } from "@/symbols/userSettingPanel";
 
 export default defineComponent({
   components: {
@@ -242,7 +289,12 @@ export default defineComponent({
   setup() {
     const userStore = useUserStore();
     const { userInfo } = storeToRefs(userStore);
-    const updateOptions = reactive<IUserUpdateOptions>({});
+    const updateOptions = reactive<IUserUpdateOptions>({
+      name: "",
+      password: "",
+      avatar: "",
+      gender: "",
+    });
 
     const languageOptions = reactive(["Chinese", "English"]);
     const selectedLanguage = "English";
@@ -256,6 +308,11 @@ export default defineComponent({
       (() => {
         console.log("missing toggleUserSettingKey");
       });
+
+    const userSettingPanelRef = ref<HTMLElement | null>(null);
+    onClickOutside(userSettingPanelRef, () => {
+      toggleOpeningUserSettingPanel(false);
+    });
 
     watch(
       () => openingUserSettingPanel,
@@ -276,6 +333,7 @@ export default defineComponent({
       phone: false,
       email: false,
       avatar: false,
+      gender: false,
     });
 
     const toggleEditStatus = (key: keyof IUserEditingStatus) => {
@@ -287,21 +345,44 @@ export default defineComponent({
     const showTooltip = inject(showTooltipKey);
     const submitEditedInfo = async (key: keyof IUserUpdateOptions) => {
       try {
-        const res = await userStore.updateById(userInfo.value.id, {
-          [key]: updateOptions[key],
-        });
-        if (showTooltip) {
-          showTooltip(res);
+        const newVal = {
+          [key as keyof IUserUpdateOptions]: updateOptions[key],
+        };
+        if (newVal) {
+          const res = await userStore.updateById(
+            userInfo.value.id,
+            newVal as IUserUpdateOptions
+          );
+          if (showTooltip) {
+            showTooltip(res);
+          }
+          toggleEditStatus(key);
         }
-        toggleEditStatus(key);
       } catch (error) {
         console.log(error);
       }
     };
 
     const reset = (key: keyof IUserUpdateOptions) => {
-      updateOptions[key] = userInfo.value[key];
+      const oldVal = userInfo.value[key];
+      if (oldVal) {
+        updateOptions[key] = oldVal;
+      }
       toggleEditStatus(key);
+    };
+
+    const avatarUploadHandler = (event: Event) => {
+      console.dir(event.target as HTMLInputElement);
+
+      const files = (event.target as HTMLInputElement).files;
+      if (files && files.length > 0) {
+        const reader = new FileReader();
+        reader.readAsDataURL(files[0]);
+        reader.onload = (env: ProgressEvent<FileReader>) => {
+          console.log({ env });
+          if (env) console.log(env.target?.result);
+        };
+      }
     };
     return {
       languageOptions,
@@ -310,12 +391,14 @@ export default defineComponent({
       selectedTheme,
       openingUserSettingPanel,
       toggleOpeningUserSettingPanel,
+      userSettingPanelRef,
       userInfo,
       updateOptions,
       editingStatus,
       toggleEditStatus,
       submitEditedInfo,
       reset,
+      avatarUploadHandler,
     };
   },
 });
@@ -323,7 +406,7 @@ export default defineComponent({
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.2s ease-in;
+  transition: opacity 0.1s ease-in;
 }
 
 .fade-enter-from,
@@ -336,5 +419,23 @@ export default defineComponent({
 }
 .fade-leave-from {
   opacity: 1;
+}
+.user-info-section {
+  @apply relative p-2 pl-4 transition-colors;
+}
+.user-info-section:hover {
+  @apply bg-zinc-400/10;
+}
+.user-info-section:hover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 4px;
+  @apply bg-zinc-900/40 animate-pulse;
+}
+input[type="file"] {
+  display: none;
 }
 </style>

@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
 
-import { reqUserLogin, reqUserUpdateById } from "@/api";
+import { reqUserLogin, reqUserRegister, reqUserUpdateById } from "@/api";
 
-import type { ITooltipInfo } from "@/types/Tooltip";
+import type { ITooltipInfo } from "@/types/tooltip";
 
 import type { IUser, IUserUpdateOptions } from "@/types/user";
 const useUserStore = defineStore({
@@ -53,6 +53,19 @@ const useUserStore = defineStore({
           return { status: false, content: error.message };
         } else {
           return { status: false, content: "update failed" };
+        }
+      }
+    },
+    async register(username: string, password: string): Promise<ITooltipInfo> {
+      try {
+        const res = await reqUserRegister(username, password);
+        const { addedUser } = res.data;
+        return { status: true, content: "register succeeded" };
+      } catch (error) {
+        if (error instanceof Error) {
+          return { status: false, content: error.message };
+        } else {
+          return { status: false, content: "register failed" };
         }
       }
     },

@@ -5,26 +5,26 @@
     <div
       class="hide-scrollbar xl:col-span-2 xl:overflow-y-auto col-span-3 pr-6"
     >
-      <div class="flex space-x-12" id="product-basic-info">
-        <div class="flex space-x-6">
+      <div id="product-basic-info" class="flex space-x-12">
+        <div id="product-image-preview" class="flex space-x-6">
           <div class="flex flex-col justify-between">
             <div class="bg-zinc-50 w-16 h-16">
               <img
-                src="@/assets/images/Product/mas-nid-survival-0-lifestyle 1.png"
+                src="@/assets/images/Product/mas-nid-survival-0-lifestyle1.png"
                 class="w-full h-full rounded"
                 alt="productDetailImg"
               />
             </div>
             <div class="bg-zinc-50 w-16 h-16">
               <img
-                src="@/assets/images/Product/nid-survival-0-30ml 1.png"
+                src="@/assets/images/Product/nid-survival-0-30ml1.png"
                 class="w-full h-full rounded"
                 alt="productDetailImg"
               />
             </div>
             <div class="bg-zinc-50 w-16 h-16">
               <img
-                src="@/assets/images/Product/nid-survival-0-30ml-swatch 1.png"
+                src="@/assets/images/Product/nid-survival-0-30ml-swatch1.png"
                 class="w-full h-full rounded"
                 alt="productDetailImg"
               />
@@ -36,11 +36,10 @@
             class="rounded w-[230px] h-[260px]"
           />
         </div>
-        <div class="flex items-center">
+        <div name="divider" class="flex items-center">
           <div class="w-[1px] border-l-[1px] border-zinc-900 h-4/5"></div>
         </div>
-
-        <div class="flex flex-col justify-between">
+        <div id="product-text-info" class="flex flex-col justify-between">
           <div class="space-y-4">
             <p class="text-zinc-600 text-xl font-medium">
               {{ selectedProduct?.brand }}
@@ -51,6 +50,12 @@
             <p class="text-zinc-600 text-xl font-medium">
               {{ selectedProduct?.capacity }} | {{ selectedProduct?.price }}
             </p>
+            <div class="flex items-end space-x-3">
+              <LunarMarkStar :mark="averageMark"></LunarMarkStar>
+              <p class="text-zinc-600 text-sm">
+                ({{ productRelatedCommentList.length }})
+              </p>
+            </div>
           </div>
           <button
             class="hover:opacity-90 bg-zinc-900 text-zinc-50 w-fit flex items-center px-4 py-2 space-x-2 rounded-full"
@@ -60,7 +65,7 @@
           </button>
         </div>
       </div>
-      <div class="mt-16 space-y-4" id="product-related-products">
+      <div id="product-related-products" class="mt-16 space-y-4">
         <div class="flex items-center space-x-2">
           <i class="ph-link-simple-fill" style="font-size: 32px"></i>
           <p class="text-zinc-900 text-2xl font-semibold">Related Products</p>
@@ -101,11 +106,15 @@
             <p class="text-zinc-700 text-base font-normal">
               {{ comment.content }}
             </p>
+            <LunarMarkStar :mark="comment.mark"></LunarMarkStar>
           </div>
         </div>
       </div>
     </div>
-    <div class="xl:col-span-1 xl:overflow-hidden xl:space-x-6 flex col-span-3">
+    <div
+      id="product-ingredient-list"
+      class="xl:col-span-1 xl:overflow-hidden xl:space-x-6 flex col-span-3"
+    >
       <div class="xl:flex items-center hidden">
         <div class="w-[1px] border-l-[1px] border-zinc-900 h-full"></div>
       </div>
@@ -131,8 +140,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted } from "vue";
+<script setup lang="ts">
+import { onMounted, computed, ref } from "vue";
 
 import { storeToRefs } from "pinia";
 import useIngredientStore from "@/stores/useIngredientStore";
@@ -142,69 +151,59 @@ import useCommentStore from "@/stores/useCommentStore";
 import { useRoute, useRouter } from "vue-router";
 
 import ProductOverView from "@/components/ProductOverview.vue";
-import { computed } from "vue";
+import LunarMarkStar from "@/components/LunarMarkStar.vue";
 
-export default defineComponent({
-  components: {
-    ProductOverView,
-  },
+const ingredientStore = useIngredientStore();
+const { ingredientList } = storeToRefs(ingredientStore);
 
-  setup() {
-    const ingredientStore = useIngredientStore();
-    const { ingredientList } = storeToRefs(ingredientStore);
+const route = useRoute();
 
-    const route = useRoute();
+const productStore = useProductStore();
+const { relatedProductList } = storeToRefs(productStore);
 
-    const productStore = useProductStore();
-    const { relatedProductList } = storeToRefs(productStore);
+const commentStore = useCommentStore();
+const { productRelatedCommentList } = storeToRefs(commentStore);
+const averageMark = ref(0);
 
-    const commentStore = useCommentStore();
-    const { productRelatedCommentList } = storeToRefs(commentStore);
-
-    onMounted(() => {
-      if (route.query.productId) {
-        ingredientStore.getIngredientList(
-          parseInt(route.query.productId.toString())
-        );
-        commentStore.getProductRelatedCommentList(
-          parseInt(route.query.productId.toString())
-        );
-      }
-      if (route.query.productBrand) {
-        productStore.getBrandRelatedProduct(
-          route.query.productBrand.toString()
-        );
-      }
+onMounted(async () => {
+  if (route.query.productId) {
+    ingredientStore.getIngredientList(
+      parseInt(route.query.productId.toString())
+    );
+    await commentStore.getProductRelatedCommentList(
+      parseInt(route.query.productId.toString())
+    );
+    let totalMark = 0;
+    productRelatedCommentList.value.forEach((comment, index) => {
+      totalMark += comment.mark;
     });
-
-    const selectedProduct = computed(() => {
-      const sP = relatedProductList.value.find((p) => {
-        if (route.query.productId) {
-          return p.id == parseInt(route?.query?.productId.toString());
-        }
-      });
-      return sP;
-    });
-
-    const router = useRouter();
-    const goIngredient = (ingredientId: number, ingredientName: string) => {
-      router.push({
-        name: "ingredient",
-        query: {
-          ingredientId,
-          ingredientName,
-        },
-      });
-    };
-    return {
-      ingredientList,
-      relatedProductList,
-      productRelatedCommentList,
-      selectedProduct,
-      goIngredient,
-    };
-  },
+    if (productRelatedCommentList.value.length > 0)
+      averageMark.value = totalMark / productRelatedCommentList.value.length;
+  }
+  if (route.query.productBrand) {
+    productStore.getBrandRelatedProduct(route.query.productBrand.toString());
+  }
 });
+
+const selectedProduct = computed(() => {
+  const sP = relatedProductList.value.find((p) => {
+    if (route.query.productId) {
+      return p.id == parseInt(route?.query?.productId.toString());
+    }
+  });
+  return sP;
+});
+
+const router = useRouter();
+const goIngredient = (ingredientId: number, ingredientName: string) => {
+  router.push({
+    name: "ingredient",
+    query: {
+      ingredientId,
+      ingredientName,
+    },
+  });
+};
 </script>
 
 <style scoped></style>

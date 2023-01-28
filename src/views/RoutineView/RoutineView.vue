@@ -33,7 +33,14 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, KeepAlive, onMounted, reactive, ref } from "vue";
+import {
+  defineComponent,
+  KeepAlive,
+  onMounted,
+  reactive,
+  ref,
+  watch,
+} from "vue";
 
 import { useRoute } from "vue-router";
 
@@ -79,13 +86,24 @@ export default defineComponent({
     const routineItemStore = useRoutineItemStore();
     const { routineItemList } = storeToRefs(routineItemStore);
     const route = useRoute();
-    onMounted(() => {
-      if (route.query.routineId) {
-        routineItemStore.getRoutineItemList(
-          parseInt(route.query.routineId.toString())
-        );
-      }
-    });
+    // onMounted(() => {
+    //   if (route.query.routineId) {
+    //     routineItemStore.getRoutineItemList(
+    //       parseInt(route.query.routineId.toString())
+    //     );
+    //   }
+    // });
+    watch(
+      () => route.query.routineId,
+      () => {
+        if (route.query.routineId) {
+          routineItemStore.getRoutineItemList(
+            parseInt(route.query.routineId.toString())
+          );
+        }
+      },
+      { immediate: true }
+    );
     return {
       routineLayoutOption,
       RoutineFlow,

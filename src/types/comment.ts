@@ -4,6 +4,6 @@ export interface IComment {
   id: number;
   content: string;
   created_time: string;
-  rank: number;
+  mark: number;
   user: IUser;
 }

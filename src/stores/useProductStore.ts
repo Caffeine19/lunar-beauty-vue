@@ -11,16 +11,18 @@ const useProductStore = defineStore({
   state: () => {
     return {
       productOverviewList: [] as IProduct[],
+      productCount: 0,
       relatedProductList: [] as IProduct[],
     };
   },
   actions: {
-    async getProductOverviewList(category: string) {
+    async getProductOverviewList(category: string, skip: number, take: number) {
       try {
-        const res = await reqProductFindOverview(category);
-        const { productOverviewList } = res.data;
+        const res = await reqProductFindOverview(category, skip, take);
+        const { productOverviewList, productCount } = res.data;
         this.productOverviewList = productOverviewList;
-        console.log({ productOverviewList });
+        this.productCount = productCount;
+        console.dir({ productOverviewList, productCount });
       } catch (error) {
         console.error(error);
       }

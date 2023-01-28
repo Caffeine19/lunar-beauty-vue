@@ -5,7 +5,6 @@
       :default-zoom="1.5"
       :min-zoom="0.2"
       :max-zoom="4"
-      class=""
       v-model="elementList"
       @node-double-click="doubleClick"
     >
@@ -39,8 +38,6 @@ export default defineComponent({
       sourcePosition: Position.Right,
       targetPosition: Position.Left,
     });
-
-    const test = ref<number>(1);
 
     onMounted(async () => {
       if (route.query.routineId) {

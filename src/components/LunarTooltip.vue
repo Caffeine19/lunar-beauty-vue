@@ -3,7 +3,7 @@
     <transition name="fade">
       <div
         v-if="tooltipOption?.visible"
-        class="bg-zinc-900/90 border-zinc-50/60 backdrop-blur-2xl h-fit flex items-center p-4 mt-8 border-[1px] rounded-full shadow-2xl"
+        class="bg-zinc-900/90 border-zinc-600/60 backdrop-blur-2xl h-fit flex items-center p-4 mt-8 border-[1px] rounded-full shadow-2xl"
       >
         <p
           :class="tooltipOption?.info.status ? 'succeeded' : ' failed'"

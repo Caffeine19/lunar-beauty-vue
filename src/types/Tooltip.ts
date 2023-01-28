@@ -1,6 +1,7 @@
-export interface ITooltipInfo {
+export interface ITooltipInfo<T = unknown> {
   status: boolean;
   content: string;
+  data?: T;
 }
 
 export interface ITooltipOption {
