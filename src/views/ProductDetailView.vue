@@ -121,14 +121,22 @@
                 </p>
               </div>
               <p class="text-zinc-700 text-sm font-light">
-                {{ comment.created_time }}
+                {{ dayjs(comment.created_time).format("YYYY/MM/DD") }}
               </p>
             </div>
 
             <p class="text-zinc-700 text-base font-normal">
               {{ comment.content }}
             </p>
-            <LunarMarkStar :mark="comment.mark"></LunarMarkStar>
+            <div class="flex items-center justify-between">
+              <LunarMarkStar :mark="comment.mark"></LunarMarkStar>
+              <button
+                v-if="comment.userId === userInfo?.id"
+                class="hover:bg-zinc-900/10 text-zinc-900 flex items-center justify-center hover:border-zinc-900 border-[1px] p-1 rounded"
+              >
+                <i class="ph-trash" style="font-size: 24px"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -205,7 +213,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, ref, inject, type Ref, reactive } from "vue";
+import { onMounted, computed, ref, inject, reactive } from "vue";
 
 import { storeToRefs } from "pinia";
 import useIngredientStore from "@/stores/useIngredientStore";
@@ -222,7 +230,7 @@ import LunarCheckbox, {
 
 import { userInfoKey } from "@/symbols/userInfo";
 import type { Comment, CommentCreateOptions } from "@/types/comment";
-
+import dayjs from "dayjs";
 const route = useRoute();
 /*product stuff*/
 const productStore = useProductStore();
