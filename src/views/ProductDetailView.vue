@@ -88,21 +88,28 @@
           id="comment-header"
           class="backdrop-blur-2xl sticky top-0 flex items-center justify-between px-8 py-2"
         >
-          <div class="text-zinc-900 flex items-center space-x-2">
-            <i class="ph-chat-teardrop-text-fill" style="font-size: 32px"></i>
-            <p class="text-2xl font-semibold">Comments</p>
+          <div class="flex items-end space-x-6">
+            <div class="text-zinc-900 flex items-center space-x-2">
+              <i class="ph-chat-teardrop-text-fill" style="font-size: 32px"></i>
+              <p class="text-2xl font-semibold">Comments</p>
+            </div>
+            <LunarCheckbox
+              v-model:checked="displayUserOnly"
+              label="me only"
+              :checkBoxStyle="checkBoxStyle"
+            ></LunarCheckbox>
           </div>
           <button
             @click="openCommentEditor"
             class="hover:bg-zinc-900/10 flex items-center justify-center p-1 transition-colors rounded"
           >
-            <i class="ph-plus text-zinc-900" style="font-size: 28px"></i>
+            <i class="ph-plus text-zinc-900" style="font-size: 24px"></i>
           </button>
         </div>
         <div
           id="comment-list"
           class="p-4 mx-8 space-y-6 rounded border-[1px] border-zinc-900/60 hover:bg-zinc-900/10 transition-colors"
-          v-for="comment in productRelatedCommentList"
+          v-for="comment in displayedCommentList"
           :key="comment.id"
         >
           <div class="space-y-6">
@@ -199,7 +206,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, ref } from "vue";
+import { onMounted, computed, ref, inject, type Ref } from "vue";
 
 import { storeToRefs } from "pinia";
 import useIngredientStore from "@/stores/useIngredientStore";
@@ -210,9 +217,14 @@ import { useRoute, useRouter } from "vue-router";
 
 import ProductOverView from "@/components/ProductOverview.vue";
 import LunarMarkStar from "@/components/LunarMarkStar.vue";
+import LunarCheckbox, {
+  type CheckBoxStyle,
+} from "@/components/LunarCheckbox.vue";
+
+import { userInfoKey } from "@/symbols/userInfo";
+import type { IComment } from "@/types/comment";
 
 const route = useRoute();
-
 /*product stuff*/
 const productStore = useProductStore();
 const { relatedProductList } = storeToRefs(productStore);
@@ -233,6 +245,7 @@ onMounted(() => {
 /*comment stuff*/
 const commentStore = useCommentStore();
 const { productRelatedCommentList } = storeToRefs(commentStore);
+
 const averageMark = ref(0);
 onMounted(async () => {
   if (route.query.productId) {
@@ -240,11 +253,35 @@ onMounted(async () => {
       parseInt(route.query.productId.toString())
     );
     let totalMark = 0;
-    productRelatedCommentList.value.forEach((comment, index) => {
+    productRelatedCommentList.value.forEach((comment) => {
       totalMark += comment.mark;
     });
     if (productRelatedCommentList.value.length > 0)
       averageMark.value = totalMark / productRelatedCommentList.value.length;
+  }
+});
+
+const displayUserOnly = ref(false);
+const checkBoxStyle: CheckBoxStyle = {
+  textStyle: "text-zinc-900 text-base font-medium",
+  pathStyle: "stroke-zinc-50",
+  groupStyle: { gap: "space-x-2" },
+  buttonStyle: {
+    checked: "bg-zinc-900 hover:bg-zinc-900/90",
+    unchecked: "hover:bg-zinc-900/10",
+    basic: "border-zinc-900",
+    size: "w-4 h-4",
+  },
+};
+
+const userInfo = inject(userInfoKey);
+const displayedCommentList = computed<IComment[]>(() => {
+  if (!displayUserOnly.value) {
+    return productRelatedCommentList.value;
+  } else {
+    return productRelatedCommentList.value.filter((comment) => {
+      return comment.user.id === userInfo?.value.id;
+    });
   }
 });
 
