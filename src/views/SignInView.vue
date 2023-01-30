@@ -36,6 +36,7 @@
         <input
           placeholder="password"
           v-model="password"
+          type="password"
           class="test w-4/5 border-zinc-400 border-b-[1px] py-2 text-zinc-50 text-2xl font-medium bg-zinc-900 placeholder-zinc-200/80 outline-0 focus:placeholder-zinc-200 transition-all"
         />
         <LunarCheckbox

@@ -135,31 +135,30 @@
       <div
         id="comment-editor"
         v-if="openingCommentEditor"
-        class="bg-zinc-50/50 overflow-y-hidden backdrop-blur-2xl border-t-[1px] border-zinc-500 sticky bottom-0 left-0 w-full h-96 justify-between flex flex-col"
+        class="bg-zinc-50/50 overflow-y-hidden backdrop-blur-2xl border-t-[1px] border-zinc-500 sticky bottom-0 left-0 w-full h-[50vh] justify-between flex flex-col"
       >
         <div class="flex items-center justify-between px-8 py-3">
           <div class="flex items-center space-x-4">
             <img src="@/assets/images/Avatar.png" alt="user_avatar" />
             <p class="text-zinc-900 libertinus-regular text-2xl">LazyFish</p>
           </div>
-          <LunarMarkStar></LunarMarkStar>
+          <LunarMarkStar
+            v-model:mark="commentCreateOptions.mark"
+          ></LunarMarkStar>
         </div>
-        <div
-          class="mx-8 py-3 border-y-[1px] border-zinc-400 shrink overflow-y-auto hide-scrollbar"
-        >
+        <div class="mx-8 py-3 border-y-[1px] border-zinc-400 flex-1">
           <textarea
             name="comment-content"
             id="comment-content"
-            cols="30"
-            rows="10"
-            class="outline-0 text-zinc-900 hide-scrollbar w-full text-base bg-transparent"
+            v-model="commentCreateOptions.content"
+            class="outline-0 text-zinc-900 hide-scrollbar w-full h-full text-base bg-transparent"
           ></textarea>
         </div>
         <div class="flex items-center justify-between px-8">
           <p class="text-zinc-600 text-lg italic">323 words in total</p>
           <div class="flex space-x-3">
             <button
-              @click="closeCommentEditor"
+              @click="createComment"
               class="text-zinc-900 flex items-center p-3 space-x-3 text-lg border-l-[1px] border-zinc-400"
             >
               <i class="ph-paper-plane"></i>
@@ -170,7 +169,7 @@
               class="text-zinc-900 flex items-center p-3 space-x-3 text-lg border-l-[1px] border-zinc-400"
             >
               <i class="ph-x"></i>
-              <p>Cancel</p>
+              <p>Close</p>
             </button>
           </div>
         </div>
@@ -206,7 +205,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, ref, inject, type Ref } from "vue";
+import { onMounted, computed, ref, inject, type Ref, reactive } from "vue";
 
 import { storeToRefs } from "pinia";
 import useIngredientStore from "@/stores/useIngredientStore";
@@ -222,7 +221,7 @@ import LunarCheckbox, {
 } from "@/components/LunarCheckbox.vue";
 
 import { userInfoKey } from "@/symbols/userInfo";
-import type { IComment } from "@/types/comment";
+import type { Comment, CommentCreateOptions } from "@/types/comment";
 
 const route = useRoute();
 /*product stuff*/
@@ -275,7 +274,7 @@ const checkBoxStyle: CheckBoxStyle = {
 };
 
 const userInfo = inject(userInfoKey);
-const displayedCommentList = computed<IComment[]>(() => {
+const displayedCommentList = computed<Comment[]>(() => {
   if (!displayUserOnly.value) {
     return productRelatedCommentList.value;
   } else {
@@ -291,6 +290,18 @@ const openCommentEditor = () => {
 };
 const closeCommentEditor = () => {
   openingCommentEditor.value = false;
+};
+
+const commentCreateOptions = reactive<CommentCreateOptions>({
+  content: "",
+  mark: 0,
+  userId: userInfo?.value.id,
+  productId: selectedProduct.value?.id,
+});
+
+const createComment = () => {
+  if (commentCreateOptions.userId && commentCreateOptions.productId)
+    commentStore.createByUser(commentCreateOptions);
 };
 
 /*ingredient stuff*/
