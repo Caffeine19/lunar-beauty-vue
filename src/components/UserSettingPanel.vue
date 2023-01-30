@@ -262,8 +262,8 @@
     </div>
   </Transition>
 </template>
-<script lang="ts">
-import { defineComponent, inject, reactive, Transition, watch, ref } from "vue";
+<script setup lang="ts">
+import { inject, reactive, watch, ref } from "vue";
 
 import { onClickOutside } from "@vueuse/core";
 
@@ -279,129 +279,103 @@ import LunarLabelRadio from "./LunarLabelRadio.vue";
 import { showTooltipKey } from "@/symbols/tooltip";
 import { toggleUserSettingPanelKey } from "@/symbols/userSettingPanel";
 
-export default defineComponent({
-  components: {
-    LunarSelector,
-    Transition,
-    LunarInput,
-    LunarLabelRadio,
+const userStore = useUserStore();
+const { userInfo } = storeToRefs(userStore);
+const updateOptions = reactive<IUserUpdateOptions>({
+  name: "",
+  password: "",
+  avatar: "",
+  gender: "",
+});
+
+const languageOptions = reactive(["Chinese", "English"]);
+const selectedLanguage = "English";
+
+const themeOptions = reactive(["System", "Light", "Dark"]);
+const selectedTheme = "Light";
+
+const openingUserSettingPanel = inject("openingUserSettingPanel");
+const toggleOpeningUserSettingPanel =
+  inject(toggleUserSettingPanelKey) ||
+  (() => {
+    console.log("missing toggleUserSettingKey");
+  });
+
+const userSettingPanelRef = ref<HTMLElement | null>(null);
+onClickOutside(userSettingPanelRef, () => {
+  toggleOpeningUserSettingPanel(false);
+});
+
+watch(
+  () => openingUserSettingPanel,
+  () => {
+    updateOptions.name = userInfo.value.name;
+    updateOptions.password = userInfo.value.password;
+    updateOptions.avatar = userInfo.value.avatar;
+    updateOptions.gender = userInfo.value.gender;
+    updateOptions.email = userInfo.value.email;
+    updateOptions.phone = userInfo.value.phone;
   },
-  setup() {
-    const userStore = useUserStore();
-    const { userInfo } = storeToRefs(userStore);
-    const updateOptions = reactive<IUserUpdateOptions>({
-      name: "",
-      password: "",
-      avatar: "",
-      gender: "",
-    });
+  { immediate: true }
+);
 
-    const languageOptions = reactive(["Chinese", "English"]);
-    const selectedLanguage = "English";
+const editingStatus = reactive<IUserEditingStatus>({
+  name: false,
+  password: false,
+  phone: false,
+  email: false,
+  avatar: false,
+  gender: false,
+});
 
-    const themeOptions = reactive(["System", "Light", "Dark"]);
-    const selectedTheme = "Light";
+const toggleEditStatus = (key: keyof IUserEditingStatus) => {
+  console.log({ updateKey: key });
 
-    const openingUserSettingPanel = inject("openingUserSettingPanel");
-    const toggleOpeningUserSettingPanel =
-      inject(toggleUserSettingPanelKey) ||
-      (() => {
-        console.log("missing toggleUserSettingKey");
-      });
+  editingStatus[key] = !editingStatus[key];
+};
 
-    const userSettingPanelRef = ref<HTMLElement | null>(null);
-    onClickOutside(userSettingPanelRef, () => {
-      toggleOpeningUserSettingPanel(false);
-    });
-
-    watch(
-      () => openingUserSettingPanel,
-      () => {
-        updateOptions.name = userInfo.value.name;
-        updateOptions.password = userInfo.value.password;
-        updateOptions.avatar = userInfo.value.avatar;
-        updateOptions.gender = userInfo.value.gender;
-        updateOptions.email = userInfo.value.email;
-        updateOptions.phone = userInfo.value.phone;
-      },
-      { immediate: true }
-    );
-
-    const editingStatus = reactive<IUserEditingStatus>({
-      name: false,
-      password: false,
-      phone: false,
-      email: false,
-      avatar: false,
-      gender: false,
-    });
-
-    const toggleEditStatus = (key: keyof IUserEditingStatus) => {
-      console.log({ updateKey: key });
-
-      editingStatus[key] = !editingStatus[key];
+const showTooltip = inject(showTooltipKey);
+const submitEditedInfo = async (key: keyof IUserUpdateOptions) => {
+  try {
+    const newVal = {
+      [key as keyof IUserUpdateOptions]: updateOptions[key],
     };
-
-    const showTooltip = inject(showTooltipKey);
-    const submitEditedInfo = async (key: keyof IUserUpdateOptions) => {
-      try {
-        const newVal = {
-          [key as keyof IUserUpdateOptions]: updateOptions[key],
-        };
-        if (newVal) {
-          const res = await userStore.updateById(
-            userInfo.value.id,
-            newVal as IUserUpdateOptions
-          );
-          if (showTooltip) {
-            showTooltip(res);
-          }
-          toggleEditStatus(key);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    const reset = (key: keyof IUserUpdateOptions) => {
-      const oldVal = userInfo.value[key];
-      if (oldVal) {
-        updateOptions[key] = oldVal;
+    if (newVal) {
+      const res = await userStore.updateById(
+        userInfo.value.id,
+        newVal as IUserUpdateOptions
+      );
+      if (showTooltip) {
+        showTooltip(res);
       }
       toggleEditStatus(key);
-    };
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-    const avatarUploadHandler = (event: Event) => {
-      console.dir(event.target as HTMLInputElement);
+const reset = (key: keyof IUserUpdateOptions) => {
+  const oldVal = userInfo.value[key];
+  if (oldVal) {
+    updateOptions[key] = oldVal;
+  }
+  toggleEditStatus(key);
+};
 
-      const files = (event.target as HTMLInputElement).files;
-      if (files && files.length > 0) {
-        const reader = new FileReader();
-        reader.readAsDataURL(files[0]);
-        reader.onload = (env: ProgressEvent<FileReader>) => {
-          console.log({ env });
-          if (env) console.log(env.target?.result);
-        };
-      }
+const avatarUploadHandler = (event: Event) => {
+  console.dir(event.target as HTMLInputElement);
+
+  const files = (event.target as HTMLInputElement).files;
+  if (files && files.length > 0) {
+    const reader = new FileReader();
+    reader.readAsDataURL(files[0]);
+    reader.onload = (env: ProgressEvent<FileReader>) => {
+      console.log({ env });
+      if (env) console.log(env.target?.result);
     };
-    return {
-      languageOptions,
-      selectedLanguage,
-      themeOptions,
-      selectedTheme,
-      openingUserSettingPanel,
-      toggleOpeningUserSettingPanel,
-      userSettingPanelRef,
-      userInfo,
-      updateOptions,
-      editingStatus,
-      toggleEditStatus,
-      submitEditedInfo,
-      reset,
-      avatarUploadHandler,
-    };
-  },
-});
+  }
+};
 </script>
 <style scoped>
 .fade-enter-active,
