@@ -1,11 +1,11 @@
 <template>
   <div
-    class="xl:overflow-y-hidden hide-scrollbar grid w-full grid-cols-3 p-8 overflow-y-auto"
+    class="xl:overflow-y-hidden hide-scrollbar grid w-full grid-cols-3 overflow-y-auto"
   >
     <div
-      class="hide-scrollbar xl:col-span-2 xl:overflow-y-auto col-span-3 pr-6"
+      class="hide-scrollbar xl:col-span-2 xl:overflow-y-auto relative col-span-3"
     >
-      <div id="product-basic-info" class="flex space-x-12">
+      <div id="product-basic-info" class="flex px-8 pt-8 space-x-12">
         <div id="product-image-preview" class="flex space-x-6">
           <div class="flex flex-col justify-between">
             <div class="bg-zinc-50 w-16 h-16">
@@ -65,9 +65,12 @@
           </button>
         </div>
       </div>
-      <div id="product-related-products" class="mt-16 space-y-4">
+      <div id="product-related-products" class="px-8 mt-16 space-y-4">
         <div class="flex items-center space-x-2">
-          <i class="ph-link-simple-fill" style="font-size: 32px"></i>
+          <i
+            class="ph-link-simple-fill text-zinc-900"
+            style="font-size: 32px"
+          ></i>
           <p class="text-zinc-900 text-2xl font-semibold">Related Products</p>
         </div>
         <div class="hide-scrollbar overflow-x-auto">
@@ -81,12 +84,24 @@
         </div>
       </div>
       <div id="product-related-comments" class="mt-4 space-y-4">
-        <div class="flex items-center space-x-2">
-          <i class="ph-chat-teardrop-text-fill" style="font-size: 32px"></i>
-          <p class="text-zinc-900 text-2xl font-semibold">Comments</p>
+        <div
+          id="comment-header"
+          class="backdrop-blur-2xl sticky top-0 flex items-center justify-between px-8 py-2"
+        >
+          <div class="text-zinc-900 flex items-center space-x-2">
+            <i class="ph-chat-teardrop-text-fill" style="font-size: 32px"></i>
+            <p class="text-2xl font-semibold">Comments</p>
+          </div>
+          <button
+            @click="openCommentEditor"
+            class="hover:bg-zinc-900/10 flex items-center justify-center p-1 transition-colors rounded"
+          >
+            <i class="ph-plus text-zinc-900" style="font-size: 28px"></i>
+          </button>
         </div>
         <div
-          class="p-4 space-y-6 rounded border-[1px] border-zinc-900/60 hover:bg-zinc-900/10 transition-colors"
+          id="comment-list"
+          class="p-4 mx-8 space-y-6 rounded border-[1px] border-zinc-900/60 hover:bg-zinc-900/10 transition-colors"
           v-for="comment in productRelatedCommentList"
           :key="comment.id"
         >
@@ -110,6 +125,49 @@
           </div>
         </div>
       </div>
+      <div
+        id="comment-editor"
+        v-if="openingCommentEditor"
+        class="bg-zinc-50/50 overflow-y-hidden backdrop-blur-2xl border-t-[1px] border-zinc-500 sticky bottom-0 left-0 w-full h-96 justify-between flex flex-col"
+      >
+        <div class="flex items-center justify-between px-8 py-3">
+          <div class="flex items-center space-x-4">
+            <img src="@/assets/images/Avatar.png" alt="user_avatar" />
+            <p class="text-zinc-900 libertinus-regular text-2xl">LazyFish</p>
+          </div>
+          <LunarMarkStar></LunarMarkStar>
+        </div>
+        <div
+          class="mx-8 py-3 border-y-[1px] border-zinc-400 shrink overflow-y-auto hide-scrollbar"
+        >
+          <textarea
+            name="comment-content"
+            id="comment-content"
+            cols="30"
+            rows="10"
+            class="outline-0 text-zinc-900 hide-scrollbar w-full text-base bg-transparent"
+          ></textarea>
+        </div>
+        <div class="flex items-center justify-between px-8">
+          <p class="text-zinc-600 text-lg italic">323 words in total</p>
+          <div class="flex space-x-3">
+            <button
+              @click="closeCommentEditor"
+              class="text-zinc-900 flex items-center p-3 space-x-3 text-lg border-l-[1px] border-zinc-400"
+            >
+              <i class="ph-paper-plane"></i>
+              <p>Submit</p>
+            </button>
+            <button
+              @click="closeCommentEditor"
+              class="text-zinc-900 flex items-center p-3 space-x-3 text-lg border-l-[1px] border-zinc-400"
+            >
+              <i class="ph-x"></i>
+              <p>Cancel</p>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
     <div
       id="product-ingredient-list"
@@ -118,10 +176,10 @@
       <div class="xl:flex items-center hidden">
         <div class="w-[1px] border-l-[1px] border-zinc-900 h-full"></div>
       </div>
-      <div class="xl:mt-0 flex flex-col mt-8 space-y-4 overflow-hidden">
-        <div class="flex items-center space-x-2">
+      <div class="xl:mt-0 flex flex-col pt-8 mt-8 space-y-4 overflow-hidden">
+        <div class="text-zinc-900 flex items-center space-x-2">
           <i class="ph-flask-fill" style="font-size: 32px"></i>
-          <p class="text-zinc-900 text-2xl font-semibold">Ingredients</p>
+          <p class="text-2xl font-semibold">Ingredients</p>
         </div>
         <ul
           class="text-zinc-800 hide-scrollbar ml-3 space-y-4 overflow-y-scroll text-base font-normal list-disc list-inside"
@@ -153,23 +211,31 @@ import { useRoute, useRouter } from "vue-router";
 import ProductOverView from "@/components/ProductOverview.vue";
 import LunarMarkStar from "@/components/LunarMarkStar.vue";
 
-const ingredientStore = useIngredientStore();
-const { ingredientList } = storeToRefs(ingredientStore);
-
 const route = useRoute();
 
+/*product stuff*/
 const productStore = useProductStore();
 const { relatedProductList } = storeToRefs(productStore);
+const selectedProduct = computed(() => {
+  const sP = relatedProductList.value.find((p) => {
+    if (route.query.productId) {
+      return p.id == parseInt(route?.query?.productId.toString());
+    }
+  });
+  return sP;
+});
+onMounted(() => {
+  if (route.query.productBrand) {
+    productStore.getBrandRelatedProduct(route.query.productBrand.toString());
+  }
+});
 
+/*comment stuff*/
 const commentStore = useCommentStore();
 const { productRelatedCommentList } = storeToRefs(commentStore);
 const averageMark = ref(0);
-
 onMounted(async () => {
   if (route.query.productId) {
-    ingredientStore.getIngredientList(
-      parseInt(route.query.productId.toString())
-    );
     await commentStore.getProductRelatedCommentList(
       parseInt(route.query.productId.toString())
     );
@@ -180,20 +246,25 @@ onMounted(async () => {
     if (productRelatedCommentList.value.length > 0)
       averageMark.value = totalMark / productRelatedCommentList.value.length;
   }
-  if (route.query.productBrand) {
-    productStore.getBrandRelatedProduct(route.query.productBrand.toString());
-  }
 });
 
-const selectedProduct = computed(() => {
-  const sP = relatedProductList.value.find((p) => {
-    if (route.query.productId) {
-      return p.id == parseInt(route?.query?.productId.toString());
-    }
-  });
-  return sP;
-});
+const openingCommentEditor = ref(false);
+const openCommentEditor = () => {
+  openingCommentEditor.value = true;
+};
+const closeCommentEditor = () => {
+  openingCommentEditor.value = false;
+};
 
+/*ingredient stuff*/
+const ingredientStore = useIngredientStore();
+const { ingredientList } = storeToRefs(ingredientStore);
+onMounted(() => {
+  if (route.query.productId)
+    ingredientStore.getIngredientList(
+      parseInt(route.query.productId.toString())
+    );
+});
 const router = useRouter();
 const goIngredient = (ingredientId: number, ingredientName: string) => {
   router.push({
