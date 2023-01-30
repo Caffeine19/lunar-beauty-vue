@@ -131,8 +131,9 @@
             <div class="flex items-center justify-between">
               <LunarMarkStar :mark="comment.mark"></LunarMarkStar>
               <button
+                @click="deleteComment(comment.id)"
                 v-if="comment.userId === userInfo?.id"
-                class="hover:bg-zinc-900/10 text-zinc-900 flex items-center justify-center hover:border-zinc-900 border-[1px] p-1 rounded"
+                class="hover:bg-zinc-900/10 text-zinc-900 flex items-center justify-center hover:border-zinc-900 border-zinc-400 border-[1px] p-1 rounded"
               >
                 <i class="ph-trash" style="font-size: 24px"></i>
               </button>
@@ -163,7 +164,12 @@
           ></textarea>
         </div>
         <div class="flex items-center justify-between px-8">
-          <p class="text-zinc-600 text-lg italic">323 words in total</p>
+          <p class="text-zinc-600 text-lg italic">
+            <span class="text-xl underline">
+              {{ commentCreateOptions.content.length }}
+            </span>
+            words in total
+          </p>
           <div class="flex space-x-3">
             <button
               @click="createComment"
@@ -310,6 +316,10 @@ const commentCreateOptions = reactive<CommentCreateOptions>({
 const createComment = () => {
   if (commentCreateOptions.userId && commentCreateOptions.productId)
     commentStore.createByUser(commentCreateOptions);
+};
+
+const deleteComment = (commentId: number) => {
+  commentStore.deleteById(commentId);
 };
 
 /*ingredient stuff*/

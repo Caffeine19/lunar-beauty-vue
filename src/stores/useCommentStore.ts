@@ -1,7 +1,11 @@
 import { defineStore } from "pinia";
 
 import type { Comment, CommentCreateOptions } from "@/types/comment";
-import { reqCommentCreateByUser, reqCommentFindByProduct } from "@/api/comment";
+import {
+  reqCommentCreateByUser,
+  reqCommentDeleteById,
+  reqCommentFindByProduct,
+} from "@/api/comment";
 
 import type { ITooltipInfo } from "@/types/tooltip";
 const useCommentStore = defineStore({
@@ -31,6 +35,21 @@ const useCommentStore = defineStore({
       } catch (error) {
         console.error(error);
         return { status: false, content: "created failed" };
+      }
+    },
+    async deleteById(commentId: number): Promise<ITooltipInfo> {
+      try {
+        const res = await reqCommentDeleteById(commentId);
+        const { deletedComment } = res.data;
+        this.productRelatedCommentList = this.productRelatedCommentList.filter(
+          (comment) => {
+            return comment.id !== deletedComment.id;
+          }
+        );
+        return { status: true, content: "delete succeeded" };
+      } catch (error) {
+        console.error(error);
+        return { status: false, content: "delete failed" };
       }
     },
   },

@@ -8,3 +8,6 @@ export const reqCommentFindByProduct = (productId: number) => {
 export const reqCommentCreateByUser = (data: CommentCreateOptions) => {
   return axiosInstance.post("/comment/createByUser", data);
 };
+export const reqCommentDeleteById = (commentId: number) => {
+  return axiosInstance.post("/comment/deleteById", { commentId });
+};
