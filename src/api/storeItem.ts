@@ -1,4 +1,7 @@
-import type { IStoreItemUpdateOptions } from "@/types/storeItem";
+import type {
+  StoreItemCreateOptions,
+  StoreItemUpdateOptions,
+} from "@/types/storeItem";
 import axiosInstance from ".";
 
 export const reqStoreItemFindByUser = (userId: number) => {
@@ -6,7 +9,7 @@ export const reqStoreItemFindByUser = (userId: number) => {
 };
 export const reqStoreItemUpdateById = (
   storeItemId: number,
-  data: IStoreItemUpdateOptions
+  data: StoreItemUpdateOptions
 ) => {
   return axiosInstance.post("/storeItem/updateById", {
     storeItemId,
@@ -15,4 +18,8 @@ export const reqStoreItemUpdateById = (
 };
 export const reqStoreItemDeleteById = (storeItemId: number) => {
   return axiosInstance.post("/storeItem/deleteById", { storeItemId });
+};
+
+export const reqStoreItemCreateByUser = (data: StoreItemCreateOptions) => {
+  return axiosInstance.post("/storeItem/createByUser", { data });
 };

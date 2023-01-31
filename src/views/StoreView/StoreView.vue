@@ -52,7 +52,7 @@ import { computed, defineComponent, onMounted, reactive, ref } from "vue";
 import { storeToRefs } from "pinia";
 import useStoreItemStore from "@/stores/useStoreItemStore";
 
-import type { IStoreItem } from "@/types/storeItem";
+import type { StoreItem } from "@/types/storeItem";
 import { applyingTime } from "@/types/applyingTime";
 import { preservationStatus } from "@/types/preservationStatus";
 
@@ -175,10 +175,10 @@ export default defineComponent({
     /*控制显示storeItem的详情面板的显示*/
     const showingProductDetail = ref(false);
 
-    const selectedProduct = ref<IStoreItem>();
+    const selectedProduct = ref<StoreItem>();
     // const selectedIndex = ref<number>(0);
 
-    const openStoreItemDetail = (productId: IStoreItem["id"]) => {
+    const openStoreItemDetail = (productId: StoreItem["id"]) => {
       if (!showingProductDetail.value) showingProductDetail.value = true;
 
       selectedProduct.value = storeItemList.value.find((product) => {

@@ -39,16 +39,16 @@
   </div>
 </template>
 <script setup lang="ts">
-import type { IStoreItem } from "@/types/storeItem";
+import type { StoreItem } from "@/types/storeItem";
 import type { IRoutineItem } from "@/types/routineItem";
 
 import EmptyBox from "@/components/EmptyBox.vue";
 
 defineProps<{
-  productList: IStoreItem[] | IRoutineItem[];
+  productList: StoreItem[] | IRoutineItem[];
   tag: string;
   tagIconClass: string;
-  selectedProduct?: IStoreItem | IRoutineItem;
+  selectedProduct?: StoreItem | IRoutineItem;
 }>();
 
 defineEmits(["productBoardItemClick"]);

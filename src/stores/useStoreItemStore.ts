@@ -1,10 +1,15 @@
 import { defineStore } from "pinia";
 import {
+  reqStoreItemCreateByUser,
   reqStoreItemDeleteById,
   reqStoreItemFindByUser,
   reqStoreItemUpdateById,
 } from "@/api/storeItem";
-import type { IStoreItem, IStoreItemUpdateOptions } from "@/types/storeItem";
+import type {
+  StoreItem,
+  StoreItemCreateOptions,
+  StoreItemUpdateOptions,
+} from "@/types/storeItem";
 
 import type { ITooltipInfo } from "@/types/tooltip";
 
@@ -12,7 +17,7 @@ const useStoreItemStore = defineStore({
   id: "storeItem",
   state: () => {
     return {
-      storeItemList: [] as IStoreItem[],
+      storeItemList: [] as StoreItem[],
     };
   },
   actions: {
@@ -29,7 +34,7 @@ const useStoreItemStore = defineStore({
 
     async updateById(
       storeItemId: number,
-      data: IStoreItemUpdateOptions
+      data: StoreItemUpdateOptions
     ): Promise<ITooltipInfo> {
       try {
         const res = await reqStoreItemUpdateById(storeItemId, data);
@@ -77,6 +82,18 @@ const useStoreItemStore = defineStore({
       } catch (error) {
         console.log(error);
         return { status: false, content: "delete failed" };
+      }
+    },
+    async createByUser(data: StoreItemCreateOptions): Promise<ITooltipInfo> {
+      try {
+        const res = await reqStoreItemCreateByUser(data);
+        const { createdStoreItem } = res.data;
+        this.storeItemList.push(createdStoreItem);
+        console.log({ createdStoreItem });
+        return { status: true, content: "create succeeded" };
+      } catch (error) {
+        console.log(error);
+        return { status: false, content: "create failed" };
       }
     },
   },
