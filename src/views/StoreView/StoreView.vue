@@ -10,10 +10,7 @@
           <div class="flex items-center">
             <div class="w-[1px] border-l-[1px] border-zinc-900 h-4/5"></div>
           </div>
-          <button
-            class="text-zinc-900"
-            @click="toggleGroupOption('preservationStatus')"
-          >
+          <button class="text-zinc-900" @click="toggleGroupOption">
             <i class="ph-faders" style="font-size: 28px"></i>
           </button>
           <button class="text-zinc-900">
@@ -58,6 +55,7 @@ import { preservationStatus } from "@/types/preservationStatus";
 
 import ProductBoard from "@/components/ProductBoard.vue";
 import StoreItemDetail from "./StoreItemDetail.vue";
+import type { IProduct } from "@/types/product";
 export default defineComponent({
   components: {
     ProductBoard,
@@ -166,10 +164,11 @@ export default defineComponent({
       "applyingTime"
     );
 
-    const toggleGroupOption = (
-      newOption: "applyingTime" | "preservationStatus"
-    ) => {
-      currentGroupOption.value = newOption;
+    const toggleGroupOption = () => {
+      currentGroupOption.value =
+        currentGroupOption.value === "applyingTime"
+          ? "preservationStatus"
+          : "applyingTime";
     };
 
     /*控制显示storeItem的详情面板的显示*/
@@ -188,6 +187,31 @@ export default defineComponent({
 
     const closeStoreItemDetail = () => {
       showingProductDetail.value = false;
+    };
+
+    const prepareCreateStoreItem = () => {
+      const blankProduct: IProduct = {
+        id: 0,
+        name: "",
+        brand: "",
+        price: 0,
+        images: "",
+        category: "",
+        capacity: "",
+      };
+      storeItemList.value.push({
+        id: 0,
+        amount: 0,
+        applyingTime: applyingTime.ALL,
+        expense: 0,
+        openedTime: null,
+        productionTime: null,
+        isRunout: false,
+        product: blankProduct,
+        isOpened: false,
+        isExpired: false,
+        shelfTime: 0,
+      });
     };
 
     return {
