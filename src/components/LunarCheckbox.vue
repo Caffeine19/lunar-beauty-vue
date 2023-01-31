@@ -37,7 +37,7 @@ export interface CheckBoxStyle {
   textStyle?: string;
   pathStyle?: string;
   groupStyle?: {
-    gap: string;
+    gap?: string;
   };
   buttonStyle?: {
     checked?: string;

@@ -236,6 +236,9 @@ export default defineComponent({
     );
 
     const checkBoxStyle: CheckBoxStyle = {
+      groupStyle: {
+        gap: "space-x-2",
+      },
       textStyle: "text-zinc-900 text-base font-medium",
       pathStyle: "stroke-zinc-50",
       buttonStyle: {

@@ -83,7 +83,7 @@
           </div>
         </div>
       </div>
-      <div id="product-related-comments" class="mt-4 space-y-4">
+      <div id="product-related-comments" class="my-4 space-y-4">
         <div
           id="comment-header"
           class="backdrop-blur-2xl sticky top-0 flex items-center justify-between px-8 py-2"
@@ -140,51 +140,51 @@
             </div>
           </div>
         </div>
-      </div>
-      <div
-        id="comment-editor"
-        v-if="openingCommentEditor"
-        class="bg-zinc-50/50 overflow-y-hidden backdrop-blur-2xl border-t-[1px] border-zinc-500 sticky bottom-0 left-0 w-full h-[50vh] justify-between flex flex-col"
-      >
-        <div class="flex items-center justify-between px-8 py-3">
-          <div class="flex items-center space-x-4">
-            <img src="@/assets/images/Avatar.png" alt="user_avatar" />
-            <p class="text-zinc-900 libertinus-regular text-2xl">LazyFish</p>
+        <div
+          id="comment-editor"
+          v-if="openingCommentEditor"
+          class="bg-zinc-50/50 overflow-y-hidden backdrop-blur-2xl border-t-[1px] border-zinc-500 sticky bottom-0 left-0 w-full h-[50vh] justify-between flex flex-col"
+        >
+          <div class="flex items-center justify-between px-8 py-3">
+            <div class="flex items-center space-x-4">
+              <img src="@/assets/images/Avatar.png" alt="user_avatar" />
+              <p class="text-zinc-900 libertinus-regular text-2xl">LazyFish</p>
+            </div>
+            <LunarMarkStar
+              v-model:mark="commentCreateOptions.mark"
+            ></LunarMarkStar>
           </div>
-          <LunarMarkStar
-            v-model:mark="commentCreateOptions.mark"
-          ></LunarMarkStar>
-        </div>
-        <div class="mx-8 py-3 border-y-[1px] border-zinc-400 flex-1">
-          <textarea
-            name="comment-content"
-            id="comment-content"
-            v-model="commentCreateOptions.content"
-            class="outline-0 text-zinc-900 hide-scrollbar w-full h-full text-base bg-transparent"
-          ></textarea>
-        </div>
-        <div class="flex items-center justify-between px-8">
-          <p class="text-zinc-600 text-lg italic">
-            <span class="text-xl underline">
-              {{ commentCreateOptions.content.length }}
-            </span>
-            words in total
-          </p>
-          <div class="flex space-x-3">
-            <button
-              @click="createComment"
-              class="text-zinc-900 flex items-center p-3 space-x-3 text-lg border-l-[1px] border-zinc-400"
-            >
-              <i class="ph-paper-plane"></i>
-              <p>Submit</p>
-            </button>
-            <button
-              @click="closeCommentEditor"
-              class="text-zinc-900 flex items-center p-3 space-x-3 text-lg border-l-[1px] border-zinc-400"
-            >
-              <i class="ph-x"></i>
-              <p>Close</p>
-            </button>
+          <div class="mx-8 py-3 border-y-[1px] border-zinc-400 flex-1">
+            <textarea
+              name="comment-content"
+              id="comment-content"
+              v-model="commentCreateOptions.content"
+              class="outline-0 text-zinc-900 hide-scrollbar w-full h-full text-base bg-transparent"
+            ></textarea>
+          </div>
+          <div class="flex items-center justify-between px-8">
+            <p class="text-zinc-600 text-lg italic">
+              <span class="text-xl underline">
+                {{ commentCreateOptions.content.length }}
+              </span>
+              words in total
+            </p>
+            <div class="flex space-x-3">
+              <button
+                @click="createComment"
+                class="text-zinc-900 flex items-center p-3 space-x-3 text-lg border-l-[1px] border-zinc-400"
+              >
+                <i class="ph-paper-plane"></i>
+                <p>Submit</p>
+              </button>
+              <button
+                @click="closeCommentEditor"
+                class="text-zinc-900 flex items-center p-3 space-x-3 text-lg border-l-[1px] border-zinc-400"
+              >
+                <i class="ph-x"></i>
+                <p>Close</p>
+              </button>
+            </div>
           </div>
         </div>
       </div>
