@@ -20,7 +20,7 @@
       >
         <p class="w-11/12 transition-colors">{{ product.product.name }}</p>
         <p
-          class="w-1/12 border-l-[1px] border-zinc-900 text-right transition-colors"
+          class="border-zinc-900 w-1/12 text-right transition-colors border-l"
           :class="
             selectedProduct?.product.id == product.id
               ? ' border-zinc-50'
@@ -30,6 +30,7 @@
           {{ product.amount }}
         </p>
       </li>
+      <EmptyBox v-if="productList.length === 0"></EmptyBox>
     </ul>
     <button class="text-zinc-600 flex items-center space-x-3">
       <i class="ph-plus" style="font-size: 28px"></i>
@@ -37,20 +38,19 @@
     </button>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from "vue";
-import type { PropType } from "vue";
+<script setup lang="ts">
 import type { IStoreItem } from "@/types/storeItem";
 import type { IRoutineItem } from "@/types/routineItem";
-export default defineComponent({
-  props: {
-    productList: Array as PropType<IStoreItem[] | IRoutineItem[]>,
-    tag: String,
-    tagIconClass: String,
-    selectedProduct: Object as PropType<IStoreItem | IRoutineItem>,
-  },
-  emits: ["productBoardItemClick"],
-  setup() {},
-});
+
+import EmptyBox from "@/components/EmptyBox.vue";
+
+defineProps<{
+  productList: IStoreItem[] | IRoutineItem[];
+  tag: string;
+  tagIconClass: string;
+  selectedProduct?: IStoreItem | IRoutineItem;
+}>();
+
+defineEmits(["productBoardItemClick"]);
 </script>
 <style scoped></style>

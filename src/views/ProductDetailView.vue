@@ -140,6 +140,10 @@
             </div>
           </div>
         </div>
+        <div class="mx-8">
+          <EmptyBox v-if="displayedCommentList.length === 0"></EmptyBox>
+        </div>
+
         <div
           id="comment-editor"
           v-if="openingCommentEditor"
@@ -233,8 +237,10 @@ import LunarMarkStar from "@/components/LunarMarkStar.vue";
 import LunarCheckbox, {
   type CheckBoxStyle,
 } from "@/components/LunarCheckbox.vue";
+import EmptyBox from "@/components/EmptyBox.vue";
 
 import { userInfoKey } from "@/symbols/userInfo";
+
 import type { Comment, CommentCreateOptions } from "@/types/comment";
 import dayjs from "dayjs";
 const route = useRoute();
