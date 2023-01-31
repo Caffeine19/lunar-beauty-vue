@@ -6,7 +6,7 @@ type CalculatedPreservationStatus = {
   isExpired: boolean;
 };
 
-export type IStoreItem = {
+export type StoreItem = {
   id: number;
 
   amount: number;
@@ -24,8 +24,8 @@ export type IStoreItem = {
   product: IProduct;
 } & CalculatedPreservationStatus;
 
-export type IStoreItemUpdateOptions = Pick<
-  IStoreItem,
+export type StoreItemUpdateOptions = Pick<
+  StoreItem,
   | "amount"
   | "applyingTime"
   | "expense"
@@ -33,4 +33,9 @@ export type IStoreItemUpdateOptions = Pick<
   | "productionTime"
   | "shelfTime"
   | "isRunout"
+>;
+
+export type StoreItemCreateOptions = Omit<
+  StoreItem,
+  "id" | keyof CalculatedPreservationStatus
 >;
