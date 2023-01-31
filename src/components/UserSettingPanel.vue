@@ -3,7 +3,7 @@
     <div
       v-if="openingUserSettingPanel"
       ref="userSettingPanelRef"
-      class="top-1/2 flex flex-col left-1/2 bg-zinc-50/70 backdrop-blur-xl h-2/3 w-[36rem] absolute z-10 px-6 -translate-x-1/2 -translate-y-1/2 shadow-2xl max-w-[66vw] border-zinc-200 border-[1px]"
+      class="top-1/2 flex flex-col left-1/2 bg-zinc-50/70 backdrop-blur-xl h-2/3 w-[36rem] absolute z-10 px-6 -translate-x-1/2 -translate-y-1/2 shadow-2xl max-w-[66vw] border-zinc-200 border"
     >
       <div
         class="flex items-center justify-between py-3 border-b-[1px] border-zinc-500"

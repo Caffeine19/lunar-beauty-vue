@@ -74,7 +74,7 @@
       </li>
       <button
         @click="beginCreateRoutine"
-        class="mx-2.5 text-zinc-500 border-zinc-400 border-[1px] hover:bg-zinc-900/10 hover:text-zinc-900 hover:border-zinc-900 flex items-center px-2 py-1 space-x-6 transition-colors border-dashed"
+        class="mx-2.5 text-zinc-500 border-zinc-400 border hover:bg-zinc-900/10 hover:text-zinc-900 hover:border-zinc-900 flex items-center px-2 py-1 space-x-6 transition-colors border-dashed"
       >
         <i class="ph-plus" style="font-size: 28px"></i>
         <p class="xl:block hidden text-lg font-normal">Create</p>

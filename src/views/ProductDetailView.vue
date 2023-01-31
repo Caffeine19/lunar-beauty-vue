@@ -108,7 +108,7 @@
         </div>
         <div
           id="comment-list"
-          class="p-4 mx-8 space-y-6 rounded border-[1px] border-zinc-900/60 hover:bg-zinc-900/10 transition-colors"
+          class="border-zinc-900/60 hover:bg-zinc-900/10 p-4 mx-8 space-y-6 transition-colors border rounded"
           v-for="comment in displayedCommentList"
           :key="comment.id"
         >
@@ -133,7 +133,7 @@
               <button
                 @click="deleteComment(comment.id)"
                 v-if="comment.userId === userInfo?.id"
-                class="hover:bg-zinc-900/10 text-zinc-900 flex items-center justify-center hover:border-zinc-900 border-zinc-400 border-[1px] p-1 rounded"
+                class="hover:bg-zinc-900/10 text-zinc-900 hover:border-zinc-900 border-zinc-400 flex items-center justify-center p-1 border rounded"
               >
                 <i class="ph-trash" style="font-size: 24px"></i>
               </button>

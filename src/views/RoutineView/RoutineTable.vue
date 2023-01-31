@@ -72,7 +72,7 @@
         :chart-data="barChartData"
         class="col-span-2"
         :height="125"
-        :css-classes="'bg-zinc-50 rounded border-[1px] border-zinc-200'"
+        :css-classes="'bg-zinc-50 rounded border border-zinc-200'"
       ></BarChart> -->
     </div>
   </div>

@@ -6,7 +6,7 @@
     <transition name="fade">
       <div
         v-show="dialogOption?.visible"
-        class="bg-zinc-900 border-zinc-50/60 h-fit p-6 border-[1px] shadow-2xl"
+        class="bg-zinc-900 border-zinc-50/60 h-fit p-6 border shadow-2xl"
       >
         <div class="flex items-center space-x-4">
           <i
@@ -37,7 +37,7 @@
           </button>
           <button
             @click="cancelClickHandler"
-            class="border-[1px] border-zinc-300 hover:bg-zinc-50/10 transition-colors px-2 py-1"
+            class="border-zinc-300 hover:bg-zinc-50/10 px-2 py-1 transition-colors border"
           >
             <p
               class="text-zinc-300 text-lg font-medium flex items-center space-x-1.5"

@@ -3,7 +3,7 @@
     <div
       v-if="routineCreatePanelOption?.visible"
       ref="routineCreatePanelRef"
-      class="top-1/3 left-1/2 fixed -translate-x-1/2 bg-zinc-50/70 border-zinc-200 border-[1px] backdrop-blur-xl shadow-2xl p-6"
+      class="top-1/3 left-1/2 bg-zinc-50/70 border-zinc-200 backdrop-blur-xl fixed p-6 -translate-x-1/2 border shadow-2xl"
     >
       <div class="text-zinc-900 flex items-center mb-6 space-x-4">
         <i class="ph-map-trifold" style="font-size: 28px"></i>
@@ -27,7 +27,7 @@
         </button>
         <button
           @click="cancelClickHandler"
-          class="border-[1px] border-zinc-900 hover:bg-zinc-900/10 transition-colors px-2 py-1"
+          class="border-zinc-900 hover:bg-zinc-900/10 px-2 py-1 transition-colors border"
         >
           <p
             class="text-zinc-900 text-lg font-medium flex items-center space-x-1.5"

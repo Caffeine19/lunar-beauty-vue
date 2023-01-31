@@ -3,7 +3,7 @@
     <div
       ref="selectorHeader"
       @click="handleSelectorHeaderClick"
-      class="hover:border-zinc-900 border-[1px] py-0.5 px-2 space-x-3 flex items-center justify-between hover:bg-zinc-900/10 group"
+      class="hover:border-zinc-900 border py-0.5 px-2 space-x-3 flex items-center justify-between hover:bg-zinc-900/10 group"
       :class="[
         openingDropMenu ? 'bg-zinc-900/10 border-zinc-900' : 'border-zinc-300',
         disabled ? 'cursor-not-allowed' : 'cursor-pointer',

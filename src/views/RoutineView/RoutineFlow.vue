@@ -73,6 +73,6 @@ export default defineComponent({
   @apply bg-zinc-900 border-zinc-50 text-zinc-50 hover:opacity-[85%] border-2 rounded-lg;
 }
 .ingredient-node {
-  @apply border-[1px] bg-zinc-50/80 border-zinc-600 rounded-full;
+  @apply bg-zinc-50/80 border-zinc-600 border rounded-full;
 }
 </style>

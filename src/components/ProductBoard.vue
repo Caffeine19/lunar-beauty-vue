@@ -16,7 +16,7 @@
             ? 'bg-zinc-900 text-zinc-50 hover:bg-zinc-800/90'
             : 'text-zinc-900   hover:bg-zinc-900/10 border-zinc-600'
         "
-        class="border-[1px] flex justify-between items-center transition-all text-base font-normal p-1.5 space-x-2 cursor-pointer"
+        class="border flex justify-between items-center transition-all text-base font-normal p-1.5 space-x-2 cursor-pointer"
       >
         <p class="w-11/12 transition-colors">{{ product.product.name }}</p>
         <p
