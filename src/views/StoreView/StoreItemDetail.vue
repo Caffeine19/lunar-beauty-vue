@@ -184,7 +184,7 @@ const toggleIsEditing = (flag: boolean) => {
 const updateOptions = reactive<StoreItemUpdateOptions>({
   amount: 0,
   applyingTime: applyingTime.ALL,
-  expense: "0",
+  expense: 0,
   openedTime: null,
   productionTime: "",
   shelfTime: 0,
@@ -224,9 +224,7 @@ const checkBoxStyle: CheckBoxStyle = {
 };
 
 const storeItemStore = useStoreItemStore();
-
 const showTooltip = inject(showTooltipKey);
-
 const submitUpdateOptions = async () => {
   const data: any = {};
   if (selectedProduct.value) {
@@ -245,7 +243,6 @@ const submitUpdateOptions = async () => {
     toggleIsEditing(false);
   }
 };
-
 const resetAndExit = () => {
   updateOptions.amount = selectedProduct.value?.amount || 0;
   updateOptions.applyingTime =
@@ -257,7 +254,6 @@ const resetAndExit = () => {
 };
 
 const showDialog = inject(showDialogKey);
-
 const deleteStoreItem = async () => {
   if (showDialog) {
     showDialog(

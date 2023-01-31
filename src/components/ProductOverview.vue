@@ -25,37 +25,27 @@
     </button>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from "vue";
-
+<script setup lang="ts">
 import { useRouter } from "vue-router";
-export default defineComponent({
-  props: {
-    id: {
-      type: Number,
-      required: true,
-    },
-    name: String,
-    brand: String,
-    price: String,
-    images: String,
-    category: String,
-    capacity: String,
-    mark: Number,
-  },
-  setup(props) {
-    const router = useRouter();
-    // console.log(props.id, props.brand);
-    const goProductDetail = (id: number, brand: string) => {
-      router.push({
-        name: "productDetail",
-        query: { productId: id, productBrand: brand },
-      });
-    };
-    return {
-      goProductDetail,
-    };
-  },
-});
+
+interface IProduct {
+  id: number;
+  name: string;
+  brand: string;
+  price: number;
+  images: string;
+  category: string;
+  capacity: string;
+}
+defineProps<IProduct>();
+
+const router = useRouter();
+// console.log(props.id, props.brand);
+const goProductDetail = (id: number, brand: string) => {
+  router.push({
+    name: "productDetail",
+    query: { productId: id, productBrand: brand },
+  });
+};
 </script>
 <style lang=""></style>

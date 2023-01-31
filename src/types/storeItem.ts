@@ -12,11 +12,11 @@ export type StoreItem = {
   amount: number;
   applyingTime: applyingTime;
 
-  expense: string;
+  expense: number;
 
   openedTime: string | null;
 
-  productionTime: string;
+  productionTime: string | null;
   shelfTime: number;
 
   isRunout: boolean;

@@ -85,11 +85,7 @@ const useRoutineItemStore = defineStore({
         const res = await reqRoutineItemFindByRoutine(routineId);
         const { routineItemList } = res.data;
         routineItemList.forEach((routineItem: IRoutineItem) => {
-          routineItem.expense =
-            "$" +
-            (
-              routineItem.amount * parseInt(routineItem.product.price.slice(1))
-            ).toString();
+          routineItem.expense = routineItem.amount * routineItem.product.price;
         });
         this.routineItemList = routineItemList;
         console.log({ routineItemList });

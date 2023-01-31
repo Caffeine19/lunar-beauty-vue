@@ -12,7 +12,7 @@
         :key="product.id"
         @click="$emit('productBoardItemClick', product.id)"
         :class="
-          selectedProduct?.product.id == product.id
+          selectedProduct?.id == product.id
             ? 'bg-zinc-900 text-zinc-50 hover:bg-zinc-800/90'
             : 'text-zinc-900   hover:bg-zinc-900/10 border-zinc-600'
         "
@@ -22,7 +22,7 @@
         <p
           class="border-zinc-900 w-1/12 text-right transition-colors border-l"
           :class="
-            selectedProduct?.product.id == product.id
+            selectedProduct?.id == product.id
               ? ' border-zinc-50'
               : ' border-zinc-900 '
           "
@@ -51,6 +51,6 @@ defineProps<{
   selectedProduct?: StoreItem | IRoutineItem;
 }>();
 
-defineEmits(["productBoardItemClick"]);
+defineEmits(["productBoardItemClick", "productAddButtonClick"]);
 </script>
 <style scoped></style>

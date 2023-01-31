@@ -48,12 +48,7 @@
           <td>{{ routineItem.product.category }}</td>
           <td>{{ routineItem.expense }}</td>
           <td>
-            {{
-              (
-                (parseInt(routineItem.expense.slice(1)) / totalExpense) *
-                100
-              ).toFixed(2) + "%"
-            }}
+            {{ ((routineItem.expense / totalExpense) * 100).toFixed(2) + "%" }}
           </td>
         </tr>
       </tbody>
@@ -98,7 +93,7 @@ export default defineComponent({
     const totalExpense = computed(() => {
       let e = 0;
       props.routineItemList.forEach((routineItem) => {
-        e += routineItem.amount * parseInt(routineItem.product.price.slice(1));
+        e += routineItem.amount * routineItem.product.price;
       });
       return e;
     });
@@ -113,7 +108,7 @@ export default defineComponent({
       };
       props.routineItemList.forEach((routineItem) => {
         b?.labels?.push(routineItem.product.name);
-        b.datasets[0].data.push(parseInt(routineItem.expense.slice(1)));
+        b.datasets[0].data.push(routineItem.expense);
       });
       return b;
     });
