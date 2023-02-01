@@ -2,15 +2,19 @@
   <div class="grow relative flex flex-col justify-between overflow-hidden">
     <div class="backdrop-blur-2xl absolute top-0 left-0 w-full px-6 py-3">
       <div
-        class="divide-zinc-600 shrink-0 flex items-center overflow-hidden divide-x"
+        class="shrink-0 divide-zinc-600 flex items-center space-x-2 overflow-hidden divide-x"
       >
-        <button>
-          <i
-            class="ph-faders text-zinc-900 pr-2 font-normal"
-            style="font-size: 32px"
+        <div class="flex items-center space-x-1">
+          <button
+            class="hover:bg-zinc-900/10 flex items-center justify-center p-1 transition-colors rounded"
           >
-          </i>
-        </button>
+            <i
+              class="ph-faders text-zinc-900 font-normal"
+              style="font-size: 28px"
+            >
+            </i>
+          </button>
+        </div>
         <ProductCategories @click-category="changeCategory"></ProductCategories>
       </div>
     </div>
