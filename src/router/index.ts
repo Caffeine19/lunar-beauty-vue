@@ -21,46 +21,66 @@ const router = createRouter({
       path: "/main",
       name: "main",
       redirect: "/main/library",
-      component: () => import("@/views/MainView.vue"),
+      component: () => import("@/views/MainView/MainView.vue"),
       children: [
         {
           path: "/main/home",
           name: "home",
-          component: () => import("@/views/HomeView.vue"),
+          component: () => import("@/views/MainView/HomeView.vue"),
         },
         {
           path: "/main/library",
           name: "library",
-          component: () => import("@/views/LibraryView.vue"),
+          component: () =>
+            import("@/views/MainView/LibraryView/LibraryView.vue"),
           redirect: { name: "productOverview" },
           children: [
             {
               path: "/main/library/productOverview",
               name: "productOverview",
               component: () =>
-                import("@/views/ProductOverviewView/ProductOverviewView.vue"),
+                import(
+                  "@/views/MainView/LibraryView/ProductOverviewView/ProductOverviewView.vue"
+                ),
             },
             {
               path: "/main/library/productDetail",
               name: "productDetail",
-              component: () => import("@/views/ProductDetailView.vue"),
+              component: () =>
+                import("@/views/MainView/LibraryView/ProductDetailView.vue"),
             },
             {
               path: "/main/library/ingredient",
               name: "ingredient",
-              component: () => import("@/views/IngredientView.vue"),
+              component: () =>
+                import("@/views/MainView/LibraryView/IngredientView.vue"),
             },
           ],
         },
         {
           path: "/main/store",
           name: "store",
-          component: () => import("@/views/StoreView/StoreView.vue"),
+          component: () => import("@/views/MainView/StoreView/StoreView.vue"),
+          redirect: "/main/store/storeBoard",
+          children: [
+            {
+              path: "/main/store/storeBoard",
+              name: "storeBoard",
+              component: () =>
+                import("@/views/MainView/StoreView/StoreBoardView.vue"),
+            },
+            {
+              path: "/main/store/selectProduct",
+              name: "selectProduct",
+              component: () => import("@/views/PickProductView.vue"),
+            },
+          ],
         },
         {
           path: "/main/routine",
           name: "routine",
-          component: () => import("@/views/RoutineView/RoutineView.vue"),
+          component: () =>
+            import("@/views/MainView/RoutineView/RoutineView.vue"),
         },
       ],
     },

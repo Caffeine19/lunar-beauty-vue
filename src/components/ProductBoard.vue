@@ -32,7 +32,10 @@
       </li>
       <EmptyBox v-if="productList.length === 0"></EmptyBox>
     </ul>
-    <button class="text-zinc-600 flex items-center space-x-3">
+    <button
+      class="text-zinc-600 flex items-center space-x-3"
+      @click="$emit('productAddButtonClick')"
+    >
       <i class="ph-plus" style="font-size: 28px"></i>
       <p class="text-lg font-light">Add new</p>
     </button>

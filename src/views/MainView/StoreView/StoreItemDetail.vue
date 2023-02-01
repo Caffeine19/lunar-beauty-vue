@@ -11,11 +11,11 @@
         <button v-show="!isEditing" @click="toggleIsEditing(true)">
           <i class="ph-note-pencil text-zinc-900" style="font-size: 28px"></i>
         </button>
-        <button v-show="isEditing" @click="submitUpdateOptions">
+        <button v-show="isEditing" @click="onSubmitButtonClick">
           <i class="ph-upload-simple text-zinc-900" style="font-size: 28px">
           </i>
         </button>
-        <button v-show="isEditing" @click="resetAndExit">
+        <button v-show="isEditing" @click="onEraseButtonClick">
           <i class="ph-eraser text-zinc-900" style="font-size: 28px"></i>
         </button>
         <button @click="deleteStoreItem">
@@ -145,8 +145,57 @@
       </li>
     </ul>
     <div class="w-full h-[1px] border-b-[1px] border-zinc-900 my-2"></div>
-    <div class="flex justify-center mt-4">
+    <div class="flex justify-center mt-4" v-if="!creating">
       <ProductOverview v-bind="selectedProduct?.product"></ProductOverview>
+    </div>
+    <div
+      class="relative flex flex-col items-center justify-center w-4/5 w-full p-4 mx-auto mt-4 space-y-3"
+      v-else
+    >
+      <i
+        class="ph-arrow-up-left absolute top-0 left-0"
+        style="font-size: 32px"
+      ></i>
+      <i
+        class="ph-arrow-up-right absolute top-0 right-0"
+        style="font-size: 32px"
+      ></i>
+      <i
+        class="ph-arrow-down-left absolute bottom-0 left-0"
+        style="font-size: 32px"
+      ></i>
+      <i
+        class="ph-arrow-down-right absolute bottom-0 right-0"
+        style="font-size: 32px"
+      ></i>
+      <i class="ph-books-fill" style="font-size: 40px"></i>
+      <p class="libertinus-semibold text-zinc-600 text-2xl text-center">
+        Please Pick One <br />From <br />The Library
+      </p>
+      <button class="text-zinc-900 libertinus-semibold group relative text-5xl">
+        <svg
+          width="243"
+          height="106"
+          viewBox="0 0 243 106"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-36 overflow-visible"
+        >
+          <path
+            d="M219.878 48C219.878 54.4612 216.874 60.6565 211.36 66.3355C205.844 72.0168 197.838 77.1559 187.905 81.4827C168.041 90.1356 140.565 95.5 110.189 95.5C79.8133 95.5 52.337 90.1356 32.4734 81.4827C22.5408 77.1559 14.5342 72.0168 9.01794 66.3355C3.50391 60.6565 0.5 54.4612 0.5 48C0.5 41.5388 3.50391 35.3435 9.01794 29.6645C14.5342 23.9832 22.5408 18.8441 32.4734 14.5173C52.337 5.86438 79.8133 0.5 110.189 0.5C140.565 0.5 168.041 5.86438 187.905 14.5173C197.838 18.8441 205.844 23.9832 211.36 29.6645C216.874 35.3435 219.878 41.5388 219.878 48Z"
+            stroke="#18181b"
+            class="group-hover:-translate-x-1 group-hover:-translate-y-1 transition-transform"
+          />
+          <path
+            d="M242.5 58C242.5 64.4612 239.496 70.6565 233.982 76.3355C228.466 82.0168 220.459 87.1559 210.527 91.4827C190.663 100.136 163.187 105.5 132.811 105.5C102.435 105.5 74.9586 100.136 55.095 91.4827C45.1624 87.1559 37.1559 82.0168 31.6396 76.3355C26.1255 70.6565 23.1216 64.4612 23.1216 58C23.1216 51.5388 26.1255 45.3435 31.6396 39.6645C37.1559 33.9832 45.1624 28.8441 55.095 24.5173C74.9586 15.8644 102.435 10.5 132.811 10.5C163.187 10.5 190.663 15.8644 210.527 24.5173C220.459 28.8441 228.466 33.9832 233.982 39.6645C239.496 45.3435 242.5 51.5388 242.5 58Z"
+            stroke="#18181b"
+            class="group-hover:translate-x-1 group-hover:translate-y-1 transition-transform"
+          />
+        </svg>
+        <p class="top-1/2 left-1/2 absolute -translate-x-1/2 -translate-y-1/2">
+          Go
+        </p>
+      </button>
     </div>
   </div>
 </template>
@@ -174,6 +223,7 @@ const props = defineProps<{
   selectedProduct: StoreItem;
   showingProductDetail: boolean;
   closeStoreItemDetail: () => void;
+  creating: boolean;
 }>();
 
 const isEditing = ref(false);
@@ -195,7 +245,7 @@ const { selectedProduct } = toRefs(props);
 watch(
   () => props.selectedProduct,
   (newVal) => {
-    console.log({ newVal: newVal });
+    // console.log({ newVal: newVal });
     updateOptions.amount = newVal.amount;
     updateOptions.applyingTime = newVal.applyingTime;
     updateOptions.expense = newVal.expense;
@@ -204,7 +254,12 @@ watch(
     updateOptions.shelfTime = newVal.shelfTime;
     updateOptions.isRunout = newVal.isRunout;
     // console.log(selectedProduct.value);
-    isEditing.value = false;
+
+    if (props.creating) {
+      isEditing.value = true;
+    } else {
+      isEditing.value = false;
+    }
   },
   { immediate: true }
 );
@@ -240,17 +295,17 @@ const submitUpdateOptions = async () => {
     if (res && showTooltip) {
       showTooltip(res);
     }
-    toggleIsEditing(false);
   }
 };
-const resetAndExit = () => {
+const reset = () => {
   updateOptions.amount = selectedProduct.value?.amount || 0;
   updateOptions.applyingTime =
     selectedProduct.value?.applyingTime || applyingTime.ALL;
+  updateOptions.expense = selectedProduct.value?.expense || 0;
   updateOptions.openedTime = selectedProduct.value?.openedTime || null;
   updateOptions.productionTime = selectedProduct.value?.productionTime || "";
-
-  toggleIsEditing(false);
+  updateOptions.shelfTime = selectedProduct.value.shelfTime || 0;
+  updateOptions.isRunout = selectedProduct.value.isRunout;
 };
 
 const showDialog = inject(showDialogKey);
@@ -266,5 +321,19 @@ const deleteStoreItem = async () => {
     );
   }
 };
+
+const onSubmitButtonClick = () => {
+  if (!props.creating) {
+    submitUpdateOptions();
+  }
+  toggleIsEditing(false);
+};
+const onEraseButtonClick = () => {
+  reset();
+  if (!props.creating) {
+    toggleIsEditing(false);
+  }
+};
+const onTrashButtonClick = () => {};
 </script>
 <style></style>
