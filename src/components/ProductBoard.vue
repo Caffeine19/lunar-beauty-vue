@@ -8,33 +8,33 @@
     </button>
     <ul class="w-[320px] space-y-3">
       <li
-        v-for="product in productList"
-        :key="product.id"
-        @click="$emit('productBoardItemClick', product.id)"
+        v-for="item in itemList"
+        :key="item.id"
+        @click="$emit('itemBoardItemClick', item.id)"
         :class="
-          selectedProduct?.id == product.id
+          selectedItem?.id == item.id
             ? 'bg-zinc-900 text-zinc-50 hover:bg-zinc-800/90'
             : 'text-zinc-900   hover:bg-zinc-900/10 border-zinc-600'
         "
         class="border flex justify-between items-center transition-all text-base font-normal p-1.5 space-x-2 cursor-pointer"
       >
-        <p class="w-11/12 transition-colors">{{ product.product.name }}</p>
+        <p class="w-11/12 transition-colors">{{ item.product.name }}</p>
         <p
           class="border-zinc-900 w-1/12 text-right transition-colors border-l"
           :class="
-            selectedProduct?.id == product.id
+            selectedItem?.id == item.id
               ? ' border-zinc-50'
               : ' border-zinc-900 '
           "
         >
-          {{ product.amount }}
+          {{ item.amount }}
         </p>
       </li>
-      <EmptyBox v-if="productList.length === 0"></EmptyBox>
+      <EmptyBox v-if="itemList.length === 0"></EmptyBox>
     </ul>
     <button
       class="text-zinc-600 flex items-center space-x-3"
-      @click="$emit('productAddButtonClick')"
+      @click="$emit('itemAddButtonClick')"
     >
       <i class="ph-plus" style="font-size: 28px"></i>
       <p class="text-lg font-light">Add new</p>
@@ -48,12 +48,12 @@ import type { IRoutineItem } from "@/types/routineItem";
 import EmptyBox from "@/components/EmptyBox.vue";
 
 defineProps<{
-  productList: StoreItem[] | IRoutineItem[];
+  itemList: StoreItem[] | IRoutineItem[];
   tag: string;
   tagIconClass: string;
-  selectedProduct?: StoreItem | IRoutineItem;
+  selectedItem?: StoreItem | IRoutineItem;
 }>();
 
-defineEmits(["productBoardItemClick", "productAddButtonClick"]);
+defineEmits(["itemBoardItemClick", "itemAddButtonClick"]);
 </script>
 <style scoped></style>

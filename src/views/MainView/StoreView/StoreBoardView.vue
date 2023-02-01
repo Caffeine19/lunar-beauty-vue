@@ -25,29 +25,28 @@
         <ProductBoard
           v-for="(group, index) in groupOptions[currentGroupOption]"
           :key="index"
-          :productList="group.value"
+          :itemList="group.value"
           :tagIconClass="group.tagIconClass"
           :tag="group.tag"
-          @product-board-item-click="openStoreItemDetail"
-          @product-add-button-click="prepareCreateStoreItem"
-          :selectedProduct="selectedProduct"
+          @item-board-item-click="openStoreItemDetail"
+          @item-add-button-click="prepareCreateStoreItem"
+          :selectedItem="selectedStoreItem"
         >
         </ProductBoard>
       </div>
     </div>
     <StoreItemDetail
-      v-if="selectedProduct"
+      v-if="selectedStoreItem"
       :creating="creatingStoreItem"
       :close-store-item-detail="closeStoreItemDetail"
       :showing-product-detail="showingProductDetail"
-      :selected-product="selectedProduct"
+      :selectedStoreItem="selectedStoreItem"
     >
     </StoreItemDetail>
   </div>
 </template>
 <script lang="ts">
 import { computed, defineComponent, onMounted, reactive, ref } from "vue";
-
 import { storeToRefs } from "pinia";
 import useStoreItemStore from "@/stores/useStoreItemStore";
 
@@ -177,7 +176,7 @@ export default defineComponent({
     /*控制显示storeItem的详情面板的显示*/
     const showingProductDetail = ref(false);
 
-    const selectedProduct = ref<StoreItem>();
+    const selectedStoreItem = ref<StoreItem>();
     // const selectedIndex = ref<number>(0);
 
     const openStoreItemDetail = (productId: StoreItem["id"]) => {
@@ -185,7 +184,7 @@ export default defineComponent({
       if (creatingStoreItem.value && productId !== -1) return;
 
       if (!showingProductDetail.value) showingProductDetail.value = true;
-      selectedProduct.value = storeItemList.value.find((product) => {
+      selectedStoreItem.value = storeItemList.value.find((product) => {
         return product.id == productId;
       });
     };
@@ -233,7 +232,7 @@ export default defineComponent({
       openStoreItemDetail,
       closeStoreItemDetail,
 
-      selectedProduct,
+      selectedStoreItem,
       unopenedStoreItem,
       unexpiredStoreItem,
       openedStoreItem,
