@@ -16,13 +16,22 @@
         {{ capacity }} | {{ price }}
       </p>
     </div>
-    <button
-      class="opacity-0 rounded text-zinc-50 bg-gradient-to-r to-moonlight-800 from-moonlight-900 py-0.5 px-2 items-center flex group-hover:opacity-100 transition-opacity"
-      @click="goProductDetail(id, brand || '')"
+    <div
+      class="group-hover:opacity-100 flex items-center justify-between w-full transition-opacity opacity-0"
     >
-      <p class="text-base font-medium">Detail</p>
-      <i class="ph-arrow-right" style="font-size: 24px"></i>
-    </button>
+      <button
+        class="border-zinc-900 flex items-center justify-center p-0.5 transition-colors border rounded-full hover:bg-zinc-900/10"
+      >
+        <i class="ph-plus text-zinc-900" style="font-size: 20px"></i>
+      </button>
+      <button
+        class="rounded text-zinc-50 bg-gradient-to-r to-moonlight-800 from-moonlight-900 py-0.5 px-2 items-center flex"
+        @click="goProductDetail(id, brand || '')"
+      >
+        <p class="text-base font-medium">Detail</p>
+        <i class="ph-arrow-right" style="font-size: 24px"></i>
+      </button>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
