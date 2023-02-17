@@ -1,6 +1,6 @@
 <template>
-  <div class="sider-container flex flex-col h-full">
-    <div class="w-fit flex flex-col justify-start py-4 space-y-4">
+  <div class="sider-container flex flex-col w-full">
+    <div class="flex flex-col justify-start py-4 space-y-4">
       <RouterLink
         v-for="(tab, index) in siderTabOption"
         :key="index"
@@ -16,7 +16,7 @@
         <p class="xl:block hidden text-xl font-normal">{{ tab.name }}</p>
       </RouterLink>
     </div>
-    <div class="w-full">
+    <div>
       <div
         class="h-[1px] border-t-[1px] float-right border-zinc-900 transition-all"
         :class="showingRoutineList ? 'w-[90%] mb-4' : 'w-[0] mb-0'"

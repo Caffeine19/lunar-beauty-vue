@@ -1,5 +1,5 @@
 <template>
-  <div class="grow flex"><router-view></router-view></div>
+  <div class="flex overflow-hidden"><router-view></router-view></div>
 </template>
 
 <script lang="ts">

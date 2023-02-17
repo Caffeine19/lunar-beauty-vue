@@ -1,24 +1,26 @@
 <template>
-  <div class="header-container flex justify-between w-full">
+  <div class="header-container flex justify-between">
     <div
-      class="header-section-container-left flex items-center py-4 pl-2 pr-4 space-x-6"
+      class="header-section-container-center grow flex items-center justify-center px-8"
     >
-      <img src="@/assets/images/Icon/48.svg" alt="product icon" />
-      <h1
-        class="text-zinc-900 libertinus-semibold xl:block hidden text-2xl font-semibold"
+      <div
+        class="border-zinc-600 group focus-within:bg-zinc-900/10 focus-within:border-zinc-900 flex items-center justify-between w-full pl-4 space-x-4 transition-colors border border-r-0 rounded-full"
       >
-        Lunar Beauty
-      </h1>
-    </div>
-    <div
-      class="header-section-container-center grow flex items-center justify-between px-4 space-x-4"
-    >
-      <div class="relative w-full">
-        <LunarInput></LunarInput>
+        <input
+          type="text"
+          name="header-search"
+          placeholder="typing to search"
+          class="text-zinc-900 w-full py-1 bg-transparent border-none outline-none"
+        />
+        <button
+          class="border-zinc-600 text-zinc-900 group-focus-within:border-zinc-900 flex items-center justify-center p-1 border rounded-full"
+        >
+          <i
+            class="ph-arrow-right group-focus-within:animate-pulse"
+            style="font-size: 32px"
+          ></i>
+        </button>
       </div>
-      <button>
-        <i class="ph-bell text-zinc-900" style="font-size: 32px"> </i>
-      </button>
     </div>
     <div
       class="header-section-container-right group hover:bg-zinc-900/10 flex items-center py-4 pl-4 pr-2 space-x-3 transition-colors"
@@ -60,11 +62,9 @@ import { toggleUserSettingPanelKey } from "@/symbols/userSettingPanel";
 
 import { userInfoKey } from "@/symbols/userInfo";
 
-import LunarInput from "./LunarInput.vue";
 export default defineComponent({
   components: {
     OperateMenu,
-    LunarInput,
   },
   setup() {
     const userInfo = inject(userInfoKey);
@@ -154,16 +154,8 @@ export default defineComponent({
   }
 }
 
-.header-section-container-left,
 .header-section-container-right {
   @apply relative;
-}
-
-.header-section-container-left:before {
-  @apply border-r-[1px] border-zinc-900 absolute bottom-0 w-[1px] h-0 right-0;
-
-  content: "";
-  animation: draw-border-up 2s linear forwards;
 }
 
 .header-section-container-right:before {
