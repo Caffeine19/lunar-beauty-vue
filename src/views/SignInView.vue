@@ -115,6 +115,9 @@ export default defineComponent({
         basic: "border-zinc-50",
         size: "w-6 h-6",
       },
+      groupStyle: {
+        gap: "space-x-2",
+      },
     };
 
     const submitUserInfo = async () => {
