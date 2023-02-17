@@ -10,7 +10,7 @@
           type="text"
           name="header-search"
           placeholder="typing to search"
-          class="text-zinc-900 w-full py-1 bg-transparent border-none outline-none"
+          class="text-zinc-900 placeholder:text-zinc-400 w-full py-1 bg-transparent border-none outline-none"
         />
         <button
           class="border-zinc-600 text-zinc-900 group-focus-within:border-zinc-900 flex items-center justify-center p-1 border rounded-full"
