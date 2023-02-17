@@ -38,8 +38,8 @@
     ></LunarPagination>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent, onMounted, reactive, watchEffect } from "vue";
+<script setup lang="ts">
+import { onMounted, reactive, watchEffect } from "vue";
 
 import ProductCategories from "./ProductCategories.vue";
 import ProductOverView from "@/components/ProductOverview.vue";
@@ -48,72 +48,57 @@ import { storeToRefs } from "pinia";
 import useProductStore from "@/stores/useProductStore";
 
 import LunarPagination from "@/components/LunarPagination.vue";
-export default defineComponent({
-  setup() {
-    const productStore = useProductStore();
-    const { productOverviewList, productCount } = storeToRefs(productStore);
+const productStore = useProductStore();
+const { productOverviewList, productCount } = storeToRefs(productStore);
 
-    const queryOption = reactive({
-      category: "All",
-      currentPage: 1,
-      pageOption: [0],
-      itemPerPage: 8,
-      itemPerPageOption: [8, 12, 16, 20, 24],
-      itemAmount: 107,
-    });
+const queryOption = reactive({
+  category: "All",
+  currentPage: 1,
+  pageOption: [0],
+  itemPerPage: 8,
+  itemPerPageOption: [8, 12, 16, 20, 24],
+  itemAmount: 107,
+});
 
-    const getProductOverviewList = async () => {
-      await productStore.getProductOverviewList(
-        queryOption.category,
-        (queryOption.currentPage - 1) * queryOption.itemPerPage,
-        queryOption.itemPerPage
-      );
-      queryOption.itemAmount = productCount.value;
-      const pageNum = Math.ceil(productCount.value / queryOption.itemPerPage);
-      console.log({ pageNum });
+const getProductOverviewList = async () => {
+  await productStore.getProductOverviewList(
+    queryOption.category,
+    (queryOption.currentPage - 1) * queryOption.itemPerPage,
+    queryOption.itemPerPage
+  );
+  queryOption.itemAmount = productCount.value;
+  const pageNum = Math.ceil(productCount.value / queryOption.itemPerPage);
+  console.log({ pageNum });
 
-      queryOption.pageOption.length = 0;
-      for (let i = 0; i < pageNum; i++) {
-        queryOption.pageOption.push(i + 1);
-      }
+  queryOption.pageOption.length = 0;
+  for (let i = 0; i < pageNum; i++) {
+    queryOption.pageOption.push(i + 1);
+  }
 
-      // let index = 1;
-      // const arr = [];
-      // do {
-      //   arr.push(index);
-      //   index += 1;
-      // } while (index <= pageNum);
+  // let index = 1;
+  // const arr = [];
+  // do {
+  //   arr.push(index);
+  //   index += 1;
+  // } while (index <= pageNum);
 
-      // queryOption.pageOption = arr;
-      console.log(queryOption.pageOption);
-    };
+  // queryOption.pageOption = arr;
+  console.log(queryOption.pageOption);
+};
 
-    onMounted(async () => {
-      if (productOverviewList.value.length == 0) {
-        await getProductOverviewList();
-      }
-    });
+onMounted(async () => {
+  if (productOverviewList.value.length == 0) {
+    await getProductOverviewList();
+  }
+});
 
-    const changeCategory = async (category: string) => {
-      queryOption.currentPage = 1;
-      queryOption.category = category;
-    };
+const changeCategory = async (category: string) => {
+  queryOption.currentPage = 1;
+  queryOption.category = category;
+};
 
-    watchEffect(() => {
-      getProductOverviewList();
-    });
-
-    return {
-      productOverviewList,
-      changeCategory,
-      queryOption,
-    };
-  },
-  components: {
-    ProductCategories,
-    ProductOverView,
-    LunarPagination,
-  },
+watchEffect(() => {
+  getProductOverviewList();
 });
 </script>
 <style scoped>
