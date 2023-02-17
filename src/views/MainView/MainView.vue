@@ -24,11 +24,7 @@
     <MyHeader></MyHeader>
     <MySider></MySider>
 
-    <router-view v-slot="{ Component }">
-      <keep-alive :include="['StoreView']">
-        <component :is="Component" :key="$route.fullPath" />
-      </keep-alive>
-    </router-view>
+    <router-view></router-view>
 
     <UserSettingPanel></UserSettingPanel>
     <LunarDialog></LunarDialog>

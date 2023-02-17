@@ -61,20 +61,6 @@ const router = createRouter({
           path: "/main/store",
           name: "store",
           component: () => import("@/views/MainView/StoreView/StoreView.vue"),
-          redirect: "/main/store/storeBoard",
-          children: [
-            {
-              path: "/main/store/storeBoard",
-              name: "storeBoard",
-              component: () =>
-                import("@/views/MainView/StoreView/StoreBoardView.vue"),
-            },
-            {
-              path: "/main/store/selectProduct",
-              name: "selectProduct",
-              component: () => import("@/views/PickProductView.vue"),
-            },
-          ],
         },
         {
           path: "/main/routine",
