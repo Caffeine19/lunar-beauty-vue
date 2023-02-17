@@ -20,6 +20,7 @@
       class="group-hover:opacity-100 flex items-center justify-between w-full transition-opacity opacity-0"
     >
       <button
+        @click="toggleIsPickingProduct(true)"
         class="border-zinc-900 flex items-center justify-center p-0.5 transition-colors border rounded-full hover:bg-zinc-900/10"
       >
         <i class="ph-plus text-zinc-900" style="font-size: 20px"></i>
@@ -35,7 +36,10 @@
   </div>
 </template>
 <script setup lang="ts">
+import { inject } from "vue";
 import { useRouter } from "vue-router";
+
+import { toggleIsPickingProductKey } from "@/symbols/pickingProduct";
 
 interface IProduct {
   id: number;
@@ -56,5 +60,11 @@ const goProductDetail = (id: number, brand: string) => {
     query: { productId: id, productBrand: brand },
   });
 };
+
+const toggleIsPickingProduct =
+  inject(toggleIsPickingProductKey) ||
+  (() => {
+    console.log("missing toggleIsPickingProductKey");
+  });
 </script>
 <style lang=""></style>

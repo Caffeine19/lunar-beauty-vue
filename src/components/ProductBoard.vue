@@ -34,7 +34,7 @@
     </ul>
     <button
       class="text-zinc-600 flex items-center space-x-3"
-      @click="$emit('itemAddButtonClick')"
+      @click="goLibrary"
     >
       <i class="ph-plus" style="font-size: 28px"></i>
       <p class="text-lg font-light">Add new</p>
@@ -42,6 +42,8 @@
   </div>
 </template>
 <script setup lang="ts">
+import { useRouter } from "vue-router";
+
 import type { StoreItem } from "@/types/storeItem";
 import type { IRoutineItem } from "@/types/routineItem";
 
@@ -54,6 +56,11 @@ defineProps<{
   selectedItem?: StoreItem | IRoutineItem;
 }>();
 
-defineEmits(["itemBoardItemClick", "itemAddButtonClick"]);
+defineEmits(["itemBoardItemClick"]);
+
+const router = useRouter();
+const goLibrary = () => {
+  router.push({ name: "library" });
+};
 </script>
 <style scoped></style>
