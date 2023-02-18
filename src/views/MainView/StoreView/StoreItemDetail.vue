@@ -146,7 +146,10 @@
     </ul>
     <div class="w-full h-[1px] border-b-[1px] border-zinc-900 my-2"></div>
     <div class="flex justify-center mt-4">
-      <ProductOverview v-bind="selectedStoreItem?.product"></ProductOverview>
+      <ProductOverview
+        v-bind="selectedStoreItem?.product"
+        :showingAddButton="false"
+      ></ProductOverview>
     </div>
   </div>
 </template>
@@ -205,7 +208,7 @@ watch(
     updateOptions.isRunout = newVal.isRunout;
     // console.log(selectedProduct.value);
 
-    isEditing.value = true;
+    isEditing.value = false;
   },
   { immediate: true }
 );

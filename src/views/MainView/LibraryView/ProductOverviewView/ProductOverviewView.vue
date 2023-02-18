@@ -26,6 +26,7 @@
         v-for="product in productOverviewList"
         :key="product.id"
         v-bind="product"
+        class="col-span-1 mb-4"
       >
       </ProductOverView>
     </div>

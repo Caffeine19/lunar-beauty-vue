@@ -1,17 +1,43 @@
 <script setup lang="ts">
-import { inject, reactive } from "vue";
+import { inject, reactive, ref } from "vue";
+import { togglePickToPanelKey } from "@/symbols/pickToPanel";
+import { onClickOutside } from "@vueuse/core";
+import { togglePickingProductPanelKey } from "@/symbols/pickingProductPanel";
 
-const isPickingProduct = inject("isPickingProduct");
+const pickToPanel = ref<null | HTMLElement>(null);
+const showingPickToPanel = inject("showingPickToPanel");
+
+const togglePickToPanel =
+  inject(togglePickToPanelKey) ||
+  (() => {
+    console.log("missing togglePickToPanelKey");
+  });
+
+onClickOutside(pickToPanel, () => togglePickToPanel(false));
+
+const togglePickingProductPanel =
+  inject(togglePickingProductPanelKey) ||
+  (() => {
+    console.log("missing togglePickingProductPanelKey");
+  });
 
 const targetOption = reactive([
-  { name: "Store", icon: "ph-package", action: "" },
+  {
+    name: "Store",
+    icon: "ph-package",
+    action: () => {
+      togglePickingProductPanel(true);
+      togglePickToPanel(false);
+    },
+  },
   { name: "Routine", icon: "ph-map-trifold", action: "" },
 ]);
 </script>
 <template>
   <Transition name="fade">
     <div
-      v-if="isPickingProduct"
+      v-if="showingPickToPanel"
+      ref="pickToPanel"
       class="top-1/3 left-1/2 bg-zinc-900 divide-zinc-600 fixed py-2 -translate-x-1/2 divide-y-[1px] shadow-2xl rounded"
     >
       <button

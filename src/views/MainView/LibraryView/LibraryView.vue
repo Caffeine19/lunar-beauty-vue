@@ -1,6 +1,8 @@
 <template>
   <div class="flex overflow-hidden">
-    <router-view></router-view> <AddingToPanel></AddingToPanel>
+    <router-view></router-view>
+    <PickToPanel></PickToPanel>
+    <PickingProductPanel></PickingProductPanel>
   </div>
 </template>
 
@@ -8,17 +10,36 @@
 import { provide, ref } from "vue";
 import { RouterView } from "vue-router";
 
-import { toggleIsPickingProductKey } from "@/symbols/pickingProduct";
-import AddingToPanel from "./PickToPanel.vue";
+import { togglePickToPanelKey } from "@/symbols/pickToPanel";
+import PickToPanel from "./PickToPanel.vue";
 
-const isPickingProduct = ref(false);
+import { togglePickingProductPanelKey } from "@/symbols/pickingProductPanel";
+import PickingProductPanel from "./PickingProductPanel.vue";
 
-const toggleIsPickingProduct = (flag: boolean) => {
-  isPickingProduct.value = flag;
+import { setPickedProductKey } from "@/symbols/setPickedProduct";
+import type { IProduct } from "@/types/product";
+
+const showingPickToPanel = ref(false);
+const togglePickToPanel = (flag: boolean) => {
+  showingPickToPanel.value = flag;
 };
 
-provide("isPickingProduct", isPickingProduct);
-provide(toggleIsPickingProductKey, toggleIsPickingProduct);
+provide("showingPickToPanel", showingPickToPanel);
+provide(togglePickToPanelKey, togglePickToPanel);
+
+const showingPickingProductPanel = ref(false);
+const togglePickingProductPanel = (flag: boolean) => {
+  showingPickingProductPanel.value = flag;
+};
+provide("showingPickingProductPanel", showingPickingProductPanel);
+provide(togglePickingProductPanelKey, togglePickingProductPanel);
+
+const pickedProduct = ref<null | IProduct>(null);
+provide("pickedProduct", pickedProduct);
+const setPickedProduct = (product: IProduct) => {
+  pickedProduct.value = product;
+};
+provide(setPickedProductKey, setPickedProduct);
 </script>
 
 <style scoped></style>
