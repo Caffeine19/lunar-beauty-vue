@@ -5,7 +5,7 @@
     <ProductBoard
       v-for="(group, index) in groupOption"
       :key="index"
-      :productList="group.value"
+      :itemList="group.value"
       :tag="group.tag"
       :tagIconClass="group.tagIconClass"
     ></ProductBoard>

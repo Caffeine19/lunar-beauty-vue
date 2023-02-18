@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 
-import { reqUserLogin, reqUserRegister, reqUserUpdateById } from "@/api";
+import { reqUserLogin, reqUserRegister, reqUserUpdateById } from "@/api/user";
 
 import type { ITooltipInfo } from "@/types/tooltip";
 

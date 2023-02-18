@@ -1,12 +1,12 @@
 <template>
   <div class="relative w-full" ref="calendarRef">
     <div
-      class="border-[1px] py-0.5 px-2 space-x-3 flex items-center justify-between hover:bg-zinc-900/10 hover:border-zinc-900 group transition-colors"
+      class="border py-0.5 px-2 space-x-3 flex items-center justify-between hover:bg-zinc-900/10 hover:border-zinc-900 group transition-colors"
       :class="[
         openingDropMenu ? 'bg-zinc-900/10 border-zinc-900' : 'border-zinc-300',
         disabled ? 'cursor-not-allowed' : 'cursor-pointer',
       ]"
-      @click="openDropMenu"
+      @click="toggleOpeningDropMenu"
     >
       <p class="text-zinc-900 text-base font-medium">
         {{ givenDate?.slice(0, 10) || "Unset" }}
@@ -127,17 +127,21 @@ const emit = defineEmits<{
 }>();
 
 const openingDropMenu = ref<boolean>(false);
-const openDropMenu = () => {
-  if (!props.disabled) {
-    openingDropMenu.value = true;
-    drawBricks();
-  }
-};
+// const openDropMenu = () => {
+//   if (!props.disabled) {
+//     openingDropMenu.value = true;
+//     drawBricks();
+//   }
+// };
 const closeDropMenu = () => {
   openingDropMenu.value = false;
 };
-const calendarRef = ref<null | HTMLElement>(null);
 
+const toggleOpeningDropMenu = () => {
+  if (!props.disabled) openingDropMenu.value = !openingDropMenu.value;
+};
+
+const calendarRef = ref<null | HTMLElement>(null);
 onClickOutside(calendarRef, () => {
   if (openingDropMenu.value) {
     closeDropMenu();
@@ -191,10 +195,10 @@ watch(
   () => props.givenDate,
   () => {
     drawBricks();
+  },
+  {
+    immediate: true,
   }
-  // {
-  //   immediate: true,
-  // }
 );
 
 const nextMonth = () => {

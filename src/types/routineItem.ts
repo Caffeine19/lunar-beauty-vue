@@ -5,6 +5,6 @@ export interface IRoutineItem {
   id: number;
   amount: number;
   applyingTime: applyingTime;
-  expense: string;
+  expense: number;
   product: IProduct;
 }

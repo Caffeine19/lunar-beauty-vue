@@ -9,7 +9,7 @@
       "
       v-for="(category, index) in productCategoryOption"
       :key="index"
-      class="rounded-full py-1 px-4 border-[1px] border-zinc-900 transition-colors flex flex-row items-center"
+      class="border-zinc-900 flex flex-row items-center px-4 py-1 transition-colors border rounded-full"
       :class="
         selectedProductCategory == category
           ? 'bg-zinc-900 text-zinc-50  hover:bg-zinc-900/80'

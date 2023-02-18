@@ -4,21 +4,21 @@
     :class="showingProductDetail ? 'basis-1/2 xl:basis-1/4 ' : 'basis-0 hidden'"
   >
     <div class="flex justify-between">
-      <button @click="closeStoreItemDetail">
+      <button @click="onCloseButtonClick">
         <i class="ph-x text-zinc-900" style="font-size: 28px"></i>
       </button>
       <div class="space-x-2">
         <button v-show="!isEditing" @click="toggleIsEditing(true)">
           <i class="ph-note-pencil text-zinc-900" style="font-size: 28px"></i>
         </button>
-        <button v-show="isEditing" @click="submitUpdateOptions">
+        <button v-show="isEditing" @click="onSubmitButtonClick">
           <i class="ph-upload-simple text-zinc-900" style="font-size: 28px">
           </i>
         </button>
-        <button v-show="isEditing" @click="resetAndExit">
+        <button v-show="isEditing" @click="onEraseButtonClick">
           <i class="ph-eraser text-zinc-900" style="font-size: 28px"></i>
         </button>
-        <button @click="deleteStoreItem">
+        <button @click="onTrashButtonClick">
           <i class="ph-trash text-zinc-900" style="font-size: 28px"></i>
         </button>
       </div>
@@ -71,7 +71,7 @@
       </li>
       <li class="text-zinc-600 flex justify-between text-base font-medium">
         <p>ShelfTime:</p>
-        <p>{{ selectedProduct?.shelfTime + "months" }}</p>
+        <p>{{ selectedStoreItem?.shelfTime + "months" }}</p>
       </li>
       <li
         class="text-zinc-600 flex items-center justify-between text-base font-medium"
@@ -105,7 +105,7 @@
           <div class="flex flex-col items-center space-y-2">
             <p class="text-zinc-50">Opened</p>
             <i
-              v-if="selectedProduct.isOpened"
+              v-if="selectedStoreItem.isOpened"
               class="ph-check-circle-fill text-bean-800"
               style="font-size: 28px"
             ></i>
@@ -118,7 +118,7 @@
           <div class="flex flex-col items-center space-y-2">
             <p class="text-zinc-50">Expired</p>
             <i
-              v-if="selectedProduct.isExpired"
+              v-if="selectedStoreItem.isExpired"
               class="ph-check-circle-fill text-bean-800"
               style="font-size: 28px"
             ></i>
@@ -131,7 +131,7 @@
           <div class="flex flex-col items-center space-y-2">
             <p class="text-zinc-50">Runout</p>
             <i
-              v-if="selectedProduct.isRunout"
+              v-if="selectedStoreItem.isRunout"
               class="ph-check-circle-fill text-bean-800"
               style="font-size: 28px"
             ></i>
@@ -146,20 +146,15 @@
     </ul>
     <div class="w-full h-[1px] border-b-[1px] border-zinc-900 my-2"></div>
     <div class="flex justify-center mt-4">
-      <ProductOverview v-bind="selectedProduct?.product"></ProductOverview>
+      <ProductOverview
+        v-bind="selectedStoreItem?.product"
+        :showingAddButton="false"
+      ></ProductOverview>
     </div>
   </div>
 </template>
-<script lang="ts">
-import {
-  defineComponent,
-  reactive,
-  ref,
-  watch,
-  type PropType,
-  toRefs,
-  inject,
-} from "vue";
+<script setup lang="ts">
+import { reactive, ref, watch, toRefs, inject } from "vue";
 
 import ProductOverview from "@/components/ProductOverview.vue";
 import LunarCounter from "@/components/LunarCounter.vue";
@@ -170,7 +165,7 @@ import LunarCheckbox, {
   type CheckBoxStyle,
 } from "@/components/LunarCheckbox.vue";
 
-import type { IStoreItem, IStoreItemUpdateOptions } from "@/types/storeItem";
+import type { StoreItem, StoreItemUpdateOptions } from "@/types/storeItem";
 
 import { applyingTime, applyingTimeArr } from "@/types/applyingTime";
 import useStoreItemStore from "@/stores/useStoreItemStore";
@@ -178,139 +173,121 @@ import useStoreItemStore from "@/stores/useStoreItemStore";
 import { showTooltipKey } from "@/symbols/tooltip";
 import { showDialogKey } from "@/symbols/dialog";
 
-export default defineComponent({
-  components: {
-    ProductOverview,
-    LunarCounter,
-    LunarSelector,
-    LunarCalendar,
-    LunarInput,
-    LunarCheckbox,
-  },
-  props: {
-    selectedProduct: {
-      type: Object as PropType<IStoreItem>,
-      required: true,
-    },
-    showingProductDetail: {
-      type: Boolean,
-      required: true,
-    },
-    closeStoreItemDetail: {
-      type: Function as PropType<() => void>,
-      required: true,
-    },
-  },
-  setup(props) {
-    const isEditing = ref(false);
-    const toggleIsEditing = (flag: boolean) => {
-      isEditing.value = flag;
-    };
+const props = defineProps<{
+  selectedStoreItem: StoreItem;
+  showingProductDetail: boolean;
+  closeStoreItemDetail: () => void;
+}>();
 
-    const updateOptions = reactive<IStoreItemUpdateOptions>({
-      amount: 0,
-      applyingTime: applyingTime.ALL,
-      expense: "0",
-      openedTime: null,
-      productionTime: "",
-      shelfTime: 0,
-      isRunout: false,
-    });
+const isEditing = ref(false);
+const toggleIsEditing = (flag: boolean) => {
+  isEditing.value = flag;
+};
 
-    const { selectedProduct } = toRefs(props);
-    watch(
-      () => props.selectedProduct,
-      (newVal) => {
-        console.log({ newVal: newVal });
-        updateOptions.amount = newVal.amount;
-        updateOptions.applyingTime = newVal.applyingTime;
-        updateOptions.expense = newVal.expense;
-        updateOptions.openedTime = newVal.openedTime;
-        updateOptions.productionTime = newVal.productionTime;
-        updateOptions.shelfTime = newVal.shelfTime;
-        updateOptions.isRunout = newVal.isRunout;
-        // console.log(selectedProduct.value);
-        isEditing.value = false;
-      },
-      { immediate: true }
-    );
-
-    const checkBoxStyle: CheckBoxStyle = {
-      textStyle: "text-zinc-900 text-base font-medium",
-      pathStyle: "stroke-zinc-50",
-      buttonStyle: {
-        checked: "bg-zinc-900 hover:bg-zinc-900/90",
-        unchecked: "hover:bg-zinc-900/10",
-        basic: "border-zinc-900",
-        size: "w-4 h-4",
-      },
-    };
-
-    const storeItemStore = useStoreItemStore();
-
-    const showTooltip = inject(showTooltipKey);
-
-    const submitUpdateOptions = async () => {
-      const data: any = {};
-      if (selectedProduct.value) {
-        for (let i in selectedProduct.value) {
-          if (
-            updateOptions[i as keyof IStoreItemUpdateOptions] !==
-            selectedProduct.value[i as keyof IStoreItem]
-          )
-            // console.log(i);
-            data[i] = updateOptions[i as keyof IStoreItemUpdateOptions];
-        }
-        const res = await storeItemStore.updateById(
-          selectedProduct.value.id,
-          data
-        );
-        if (res && showTooltip) {
-          showTooltip(res);
-        }
-        toggleIsEditing(false);
-      }
-    };
-
-    const resetAndExit = () => {
-      updateOptions.amount = selectedProduct.value?.amount || 0;
-      updateOptions.applyingTime =
-        selectedProduct.value?.applyingTime || applyingTime.ALL;
-      updateOptions.openedTime = selectedProduct.value?.openedTime || null;
-      updateOptions.productionTime =
-        selectedProduct.value?.productionTime || "";
-
-      toggleIsEditing(false);
-    };
-
-    const showDialog = inject(showDialogKey);
-
-    const deleteStoreItem = async () => {
-      if (showDialog) {
-        showDialog(
-          "Are you sure you want to delete this store item?",
-          "this may never came back",
-          async () => {
-            const res = await storeItemStore.deleteById(
-              selectedProduct.value.id
-            );
-            if (showTooltip) showTooltip(res);
-          }
-        );
-      }
-    };
-
-    return {
-      isEditing,
-      toggleIsEditing,
-      submitUpdateOptions,
-      resetAndExit,
-      updateOptions,
-      applyingTimeArr,
-      deleteStoreItem,
-      checkBoxStyle,
-    };
-  },
+const updateOptions = reactive<StoreItemUpdateOptions>({
+  amount: 0,
+  applyingTime: applyingTime.ALL,
+  expense: 0,
+  openedTime: null,
+  productionTime: "",
+  shelfTime: 0,
+  isRunout: false,
 });
+
+const { selectedStoreItem } = toRefs(props);
+watch(
+  () => props.selectedStoreItem,
+  (newVal) => {
+    // console.log({ newVal: newVal });
+    updateOptions.amount = newVal.amount;
+    updateOptions.applyingTime = newVal.applyingTime;
+    updateOptions.expense = newVal.expense;
+    updateOptions.openedTime = newVal.openedTime;
+    updateOptions.productionTime = newVal.productionTime;
+    updateOptions.shelfTime = newVal.shelfTime;
+    updateOptions.isRunout = newVal.isRunout;
+    // console.log(selectedProduct.value);
+
+    isEditing.value = false;
+  },
+  { immediate: true }
+);
+
+const checkBoxStyle: CheckBoxStyle = {
+  groupStyle: {
+    gap: "space-x-2",
+  },
+  textStyle: "text-zinc-900 text-base font-medium",
+  pathStyle: "stroke-zinc-50",
+  buttonStyle: {
+    checked: "bg-zinc-900 hover:bg-zinc-900/90",
+    unchecked: "hover:bg-zinc-900/10",
+    basic: "border-zinc-900",
+    size: "w-4 h-4",
+  },
+};
+
+const storeItemStore = useStoreItemStore();
+const showTooltip = inject(showTooltipKey);
+const submitUpdateOptions = async () => {
+  const data: any = {};
+  if (selectedStoreItem.value) {
+    for (let i in selectedStoreItem.value) {
+      if (
+        updateOptions[i as keyof StoreItemUpdateOptions] !==
+        selectedStoreItem.value[i as keyof StoreItem]
+      )
+        // console.log(i);
+        data[i] = updateOptions[i as keyof StoreItemUpdateOptions];
+    }
+    const res = await storeItemStore.updateById(
+      selectedStoreItem.value.id,
+      data
+    );
+    if (res && showTooltip) {
+      showTooltip(res);
+    }
+  }
+};
+const reset = () => {
+  updateOptions.amount = selectedStoreItem.value?.amount || 0;
+  updateOptions.applyingTime =
+    selectedStoreItem.value?.applyingTime || applyingTime.ALL;
+  updateOptions.expense = selectedStoreItem.value?.expense || 0;
+  updateOptions.openedTime = selectedStoreItem.value?.openedTime || null;
+  updateOptions.productionTime = selectedStoreItem.value?.productionTime || "";
+  updateOptions.shelfTime = selectedStoreItem.value.shelfTime || 0;
+  updateOptions.isRunout = selectedStoreItem.value.isRunout;
+};
+
+const showDialog = inject(showDialogKey);
+const deleteStoreItem = async () => {
+  if (showDialog) {
+    showDialog(
+      "Are you sure you want to delete this store item?",
+      "this may never came back",
+      async () => {
+        const res = await storeItemStore.deleteById(selectedStoreItem.value.id);
+        if (showTooltip) showTooltip(res);
+      }
+    );
+  }
+};
+
+const onCloseButtonClick = () => {
+  props.closeStoreItemDetail();
+};
+
+const onSubmitButtonClick = () => {
+  submitUpdateOptions();
+  toggleIsEditing(false);
+};
+const onEraseButtonClick = () => {
+  reset();
+  toggleIsEditing(false);
+};
+const onTrashButtonClick = () => {
+  deleteStoreItem();
+};
 </script>
 <style></style>

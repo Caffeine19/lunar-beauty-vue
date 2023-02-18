@@ -1,6 +1,6 @@
 <template>
-  <div class="sider-container flex flex-col h-full">
-    <div class="w-fit flex flex-col justify-start py-4 space-y-4">
+  <div class="sider-container flex flex-col w-full">
+    <div class="flex flex-col justify-start py-4 space-y-4">
       <RouterLink
         v-for="(tab, index) in siderTabOption"
         :key="index"
@@ -16,7 +16,7 @@
         <p class="xl:block hidden text-xl font-normal">{{ tab.name }}</p>
       </RouterLink>
     </div>
-    <div class="w-full">
+    <div>
       <div
         class="h-[1px] border-t-[1px] float-right border-zinc-900 transition-all"
         :class="showingRoutineList ? 'w-[90%] mb-4' : 'w-[0] mb-0'"
@@ -74,7 +74,7 @@
       </li>
       <button
         @click="beginCreateRoutine"
-        class="mx-2.5 text-zinc-500 border-zinc-400 border-[1px] hover:bg-zinc-900/10 hover:text-zinc-900 hover:border-zinc-900 flex items-center px-2 py-1 space-x-6 transition-colors border-dashed"
+        class="mx-2.5 text-zinc-500 border-zinc-400 border hover:bg-zinc-900/10 hover:text-zinc-900 hover:border-zinc-900 flex items-center px-2 py-1 space-x-6 transition-colors border-dashed"
       >
         <i class="ph-plus" style="font-size: 28px"></i>
         <p class="xl:block hidden text-lg font-normal">Create</p>

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="group border-[1px] py-1 px-2 flex items-center justify-between transition-colors hover:bg-zinc-900/10 hover:border-zinc-900"
+    class="group hover:bg-zinc-900/10 hover:border-zinc-900 flex items-center justify-between px-2 py-1 transition-colors border"
     :class="[
       givenValue == selectedValue
         ? 'border-zinc-900 bg-zinc-900/10'
@@ -21,7 +21,7 @@
         :class="
           givenValue == selectedValue
             ? 'border-zinc-900 border-[5px]'
-            : 'border-zinc-300 border-[1px]'
+            : 'border-zinc-300 border'
         "
       ></button>
     </div>

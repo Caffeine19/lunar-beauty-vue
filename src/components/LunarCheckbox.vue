@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center space-x-3">
+  <div class="flex items-center" :class="checkBoxStyle.groupStyle?.gap">
     <button
       @click="toggleChecked"
       :class="[
@@ -36,6 +36,9 @@
 export interface CheckBoxStyle {
   textStyle?: string;
   pathStyle?: string;
+  groupStyle?: {
+    gap?: string;
+  };
   buttonStyle?: {
     checked?: string;
     unchecked?: string;
@@ -54,6 +57,9 @@ const props = withDefaults(defineProps<Props>(), {
   checked: false,
   disabled: false,
   checkBoxStyle: () => ({
+    groupStyle: {
+      gap: "space-x-3",
+    },
     textStyle: "text-zinc-50 text-base font-medium",
     pathStyle: "stroke-zinc-900",
     buttonStyle: {

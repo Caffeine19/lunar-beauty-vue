@@ -36,6 +36,7 @@
         <input
           placeholder="password"
           v-model="password"
+          type="password"
           class="test w-4/5 border-zinc-400 border-b-[1px] py-2 text-zinc-50 text-2xl font-medium bg-zinc-900 placeholder-zinc-200/80 outline-0 focus:placeholder-zinc-200 transition-all"
         />
         <LunarCheckbox
@@ -113,6 +114,9 @@ export default defineComponent({
         unchecked: "hover:bg-zinc-50/10",
         basic: "border-zinc-50",
         size: "w-6 h-6",
+      },
+      groupStyle: {
+        gap: "space-x-2",
       },
     };
 

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { reqIngredientFindByProduct } from "@/api";
+import { reqIngredientFindByProduct } from "@/api/ingredient";
 import type { IIngredient } from "@/types/ingredient";
 const useIngredientStore = defineStore({
   id: "ingredient",
