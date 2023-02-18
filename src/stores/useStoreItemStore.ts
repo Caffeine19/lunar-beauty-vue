@@ -12,6 +12,7 @@ import type {
 } from "@/types/storeItem";
 
 import type { ITooltipInfo } from "@/types/tooltip";
+import type { IUser } from "@/types/user";
 
 const useStoreItemStore = defineStore({
   id: "storeItem",
@@ -84,11 +85,13 @@ const useStoreItemStore = defineStore({
         return { status: false, content: "delete failed" };
       }
     },
-    async createByUser(data: StoreItemCreateOptions): Promise<ITooltipInfo> {
+    async createByUser(
+      data: StoreItemCreateOptions,
+      userId: IUser["id"]
+    ): Promise<ITooltipInfo> {
       try {
-        const res = await reqStoreItemCreateByUser(data);
+        const res = await reqStoreItemCreateByUser(userId, data);
         const { createdStoreItem } = res.data;
-        this.storeItemList.push(createdStoreItem);
         console.log({ createdStoreItem });
         return { status: true, content: "create succeeded" };
       } catch (error) {

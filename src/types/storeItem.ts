@@ -37,5 +37,5 @@ export type StoreItemUpdateOptions = Pick<
 
 export type StoreItemCreateOptions = Omit<
   StoreItem,
-  "id" | keyof CalculatedPreservationStatus
->;
+  "id" | "product" | keyof CalculatedPreservationStatus
+> & { productId: IProduct["id"] };
